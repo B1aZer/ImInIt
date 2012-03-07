@@ -20,6 +20,12 @@ class User(Base):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+    
+    def _get_password(self):
+        return self.password
+    
+    def get_name(self):
+        return self.name
 
 class Projects(Base):
     __tablename__ = 'projects'
@@ -31,16 +37,22 @@ class Projects(Base):
     title = Column(String(50))
     description = Column(String(120))
     date_created = Column(DateTime, default=datetime.utcnow)
-    date_target = Column(DateTime)
+    date_target = Column(DateTime, default=datetime.utcnow)
     inns_now = Column(Integer, default=0)
     inns_target = Column(Integer, default=100, nullable=False)
     image_link =  Column(String(220))
 
-    def __init__(self, title=None, desc=None, datet=datetime.utcnow, image=None):
+    def __init__(self, title=None, desc=None, user=None, image=None):
         self.title = title
         self.description = desc
-        self.date_target = datet
+        self.user=user
         self.image_link=image
+    
+    def __repr__(self):
+        return '<Proj %r>' % (self.title)
+    
+
+
 
 
 class Category(Base):

@@ -14,4 +14,5 @@ class RegistrationForm(Form):
 class AddProjectForm(Form):
     title = TextField('Title', [validators.Length(min=1, max=25)])
     description = TextField('Description', [validators.Length(min=6, max=35)])
+    user = TextField('Owner')
     image_link = TextField('Image Link')

@@ -6,8 +6,10 @@
             <p>This is a template for a simple marketing or informational website. 
             It includes a large callout called the hero unit and three supporting pieces of content. 
             Use it as a starting point to create something more unique.</p>
+            {% if not session.auth %}
+            {% else %}
             <p><a class="btn btn-primary btn-large" href="/add">Add Profect</a></p>
-            <p><a class="btn btn-primary btn-large" href="/register">Register</a></p>
+            {% endif %}
         </div>
         <div class="row">
             {#{% if content is iterable %}#}
@@ -16,7 +18,10 @@
                 <h1>{{ entry.title }}</h1>
                 <p>{{ entry.description }}</p>
                 <ul class="thumbnails">
-                <li class="span3">
+                    <li class="span3">
+                    <a class="close" href="/del/{{entry.id}} ">&times;</a>
+
+                    <i class="icon-search"></i>
                 <div class="thumbnail">
                     <a href="/projects/zefrank/a-show-with-ze-frank?ref=spotlight">
                         <img src="http://placehold.it/260x180" alt="">

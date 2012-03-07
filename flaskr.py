@@ -14,29 +14,21 @@ from forms import RegistrationForm,AddProjectForm
 app = Flask(__name__)
 app.config.from_object('conf')
 
-@app.before_request
-def before_request():
-    g.user = None
-    if 'auth' in session:
-        g.user = db_session.query(User).filter(User.name==session['auth']).first()
-    
-
 @app.teardown_request
 def shutdown_session(exception=None):
     db_session.remove()
 
 @app.route('/')
 def show_entries():
+    #query=[Projects.query.all()]
+    app.logger.debug('An error occurred')
     query=db_session.query(Projects).order_by(desc('date_created')).all()
-    #query=abort(404)
-    app.logger.debug(query)
     return render_template('content.html',content=query)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        #check email,login
         user = User(form.username.data, form.email.data,
                     form.password.data)
         db_session.add(user)
@@ -56,49 +48,60 @@ def add_entry():
     g.db.commit()
     flash('New entry was successfully posted')
     """
-
     form = AddProjectForm(request.form)
     if request.method == 'POST' and form.validate():
-        #try:
-            proj = Projects(form.title.data, form.description.data,g.user,
+        proj = Projects(form.title.data, form.description.data,None,
                         form.image_link.data)
-            app.logger.debug(str(proj.__dict__))
-            db_session.add(proj)
-            db_session.commit()
-            flash('Project added')
-        #except:
-            #app.logger.debug('Cant add project')
-            return redirect('/')
+        db_session.add(proj)
+        db_session.commit()
+        flash('Project added')
+        return redirect('/')
 
-    return render_template('add.html', form=form)
+    return render_template('add.html', form=form)
 
 
+'''
+def connect_db():
+     return sqlite3.connect(app.config['DATABASE'])
 
+
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    g.db.close()
+
+'''
+
+'''
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    #Make seperate gef - log the user in for register cookie
     error = None
     if request.method == 'POST':
-        user = db_session.query(User).filter(User.name == request.form['username']).first()
-        if user:
-            app.logger.debug(user.get_name())
-            if request.form['username'] != user.get_name():
-                error = 'Invalid username'
-            elif request.form['password'] != user._get_password():
-                error = 'Invalid password'
-            else:
-                session['auth'] = user.get_name()
-                flash('You were logged in')
-                g.user=user
-                app.logger.debug(g.user)
-                return redirect(url_for('show_entries'))
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('show_entries'))
     return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
-    session.pop('auth', None)
+    session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
+'''
 
 if __name__ == '__main__':
     app.debug = True
