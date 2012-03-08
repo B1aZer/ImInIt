@@ -16,10 +16,10 @@
       }
     </style>
     <!--<link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">-->
-    <!--<link href="{{ url_for('static', filename='less/bootstrap.less') }}" rel="stylesheet/less">
+    <!--<link href="{{ url_for('static', filename='less/bootstrap.less') }}" rel="stylesheet/less">-->
     <link href="{{ url_for('static', filename='css/scheme.css') }}" rel="stylesheet">
 
-    <script src="{{ url_for('static', filename='js/less-1.2.2.min.js') }}"></script>-->
+    <!--<script src="{{ url_for('static', filename='js/less-1.2.2.min.js') }}"></script>-->
 
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -35,7 +35,7 @@
   </head>
 
   <body>
-
+    <div class="wrapper">
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -57,20 +57,36 @@
           </div><!--/.nav-collapse -->
         </div>
       </div>
-    </div>
+  </div>
+   <div class="subnav subnav-fixed" >
+            <ul class="nav nav-pills">
+              <li>
+                <a href="#">Home</a> 
+              </li>
+              <li>
+                <a href="#">Library</a> 
+              </li>
+              <li class="active">
+                <a href="#">Data</a>
+              </li>
+            </ul>
+        </div>
 
-    <div class="container">
-    {% block content %}{% endblock %}
-    </div> <!-- /container -->
-    <div class="footer">
-    </div>
+            {% block content %} {% endblock %}
+    <!--<div class="footer-inner">
+    </div>-->
 
+        <footer>
+    </footer>
+    </div>
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ url_for('static', filename='js/jquery-1.7.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui-1.8.18.custom.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scheme.js') }}"></script>
 
       </body>
 </html>

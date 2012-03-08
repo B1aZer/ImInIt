@@ -29,10 +29,6 @@ body {
     background-image: url("../img/header.png");
     height:250px;
     width:100%;
-    background-color: #EEEEEE;
-    border: 0 1px 0 0 solid #D5D5D5;
-    padding: 0 0 10px 0;
-    
 }
 
 .slider {

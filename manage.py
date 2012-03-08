@@ -32,6 +32,11 @@ def show_entries():
     app.logger.debug(query)
     return render_template('content.html',content=query)
 
+@app.route('/projects/<int:proj_id>')
+def project_index(proj_id):
+    return render_template('project.html')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
