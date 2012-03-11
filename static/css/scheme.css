@@ -1,5 +1,7 @@
 body {
-    padding-top: 80px; /* 60px to make the container go all the way to the bottom of the topbar */
+    padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+    background-color: #FAFAFA;
+    color:#535514;
 }
 /*F5F5F5*/
 
@@ -8,24 +10,28 @@ body {
 }
 .contain {
     background: #EEEEEE;
-    padding: 2px;
+    padding: 10px 10px 10px 10px;
     -moz-border-radius:4px; 
     -webkit-border-radius: 4px;
-
     
-
 }
+.wrap {
+    background-color: #E5E3DF;
+    padding: 10px 0 10px 10px;
+    border: 1px solid #D5D5D5;
+    overflow:hidden;/*not neccecery but what if*/
+     -moz-border-radius: 4px;
+     -webkit-border-radius: 4px;
+}
+/* changing thumbnail def size*/
+.span33 {
+    width:188px;
+}
+
 /*E5E5E5*/
 /*D5D5D5*/
 .row {
     margin-bottom: 20px;
-}
-.wrap {
-    background-color: white;
-    border: 1px solid #D5D5D5;
-     -moz-border-radius: 4px;
-     -webkit-border-radius: 4px;
-    /*padding-left: 8px;*/
 }
 
 

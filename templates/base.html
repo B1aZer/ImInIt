@@ -98,20 +98,22 @@
         {% if loop.index%2 > 0 %}<div class="row">{% endif %}
             <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
                 'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
-                    <!--<div class="wrap">-->
+                <div class="contain">
+                    <div class="wrap">
                         <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
                         <p>{{ prj.description }}</p>-->
 
                         <ul class="thumbnails">
-                                    <li class="span3">
-                                    <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
+                            <li class="span33">
+                                    <a href="#"><img src="http://www.astateoftrance.com/wp-content/themes/asot-v3/img/asot550/placeholder-moscow.jpg" alt=""></a>
 
                                     </li>
                         </ul>
                         <p class="well"> Description </p>
                         <button class="btn">View</button>
 
-                        <!--</div>-->
+                    </div>
+                </div>
                 </div>
                 {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
 
