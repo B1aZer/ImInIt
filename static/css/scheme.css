@@ -1,52 +1,42 @@
 body {
-    /*padding-top: 120px;*/
-    /*background: none repeat scroll 0 0 #F0F1F2;*/
-    background-color: #D5D5D5;
+    padding-top: 80px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+/*F5F5F5*/
 
+#mapcanvas {
+    height: 250px;
 }
-.wrapper{
-    padding-top: 40px;
-    background-color: #EEEEEE;
-}
-.main {
-    border: 1px solid #D5D5D5;
-    position: relative;
-    background-color: #EEEEEE;
-    padding: 3px;
+.contain {
+    background: #EEEEEE;
+    padding: 2px;
+    -moz-border-radius:4px; 
+    -webkit-border-radius: 4px;
 
-}
-.content {
-    background-color: white;
-    border-radius: 6px;
-}
-/*.footer-inner {
-    display: block;
-    height: 60px;
-    border-top: 1px solid #D5D5D5;
-}
-*/
-.headermap {
-    background-image: url("../img/header.png");
-    height:250px;
-    width:100%;
-    background-color: #EEEEEE;
-    border: 0 1px 0 0 solid #D5D5D5;
-    padding: 0 0 10px 0;
     
+
+}
+/*E5E5E5*/
+/*D5D5D5*/
+.row {
+    margin-bottom: 20px;
+}
+.wrap {
+    background-color: white;
+    border: 1px solid #D5D5D5;
+     -moz-border-radius: 4px;
+     -webkit-border-radius: 4px;
+    /*padding-left: 8px;*/
 }
 
-.slider {
-    display: block;
-    height: 20px;
-    border: 5px solid #D5D5D5;
-}
 
-footer {
-margin-top: -20px;
-padding-top: 50px;
-border-top: 1px solid #C7C7C7;
-background: none repeat scroll 0 0 #D5D5D5
-}
+
+/*.wrap:after {*/
+/*content:"";*/
+   /*position:relative;*/
+/*border:5px solid #00b4ff;*/
+/*background:#fff;*/
+/*}*/
+
 
 
 

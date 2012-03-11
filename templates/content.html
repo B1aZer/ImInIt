@@ -1,62 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container main">
+<div class="container">
 
 
-            <div class="content">
-            <!--<h1>Components</h1>
-            <p class="lead">Dozens of reusable components are built into Bootstrap to provide navigation, alerts, popovers, and much more.</p>-->
-
-    <div class="headermap"></div>
-    <!--<div class="hero-unit">
-        <h1>Hello, world!</h1>
-            <p>This is a template for a simple marketing or informational website. 
-            It includes a large callout called the hero unit and three supporting pieces of content. 
-            Use it as a starting point to create something more unique.</p>
-        {% if not session.auth %}
-        {% else %}
-            <p><a class="btn btn-primary btn-large" href="/add">Add Profect</a></p>
-        {% endif %}
-    </div>-->
-    <!--<div class="slider"></div>-->
-    <div class="row">
-            {#{% if content is iterable %}#}
-        {% for entry in content %}
-        <div class="span4">
-                <!--<h5>{{ entry.title }}</h5>
-                <h6>{{ entry.description }}</h6>!-->
-                <ul class="thumbnails">
-                    <li class="span3">
-                    <a class="close" href="/del/{{entry.id}} ">&times;</a>
-                    <i class="icon-search"></i>
-                    <div class="thumbnail">
-                        <a href="/projects/{{ entry.id }}">
-                        <img src="http://www.ozjobsguide.com.au/blog/wp-content/uploads/2011/03/sample.jpg" alt="">
-                        </a>
-                        <h5>Thumbnail label</h5>
-                        <p>Thumbnail caption right here...</p>
-                        <ul class="unstyled">
-                            <li>icon next</li>
-                            <li>button</li>
-                            <li>status</li>
-                        </ul>
-                    </div>
-                    </li>
-                </ul>
-        </div><!--span4-->
-        {% else %}
-            <em>Unbelievable.  No entries here so far</em>
-        {% endfor %}
-            {#{% else %}
-            not iterable
-            {% endif %}#}
-        </div><!--row-->
-
-        </div><!--ccontent-->
-
-
-    
 </div> <!-- /container -->
 
 

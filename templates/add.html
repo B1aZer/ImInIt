@@ -1,16 +1,55 @@
 {% extends "base.html" %}
-{% block content %}
+{% block subnav %}
 
+<div class="subnav subnav-fixed" >
+            <ul class="nav nav-pills">
+              <li>
+                <a href="/">Home</a> 
+                </li>
+                <li>
+                <a href="/map">Map</a> 
+              </li>
+              <li class="active">
+                <a href="/add">Add</a>
+              </li>
+            </ul>
+    </div>
+
+{% endblock %}
+
+{% block content %}
 {% from "_formhelpers.html" import render_field %}
-<form method="post" action="/add">
+<div class="container">
+<div class="row">
+    <div class="span4">    
+<form id="add-point" method="post" action="/add">
   <dl>
     {{ render_field(form.title) }}
     {{ render_field(form.description) }}
-    {{ render_field(form.user) }}
+    {{ render_field(form.loc) }}
     {{ render_field(form.image_link) }}
-  </dl>
-  <p><input type=submit value=Add>
-</form>
+    {{ render_field(form.lat) }}
+    {{ render_field(form.lng) }}
+    {{ render_field(form.mark_location) }}
 
+  </dl>
+    <button type="submit" class="btn">Add Point</button>
+  
+</form>
+  <button id="findbtn" class="btn">Find Point</button>
+    <button id="clearbtn" class="btn">Clear Point</button>
+
+</div>
+<div class="span8">
+    <div class="contain">
+        <div id="mapcanvas" class="wrap">
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/add.js') }}"></script>
 {% endblock %}
 

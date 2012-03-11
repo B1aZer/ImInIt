@@ -10,11 +10,6 @@
     
     <!-- Le styles -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
     <!--<link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">-->
     <!--<link href="{{ url_for('static', filename='less/bootstrap.less') }}" rel="stylesheet/less">-->
     <link href="{{ url_for('static', filename='css/scheme.css') }}" rel="stylesheet">
@@ -32,10 +27,11 @@
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='images/apple-touch-icon-72x72.png') }}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='images/apple-touch-icon-114x114.png') }}">
-  </head>
+    </head>
 
-  <body>
-    <div class="wrapper">
+    <body>
+        {% block navbar %}
+      <!--<div class="wrapper">-->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -47,38 +43,115 @@
           <a class="brand" href="/">Project name</a>
           <div class="nav-collapse">
             <ul class="nav pull-right">
-             {% if not session.auth %}
+             {% if not g.user %}
              <li><a href="{{ url_for('login') }}">Log In</a></li>
              <li><a href="/register">Register</a></li>
-              {% else %}
-              <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-              {% endif %}
+             {% else %}
+             <li class="dropdown" id="menu1">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    {{ g.user.name }}
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                 <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                </ul>
+             </li>
+             {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
   </div>
-   <div class="subnav subnav-fixed" >
-            <ul class="nav nav-pills">
-              <li>
-                <a href="#">Home</a> 
-              </li>
-              <li>
-                <a href="#">Library</a> 
-              </li>
-              <li class="active">
-                <a href="#">Data</a>
-              </li>
-            </ul>
-        </div>
+  {% endblock %}
+  {% block subnav %}
 
-            {% block content %} {% endblock %}
+    <div class="subnav subnav-fixed" >
+            <ul class="nav nav-pills">
+              <li class="active">
+                <a href="/">Home</a> 
+              </li>
+              <li>
+                <a href="/map">Map</a> 
+                </li>
+                {% if g.user %}
+              <li>
+                <a href="/add">Add</a>
+                </li>
+                {% endif %}
+            </ul>
+    </div>
+
+  {% endblock %}
+    {% block content %}
+    
+
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                 <div class="contain">
+                    <div id="mapcanvas" class="wrap">
+                        </div>
+            </div>
+            </div>
+        </div>
+        {% for prj in content %}
+        {% if loop.index%2 > 0 %}<div class="row">{% endif %}
+            <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
+                'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
+                    <!--<div class="wrap">-->
+                        <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
+                        <p>{{ prj.description }}</p>-->
+
+                        <ul class="thumbnails">
+                                    <li class="span3">
+                                    <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
+
+                                    </li>
+                        </ul>
+                        <p class="well"> Description </p>
+                        <button class="btn">View</button>
+
+                        <!--</div>-->
+                </div>
+                {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
+
+            {% else %}
+            <!--<div class="span3 contain">-->
+                <!--<div class="wrap">-->
+
+        <ul class="thumbnails">
+            <li class="span3">
+            <div class="thumbnail">
+               <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
+              <h5>Thumbnail label</h5>
+              <p>Thumbnail caption right here...</p>
+            </div>
+            </li>
+            <li class="span3">
+            <div class="thumbnail">
+               <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
+              <h5>Thumbnail label</h5>
+              <p>Thumbnail caption right here...</p>
+            </div>
+            </li>
+
+
+        </ul>
+        <!--</div>-->
+    <!--</div>-->
+        {% endfor %}
+        </div> <!-- /container -->
+
+
+    
+    
+    {% endblock %}
     <!--<div class="footer-inner">
     </div>-->
 
-        <footer>
+    <footer>
     </footer>
-    </div>
+    <!--</div>-->
 
     <!-- Le javascript
     ================================================== -->
@@ -86,8 +159,12 @@
     <script src="{{ url_for('static', filename='js/jquery-1.7.1.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui-1.8.18.custom.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/scheme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/init.js') }}"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
+    {% block js %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    {% endblock %}
 
-      </body>
+    </body>
 </html>
 

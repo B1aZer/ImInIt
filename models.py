@@ -19,7 +19,7 @@ class User(Base):
         self.password = password
 
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return "%s" % self.name
     
     def _get_password(self):
         return self.password
@@ -38,19 +38,43 @@ class Projects(Base):
     description = Column(String(120))
     date_created = Column(DateTime, default=datetime.utcnow)
     date_target = Column(DateTime, default=datetime.utcnow)
+    lat = Column(Integer)
+    lng = Column(Integer)
     inns_now = Column(Integer, default=0)
     inns_target = Column(Integer, default=100, nullable=False)
     image_link =  Column(String(220))
 
-    def __init__(self, title=None, desc=None, user=None, image=None):
+    def __init__(self, title=None, desc=None, user=None, lat=None, lng=None, image=None):
         self.title = title
         self.description = desc
         self.user=user
+        self.lat=lat
+        self.lng=lng
         self.image_link=image
     
+    def __str__(self):
+        return self.title
+
+    #def __unicode__(self):
+        #return self.title
+
     def __repr__(self):
-        return '<Proj %r>' % (self.title)
-    
+        return "%s" % self.title
+
+    def json(self):
+        """
+        Returns dict of safe attributes for passing into 
+        a JSON request.
+        """
+        
+        return dict(proj_id=self.id,
+                    title=self.title,
+                    description=self.description,
+                    user=self.user.name,
+                    lat=self.lat,
+                    lng=self.lng,
+                    image=self.image_link)
+
 
 
 
