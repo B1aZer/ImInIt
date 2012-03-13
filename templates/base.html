@@ -10,9 +10,10 @@
     
     <!-- Le styles -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-    <!--<link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">-->
+    <link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">
     <!--<link href="{{ url_for('static', filename='less/bootstrap.less') }}" rel="stylesheet/less">-->
     <link href="{{ url_for('static', filename='css/scheme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/overcast/jquery-ui-1.8.18.custom.css') }}" rel="stylesheet">
 
     <!--<script src="{{ url_for('static', filename='js/less-1.2.2.min.js') }}"></script>-->
 
@@ -105,12 +106,19 @@
 
                         <ul class="thumbnails">
                             <li class="span33">
-                                    <a href="#"><img src="http://www.astateoftrance.com/wp-content/themes/asot-v3/img/asot550/placeholder-moscow.jpg" alt=""></a>
+                                    <a href="/projects/1"><img src="http://www.astateoftrance.com/wp-content/themes/asot-v3/img/asot550/placeholder-moscow.jpg" alt=""></a>
 
                                     </li>
                         </ul>
                         <p class="well"> Description </p>
-                        <button class="btn">View</button>
+                        <span class="btn left">View</span>
+                        <span class="right">
+                            <div class="btn-group">
+                                <a class="btn" href="#"><i class="icon-thumbs-up"</i></a>
+                              <a class="btn" href="#"><i class="icon-thumbs-down"</i></a>
+                            </div>
+                        </span>
+                        
 
                     </div>
                 </div>
@@ -164,7 +172,6 @@
     <script src="{{ url_for('static', filename='js/init.js') }}"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
     {% block js %}
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     {% endblock %}
 
     </body>

@@ -20,30 +20,39 @@
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
-<div class="row">
+    <div class="row">
     <div class="span4">    
-<form id="add-point" method="post" action="/add">
-  <dl>
-    {{ render_field(form.title) }}
-    {{ render_field(form.description) }}
-    {{ render_field(form.loc) }}
-    {{ render_field(form.image_link) }}
-    {{ render_field(form.lat) }}
-    {{ render_field(form.lng) }}
-    {{ render_field(form.mark_location) }}
+        <form id="add-point" method="post" action="/add">
+            {{ render_field(form.title,"icon-envelope") }}
+            {{ render_field(form.description,"","input-xlarge") }}
+            {{ render_field(form.date_end,"icon-envelope") }}
+            {{ render_field(form.image_link,"icon-envelope") }}
+            {{ render_field(form.loc,"icon-envelope") }}
+            <div id="loc_error">
+            </div>
 
-  </dl>
-    <button type="submit" class="btn">Add Point</button>
-  
-</form>
-  <button id="findbtn" class="btn">Find Point</button>
-    <button id="clearbtn" class="btn">Clear Point</button>
+            {{ form.lat }}
+            {{ form.lng }}
+            <p><label class="checkbox inline">
+                        {{ form.mark_location }} 
+                        {{ form.mark_location.label.text }}
+            </label></p>
+            
+        <button type="submit" class="btn">Add Point</button>
+        </form>
 
-</div>
-<div class="span8">
-    <div class="contain">
-        <div id="mapcanvas" class="wrap">
-        </div>
+    </div>
+        <div class="span8" id="mapcontainer">
+            <div class="row">
+                <div class="span8">
+                    <div class="contain">
+                        <div id="mapcanvas" class="wrap">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="findbtn" class="btn">Find Point</p>
+            <p id="clearbtn" class="btn">Clear Point</p>
         </div>
     </div>
 </div>

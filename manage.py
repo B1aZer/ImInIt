@@ -32,7 +32,7 @@ def index():
     query=db_session.query(Projects).order_by(desc('date_created')).all()
     #query=abort(404)
     #app.logger.debug(g.user)
-    return render_template('base.html',content=query)
+    return render_template('index.html',content=query)
 
 @app.route('/map')
 def map():
@@ -50,14 +50,10 @@ def ajax():
         #app.logger.debug(request.form.get('lat'))
         #app.logger.debug(request.form.get('lng'))
     if request.method == 'GET':
-        query=db_session.query(Projects).order_by(desc('date_created'))
-        #jsony(query)
-        #qqq = query.all()
+        query=db_session.query(Projects).filter(Projects.lat != "", Projects.lng != "")
         projs=[]
         for qq in query.all():
-            #for q in qq:
             projs.append(qq.json())
-
         return jsonify(result = projs)
     return jsonify(status='success')
 

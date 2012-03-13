@@ -1,4 +1,6 @@
-from wtforms import Form, BooleanField, TextField, PasswordField, HiddenField, validators
+from wtforms import Form, BooleanField, TextField, PasswordField, HiddenField, DateField, TextAreaField, validators
+from flaskext.wtf import URL,Optional
+from flask import current_app
 
 class RegistrationForm(Form):
     username = TextField('Username', [validators.Length(min=4, max=25)])
@@ -12,10 +14,12 @@ class RegistrationForm(Form):
 
 
 class AddProjectForm(Form):
-    title = TextField('Title', [validators.Length(min=1, max=25)])
-    description = TextField('Description', [validators.Length(min=6, max=35)])
+    title = TextField('Title', [validators.Required()])
+    description = TextAreaField('Description', [validators.Length(min=15)])
     loc = TextField('Location')
-    image_link = TextField('Image Link')
+    date_end=DateField('Ending Date')
+    image_link = TextField('Image Link', validators=[
+                                        URL(),Optional()])
     lat= HiddenField('')
     lng= HiddenField('')
     mark_location = BooleanField('Choose location on map')

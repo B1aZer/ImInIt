@@ -1,38 +1,44 @@
 $(document).ready(function(){
 
-//$('.formin').hide();
-    /*$(".span8").slideUp('fast');*/
-    /**/
-    /*$("#clearbtn").hide();*/
-    /*$("#findbtn").hide();*/
-    /*iminit.map_init();*/
+iminit.map_init();
+iminit.add_listeners();
 
-
-$("#clearbtn").click(function(){ 
-iminit.deleteOverlays()
-});
-
-$("#findbtn").click(function(){ 
-  iminit.codeAddress(); 
-  //return false; 
-});
-
+$("#clearbtn").fadeOut('fast');
+      $("#findbtn").fadeOut('fast',function() {
+      $("#mapcontainer").slideUp('fast');
+      });
+$( "#date_end").datepicker({
+                    dateFormat:"yy-m-d"
+                    });
 $("#mark_location").change(function(){ 
   if ($("#mark_location").prop('checked')) { 
       iminit.mark=true;
-      /*$("#clearbtn").fadeIn('fast');*/
-      /*$("#findbtn").fadeIn('fast');*/
-      /*$(".span8").slideDown('slow');*/
-
+      iminit.draggable=true;
+      $("#mapcontainer").slideDown('fast',function() {
+      $("#clearbtn").fadeIn('fast');
+      $("#findbtn").fadeIn('fast');
+      iminit.check_resize();
+      });
   }
   else {
       iminit.mark=false;
-      /*$("#clearbtn").fadeOut('fast');*/
-      /*$("#findbtn").fadeOut('fast');*/
-      /*$(".span8").slideUp('fast');*/
-
+      $("#clearbtn").fadeOut('fast');
+      $("#findbtn").fadeOut('fast',function() {
+      $("#mapcontainer").slideUp('fast');
+      });
   }
-  //return false; 
+});
+$("#clearbtn").click(function(){ 
+iminit.deleteOverlays();
+$('#loc').val("");
+});
+$("#findbtn").click(function(){ 
+    if ($('#loc').val()) {
+        iminit.codeAddress(); 
+    }
+    else {
+        iminit.adressCode();
+    }
 });
 
 
