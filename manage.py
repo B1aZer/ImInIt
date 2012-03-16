@@ -7,7 +7,7 @@ from helpers import jsonify
 from sqlalchemy import desc
 from database import db_session
 from models import User, Projects
-from forms import RegistrationForm,AddProjectForm
+from forms import RegistrationForm,AddProjectForm,LoginForm
 #from contextlib import closing
 
 
@@ -18,7 +18,7 @@ app.config.from_object('conf')
 
 @app.before_request
 def before_request():
-    g.user = None
+    g.user=getattr(g,'user',None)
     if 'auth' in session:
         g.user = db_session.query(User).filter(User.name==session['auth']).first()
     
@@ -29,10 +29,10 @@ def shutdown_session(exception=None):
 
 @app.route('/')
 def index():
-    query=db_session.query(Projects).order_by(desc('date_created')).all()
+    query=db_session.query(Projects).order_by(desc('date_created')).limit(14).offset(0)
     #query=abort(404)
-    #app.logger.debug(g.user)
-    return render_template('base.html',content=query)
+    app.logger.debug(g.user)
+    return render_template('index.html',content=query)
 
 @app.route('/map')
 def map():
@@ -45,7 +45,7 @@ def map():
 
 @app.route('/ajax', methods=['POST','GET'])
 def ajax():
-    #app.logger.debug('ajax:',someth)
+    #app. logger.debug('ajax:',someth)
     #if request.method == 'POST':
         #app.logger.debug(request.form.get('lat'))
         #app.logger.debug(request.form.get('lng'))
@@ -63,7 +63,8 @@ def ajax():
 
 @app.route('/projects/<int:proj_id>')
 def project_index(proj_id):
-    return render_template('project.html')
+    proj = db_session.query(Projects).filter_by(id=proj_id).first()
+    return render_template('project.html',query=proj)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -94,8 +95,13 @@ def add_entry():
     form = AddProjectForm(request.form)
     if request.method == 'POST' and form.validate():
         #try:
-            proj = Projects(form.title.data, form.description.data,g.user,form.lat.data,form.lng.data,
-                        form.image_link.data)
+            proj = Projects(form.title.data,
+                    form.description.data,
+                    form.httext.data,
+                    g.user,
+                    form.lat.data,
+                    form.lng.data,
+                    form.image_link.data)
             #app.logger.debug(str(proj.__dict__))
             db_session.add(proj)
             db_session.commit()
@@ -110,23 +116,18 @@ def add_entry():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    #Make seperate gef - log the user in for register cookie
-    error = None
+    #Mak e seperate gef - log the user in for register cookie
+    form = LoginForm(request.form)
     if request.method == 'POST':
-        user = db_session.query(User).filter(User.name == request.form['username']).first()
-        if user:
+        user = db_session.query(User).filter(User.name == form.username.data).first()
+        if form.validate() and user:
             #app.logger.debug(user.get_name())
-            if request.form['username'] != user.get_name():
-                error = 'Invalid username'
-            elif request.form['password'] != user._get_password():
-                error = 'Invalid password'
-            else:
-                session['auth'] = user.get_name()
-                flash('You were logged in')
-                g.user=user
-                #app.logger.debug(g.user)
-                return redirect(url_for('index'))
-    return render_template('login.html', error=error)
+                if user.authentificate(form.username.data,form.password.data):
+                    flash('You were logged in')
+                    session['auth']=user.get_name()
+                    #app.logger.debug(g.user)
+                    return redirect(url_for('index'))
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():

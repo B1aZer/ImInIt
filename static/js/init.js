@@ -23,12 +23,17 @@ var iminit = {
         google.maps.event.addListener(map, 'click', function(event) {
             iminit.deleteOverlays();
             iminit.placeMarker(event.latLng);
+            iminit.addCoord(event.latLng);
         });
+        if ( $("#lat").val() && $("#lng").val() ) {
+            iminit.placeMarker(new google.maps.LatLng($("#lat").val(), $("#lng").val()));
+        }
 
     },
 
     check_resize : function() {
         google.maps.event.trigger(map, 'resize');
+        map.setCenter(new google.maps.LatLng(55.75, 37.616666699999996));
     },
 
     getMarkers : function () {
@@ -48,7 +53,7 @@ var iminit = {
     },
 
     placeMarker : function (location) {
-        var image = 'static/img/icons/ios/regroup.png';
+        var image = 'static/img/icons/blue/regroup.png';
         //if (iminit.markersArray.length == 0) {
             iminit.marker = new google.maps.Marker({
                 position: location,
@@ -77,6 +82,9 @@ var iminit = {
                 iminit.markersArray[i].setMap(null);
             }
             iminit.markersArray.length = 0;
+            $("#lat").val('');
+            $("#lng").val('');
+
         }
     },
 
@@ -118,8 +126,8 @@ var iminit = {
     },
 
     addCoord : function(geocode) {
-        $("#add-point #lat").val(geocode.lat());
-        $("#add-point #lng").val(geocode.lng());
+        $("#lat").val(geocode.lat());
+        $("#lng").val(geocode.lng());
 
     },
 

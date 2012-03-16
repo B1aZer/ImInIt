@@ -26,6 +26,11 @@ class User(Base):
     
     def get_name(self):
         return self.name
+    
+    def authentificate(self,name,passw):
+        if (self.name == name and self.password == passw):
+            return self
+
 
 class Projects(Base):
     __tablename__ = 'projects'
@@ -36,6 +41,7 @@ class Projects(Base):
     cat = relationship('Category')
     title = Column(String(50))
     description = Column(String(120))
+    html = Column(String)
     date_created = Column(DateTime, default=datetime.utcnow)
     date_target = Column(DateTime, default=datetime.utcnow)
     lat = Column(Integer)
@@ -43,10 +49,12 @@ class Projects(Base):
     inns_now = Column(Integer, default=0)
     inns_target = Column(Integer, default=100, nullable=False)
     image_link =  Column(String(220))
+    video_link =  Column(String(220))
 
-    def __init__(self, title=None, desc=None, user=None, lat=None, lng=None, image=None):
+    def __init__(self, title=None, desc=None, html=None, user=None, lat=None, lng=None, image=None):
         self.title = title
         self.description = desc
+        self.html=html
         self.user=user
         self.lat=lat
         self.lng=lng

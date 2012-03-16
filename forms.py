@@ -18,8 +18,16 @@ class AddProjectForm(Form):
     description = TextAreaField('Description', [validators.Length(min=15)])
     loc = TextField('Location')
     date_end=DateField('Ending Date')
+    goal_end = TextField('Goal')
     image_link = TextField('Image Link', validators=[
                                         URL(),Optional()])
+    video_link = TextField('Video Link', validators=[
+                                        URL(),Optional()])
+    httext = TextAreaField('html_text')
     lat= HiddenField('')
     lng= HiddenField('')
     mark_location = BooleanField('Choose location on map')
+
+class LoginForm(Form):
+    username = TextField('Username', [validators.Length(min=4, max=25)])
+    password = PasswordField('Password')

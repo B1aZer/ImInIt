@@ -1,8 +1,9 @@
-<html>
-<body>
-<p>
-text
-</p>
-</body>
-</html>
+{% extends base.html %}
+{% block content %}
+<div class="content">
+ {% for error in get_flashed_messages() %}
+    <strong>Error:</strong> {{ error }}
+    {% else %}
+    {% endfor %}
+</div>
 

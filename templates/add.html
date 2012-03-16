@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href={{ url_for('static', filename='akzhan/jquery.wysiwyg.css') }} type="text/css" media="screen" charset="utf-8" />
+
+{% endblock %}
 {% block subnav %}
 
 <div class="subnav subnav-fixed" >
@@ -21,44 +26,74 @@
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
     <div class="row">
-    <div class="span4">    
-        <form id="add-point" method="post" action="/add">
-            {{ render_field(form.title,"icon-envelope") }}
-            {{ render_field(form.description,"","input-xlarge") }}
-            {{ render_field(form.date_end,"icon-envelope") }}
-            {{ render_field(form.image_link,"icon-envelope") }}
-            {{ render_field(form.loc,"icon-envelope") }}
-            <div id="loc_error">
-            </div>
-
-            {{ form.lat }}
-            {{ form.lng }}
-            <p><label class="checkbox inline">
-                        {{ form.mark_location }} 
-                        {{ form.mark_location.label.text }}
-            </label></p>
-            
-        <button type="submit" class="btn">Add Point</button>
-        </form>
-
-    </div>
-        <div class="span8" id="mapcontainer">
-            <div class="row">
-                <div class="span8">
-                    <div class="contain">
-                        <div id="mapcanvas" class="wrap">
+        <form id="add-point" method="post" action="/add" class="form-horizontal">
+            <div id="tabs" class="tabbable tabs-left">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#1" data-toggle="tab"><i class="icon-edit icon-large"></i>Genral</a></li>
+                    <li><a href="#2" data-toggle="tab"><i class="icon-font icon-large"></i>Text</a></li>
+                    <li><a href="#3" data-toggle="tab"><i class="icon-picture icon-large"></i>Picture</a></li>
+                    <li><a href="#4" data-toggle="tab"><i class="icon-facetime-video icon-large"></i>Video</a></li>
+                    <li><a href="#5" data-toggle="tab"><i class="icon-map-marker icon-large"></i>Location</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="1">
+                        {{ render_field(form.title,"icon-bookmark") }}
+                        {{ render_field(form.description,"","input-xlarge") }}
+                        {{ render_field(form.goal_end,"icon-check") }}
+                        {{ render_field(form.date_end,"icon-time") }}
+                    </div>
+                    <div class="tab-pane fade" id="2">
+                        {{ form.httext(rows='5',cols='80') }}
+                    </div>
+                    <div class="tab-pane fade" id="3">
+                        {{ render_field(form.image_link,"icon-magnet") }}
+                    </div>
+                    <div class="tab-pane fade" id="4">
+                        {{ render_field(form.video_link,"icon-magnet") }}
+                    </div>
+                    <div class="tab-pane fade" id="5">
+                        <div class="input-prepend">
+                            {{ form.loc.label }}
+                            <span class="add-on"><i class="icon-screenshot"></i></span> {{ form.loc(_class="span2") }}
+                            <span id="findbtn" class="btn">Find Point</span>
+                            <span id="clearbtn" class="btn">Clear Point</span>
+                        </div>
+                        <div id="loc_error">
+                        </div>
+                        {{ form.lat }}
+                        {{ form.lng }}
+                        <!--<p><label class="checkbox inline">
+                            {{ form.mark_location }} 
+                            {{ form.mark_location.label.text }}
+                </label></p>-->
+                        <div class="row">
+                            <div class="span8">
+                        <div id="mapcontainer">
+                            <div class="contain">
+                                <div id="mapcanvas" class="wrap">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
             </div>
-            <p id="findbtn" class="btn">Find Point</p>
-            <p id="clearbtn" class="btn">Clear Point</p>
-        </div>
+            <button type="submit" class="btn">Add Point</button>
+        </form>
     </div>
 </div>
 {% endblock %}
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/add.js') }}"></script>
+<!--<script type="text/javascript" src={{ url_for('static', filename='markitup/jquery.markitup.js') }}></script>-->
+<!--<script type="text/javascript" src={{ url_for('static', filename='markitup/sets/html/set.js') }}></script>-->
+<!--<script type="text/javascript" src={{ url_for('static', filename='ckeditor/ckeditor.js') }}></script>-->
+<!--<script type="text/javascript" src={{ url_for('static', filename='ckeditor/adapters/jquery.js') }}></script>-->
+<script type="text/javascript" src={{ url_for('static', filename='akzhan/jquery.wysiwyg.js') }}></script>
+<script type="text/javascript" src={{ url_for('static', filename='akzhan/controls/wysiwyg.image.js') }}></script>
+<script type="text/javascript" src={{ url_for('static', filename='akzhan/controls/wysiwyg.link.js') }}></script>
+<script type="text/javascript" src={{ url_for('static', filename='akzhan/controls/wysiwyg.table.js') }}></script>
 {% endblock %}
 

@@ -29,6 +29,9 @@ body {
 .right {
     float:right;
 }
+.center {
+    text-align:center;
+}
 /* changing thumbnail def size*/
 .span33 {
     width:178px;

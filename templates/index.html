@@ -31,7 +31,7 @@
                             </div>
                             </li>
                             <div class="span33" style="text-align:center;">
-                                <strong>{{ prj.title }}</strong>
+                                <a href="/projects/{{ prj.id }}"><strong>{{ prj.title }}</strong></a>
                             </div>
                         </ul>
                         <p class="well"> {{ prj.description}}</p>
@@ -74,6 +74,17 @@
         <!--</div>-->
         <!--</div>-->
         {% endfor %}
+
+        <ul class="pager right">
+          <li>
+            <a href="?p=0">Previous</a>
+          </li>
+          <li>
+            <a href="?n=14">Next</a>
+          </li>
+        </ul>
+        
+
     </div> <!-- /container -->
 
 
