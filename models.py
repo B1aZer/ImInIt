@@ -12,11 +12,14 @@ class User(Base):
     date_joined = Column(DateTime, default=datetime.utcnow)
     password = Column(String(80))
     projects = relationship('Projects')
+    comments = relationship('Comments')
+    participant = relationship('Participants')
     
-    def __init__(self, name=None, email=None, password=None):
+    def __init__(self, name=None, email=None, password=None, image = None):
         self.name = name
         self.email = email
         self.password = password
+        self.image = image
 
     def __repr__(self):
         return "%s" % self.name
@@ -50,6 +53,8 @@ class Projects(Base):
     inns_target = Column(Integer, default=100, nullable=False)
     image_link =  Column(String(220))
     video_link =  Column(String(220))
+    comments = relationship('Comments')
+    participants = relationship('Participants')
 
     def __init__(self, title=None, desc=None, html=None, user=None, lat=None, lng=None, image=None):
         self.title = title
@@ -83,6 +88,33 @@ class Projects(Base):
                     lng=self.lng,
                     image=self.image_link)
 
+
+class Comments(Base):
+    __tablename__ = 'comments'
+    id = Column(Integer,primary_key = True)
+    content = Column (String(220))
+    date_created =  Column(DateTime, default=datetime.utcnow)
+    author_id = Column(Integer,
+                ForeignKey('users.id', ondelete='CASCADE'))
+    project_id = Column(Integer,
+                ForeignKey('projects.id', ondelete='CASCADE'))
+    user = relationship('User')
+    project = relationship('Projects')
+
+    def __init__(self, content=None, user=None, project=None):
+        self.content = content
+        self.user = user
+        self.project=project
+
+class Participants(Base):
+    __tablename__ = 'participants'
+    id = Column(Integer,primary_key = True)
+    project_id = Column(Integer,
+                ForeignKey('projects.id', ondelete='CASCADE'))
+    user_id = Column(Integer,
+                ForeignKey('users.id', ondelete='CASCADE'))
+    user = relationship('User')
+    project = relationship('Projects')
 
 
 

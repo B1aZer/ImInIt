@@ -156,10 +156,13 @@ var iminit = {
 }
 
 
+$(function() {
 
+    $('#flasher').popover({
+    placement:'bottom'
+    });
 
-
-
+});
 
 
 

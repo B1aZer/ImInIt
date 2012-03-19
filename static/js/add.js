@@ -15,6 +15,7 @@ $( "#date_end").datepicker({
                     });
                     /*$("#httext").markItUp(mySettings);*/
 $("#httext").wysiwyg({});
+$('#httext').wysiwyg('clear');
 
 $('ul.nav li a[href="#5"]').on('shown', function (e) {
     iminit.mark=true;

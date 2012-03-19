@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
 <div class="container">
     <div class="row">
         <div class="span10">
@@ -8,77 +7,145 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#1" data-toggle="tab">Info</a></li>
                     <li><a href="#2" data-toggle="tab">Comments</a></li>
+                    <li><a href="#3" data-toggle="tab">Participants</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="1">
-                         <div class="contain">
+                        <div class="row">
+                            <div class="span5">
+                                <div class="contain">
+                                    <div class="wrap">
+                                        <img src="{{ query.image_link }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="contain">
+                                    <div class="wrap">
+                                        <img src="{{ query.image_link }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
                             
+                        </div>
+                        <div class="row">
+                            <div class="span10">
+                                <div class="contain">
+                                    <div class="wrap">
+                                        <div id="mapcanvas">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="contain">
                             <div class="wrap">
-                                {{ query.html|safe }}   
+                                <div class="well">
+                                    {{ query.html|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="2">
                         <div class="contain">
                             <div class="wrap">
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
-                                <p> Some text</p>
+                                <div id="comments">
+                                    <ul class="unstyled">
+                                        {% if query.comments %}
+                                        {% for comm in query.comments %}
+                                        <li class="" id="li-comment-{{comm.id}}">
+                                        <div class="well">
+                                            <div class="comment-head">
+                                                <div class="avatar"><img alt="" src="{{ comm.user.email | gravatar }}" class="avatar" height="48" width="48" id=""></div>
+                                                <span class="name"><a href="http://kwerkee.wordpress.com" rel="external nofollow" class="url url">{{ comm.user.name }}</a></span>
+                                                <span class="date">{{ comm.date_created }}</span>
+                                            </div><!-- /.comment-head -->
+                                            <div class="comment-entry" id="comment-2">
+                                                <p>{{ comm.content }}</p>
+                                            </div><!-- /comment-entry -->
+                                        </div><!-- /.comment-container -->
+                                        </li>
+                                        {% endfor %}
+                                        {% if g.user %}
+                                        <li>
+                                        <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                            {{form.comment(class="span5",rows=5)}}
+                                            <p></p>
+                                            <button type="submit" class="btn">Send</button>
+                                        </form>
+                                        </li>
+                                        {% endif %}
+                                        {% else %}
+                                        <div class="well">
+                                            <h3> No comments yet. </h3>
+                                        </div>
+                                        {% if g.user %}
+                                        <li>
+                                        <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                            {{form.comment(class="span5",rows=5)}}
+                                            <p></p>
+                                            <button type="submit" class="btn">Send</button>
+                                        </form>
+                                        </li>
+
+                                        {% endif %}
+                                        {% endif %}
+
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="tab-pane" id="3">
+                        <div class="contain">
+                            <div class="wrap">
+                                <div id="participants">
+                                    {% if query.particpants %}
+                                        {% for part in query.particpants %}
+                                        <li class="" id="li-comment-{{comm.id}}">
+                                        <div class="well">
+                                            {{ part }}
+                                        </div>
+                                        </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-    
         </div>
         <div class="span2">
             <div class="row">
                 <div class="span2">
-                     <div class="well">
-                         <h6 style="font-size: 20px;"><div>going 57</div><h6>
-                     </div>
-                     <div class="row">
-                        <div class="span1">
-                            <!--<a class="btn btn-inverse"  href="#"><i class="icon-plus" style="font-size: 50px;"></i></a>-->
-                        </div>
-                     </div>
+                    <div class="well">
+                        <h6 style="font-size: 20px;"><div>going {{ query.inns_now }}</div></h6>
+                    </div>
+                    <button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>
+
+
                 </div>
             </div>
             <div class="row">
-                <div class="span1">
-                     <!--<div class="well">
+                <div class="span2">
+                    <!--<div class="well">
                          <h6 style="font-size: 20px;"><div><i class="icon-plus" style="font-size: 26px;"></i></div><h6>
                              </div>-->
-                    <a class="btn">
-                        <i class="icon-facebook-sign" style="font-size: 50px;"></i>
-                    </a>
-                    <p></p>
-                    <p class="btn">
-                        <i class="icon-twitter-sign" style="font-size: 50px;"></i>
-                    </p>
+                    <div class="btn-group">
+                        <a class="btn">
+                            <i class="icon-facebook-sign" style="font-size: 34px;"></i>
+                        </a>
+                        <a class="btn btn-inverse">
+                            <i class="icon-twitter-sign" style="font-size: 33px;"></i>
+                        </a>
+                        <a class="btn">
+                            <i class="icon-twitter-sign" style="font-size: 34px;"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!--<div class="well">
             <h6>
                 <i class="icon-screenshot"></i> target: 100
@@ -95,22 +162,17 @@
          <h5><a class="btn btn-small"><i class="icon-facebook-sign"></i> share on vk.com</a></h5>
          <h5><a class="btn btn-small"><i class="icon-twitter-sign"></i> share on twitter</a></h5>
                  </div>-->
-
-             
-             
-
     </div><!--row-->
     <div class="row">
         <div class="span8">
-            
         </div>
-
     </div><!--row-->
-
-
-
 </div> <!-- /container -->
-
-
 {% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/proj.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.cycle.all.js') }}"></script>
+{% endblock %}
+
 

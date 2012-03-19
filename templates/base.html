@@ -50,6 +50,15 @@
              <li><a href="{{ url_for('login') }}">Log In</a></li>
              <li><a href="/register">Register</a></li>
              {% else %}
+             <li>
+             <a href="#" class="" rel="popover" id="flasher" 
+                data-content="
+             {% for msg in get_flashed_messages() %}
+             {{ msg }} </br>
+             {% else %}
+             {% endfor %}
+             " data-original-title="A Title"><i class="icon-inbox"></i></a>
+             </li>
              <li class="dropdown" id="menu1">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     {{ g.user.name }}
@@ -59,6 +68,7 @@
                  <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                 </ul>
              </li>
+             
              {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
@@ -130,25 +140,6 @@
             {% else %}
             <!--<div class="span3 contain">-->
                 <!--<div class="wrap">-->
-
-        <ul class="thumbnails">
-            <li class="span3">
-            <div class="thumbnail">
-               <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
-              <h5>Thumbnail label</h5>
-              <p>Thumbnail caption right here...</p>
-            </div>
-            </li>
-            <li class="span3">
-            <div class="thumbnail">
-               <a href="#"><img src="http://placehold.it/260x180" alt=""></a>
-              <h5>Thumbnail label</h5>
-              <p>Thumbnail caption right here...</p>
-            </div>
-            </li>
-
-
-        </ul>
         <!--</div>-->
     <!--</div>-->
         {% endfor %}

@@ -6,8 +6,10 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from helpers import jsonify
 from sqlalchemy import desc
 from database import db_session
-from models import User, Projects
-from forms import RegistrationForm,AddProjectForm,LoginForm
+from models import User, Projects, Comments
+from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
+
+from flask.ext.gravatar import Gravatar
 #from contextlib import closing
 
 
@@ -15,6 +17,13 @@ from forms import RegistrationForm,AddProjectForm,LoginForm
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object('conf')
+
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False)
 
 @app.before_request
 def before_request():
@@ -61,11 +70,48 @@ def ajax():
         return jsonify(result = projs)
     return jsonify(status='success')
 
-@app.route('/projects/<int:proj_id>')
-def project_index(proj_id):
-    proj = db_session.query(Projects).filter_by(id=proj_id).first()
-    return render_template('project.html',query=proj)
+#!!login requied
+@app.route('/ajax/in', methods=['POST','GET'])
+def ajax_add():
+    if request.method == 'POST':
+        #        proj = db_session.query(Projects).get(5)
+        app.logger.debug(request.form.get('data'))
+        data = request.form.get('data')
+        proj = db_session.query(Projects).get(data)
+        proj.inns_now +=1
+        db_session.commit()
 
+
+    """
+    comment = Comment.query.get_or_404(comment_id)
+    comment.permissions.delete.test(403)
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    signals.comment_deleted.send(comment.post)
+
+    return jsonify(success=True,
+                   comment_id=comment_id)
+                   """
+
+    return redirect('/')
+
+@app.route('/projects/<int:proj_id>', methods=['POST','GET'])
+def project_index(proj_id):
+    form = CommentForm(request.form)
+    proj = db_session.query(Projects).filter_by(id=proj_id).first()
+    if request.method == 'POST' and form.validate():
+        comm = Comments(form.comment.data,
+                g.user,
+                proj)
+        db_session.add(comm)
+        db_session.commit()
+        flash('Comment added')
+        return redirect(url_for('project_index',proj_id=proj_id))
+    if proj is None:
+        abort(404)
+    return render_template('project.html',query=proj,form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -73,11 +119,12 @@ def register():
     if request.method == 'POST' and form.validate():
         #check email,login
         user = User(form.username.data, form.email.data,
-                    form.password.data)
+                    form.password.data, form.image.data)
         db_session.add(user)
         db_session.commit()
 
         flash('Thanks for registering')
+        session['auth']=form.username.data
         return redirect('/')
     return render_template('register.html', form=form)
 
