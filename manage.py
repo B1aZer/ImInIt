@@ -6,7 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from helpers import jsonify
 from sqlalchemy import desc
 from database import db_session
-from models import User, Projects, Comments
+from models import User, Projects, Comments, Participants
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
 
 from flask.ext.gravatar import Gravatar
@@ -47,13 +47,13 @@ def index():
 def map():
     return render_template('map.html')
 
-@app.route('/test')
-def map():
-    return render_template('test.html')
+@app.route('/user')
+def user():
+     return render_template('user.html',user=g.user)
 
-
+@app.route('/ajax/<int:proj_id>', methods=['POST','GET'])
 @app.route('/ajax', methods=['POST','GET'])
-def ajax():
+def ajax(*args, **kwargs):
     #app. logger.debug('ajax:',someth)
     #if request.method == 'POST':
         #app.logger.debug(request.form.get('lat'))
@@ -66,21 +66,32 @@ def ajax():
         for qq in query.all():
             #for q in qq:
             projs.append(qq.json())
-
+        if args:
+            query=db_session.query(Projects).get(args[0])
+            projs=query.json()
         return jsonify(result = projs)
     return jsonify(status='success')
 
 #!!login requied
-@app.route('/ajax/in', methods=['POST','GET'])
-def ajax_add():
-    if request.method == 'POST':
-        #        proj = db_session.query(Projects).get(5)
-        app.logger.debug(request.form.get('data'))
+@app.route('/projects/add/<int:proj_id>', methods=['POST','GET'])
+def part_add(proj_id):
+    if request.method == 'GET':
+        #app.logger.debug(proj.participants)
         data = request.form.get('data')
-        proj = db_session.query(Projects).get(data)
-        proj.inns_now +=1
-        db_session.commit()
-
+        proj = db_session.query(Projects).get(proj_id)
+        if g.user not in proj.get_users():
+            proj.inns_now +=1
+            part = Participants(g.user,
+                proj)
+            db_session.add(part)
+            db_session.commit()
+            flash('You are going to go')
+        else:
+            proj.inns_now -=1
+            part = db_session.query(Participants).filter_by(user=g.user).delete()
+            db_session.commit()
+            app.logger.debug(part)
+            flash('You are not going')
 
     """
     comment = Comment.query.get_or_404(comment_id)
@@ -95,12 +106,15 @@ def ajax_add():
                    comment_id=comment_id)
                    """
 
-    return redirect('/')
+    return redirect('/projects/%s' % proj_id)
 
 @app.route('/projects/<int:proj_id>', methods=['POST','GET'])
 def project_index(proj_id):
     form = CommentForm(request.form)
     proj = db_session.query(Projects).filter_by(id=proj_id).first()
+    css='icon-ok-sign'
+    if g.user in proj.get_users():
+        css='icon-remove-sign'
     if request.method == 'POST' and form.validate():
         comm = Comments(form.comment.data,
                 g.user,
@@ -111,7 +125,11 @@ def project_index(proj_id):
         return redirect(url_for('project_index',proj_id=proj_id))
     if proj is None:
         abort(404)
-    return render_template('project.html',query=proj,form=form)
+    #app.logger.debug(proj.get_users())
+    return render_template('project.html',
+                        query=proj,
+                        form=form,
+                        css=css)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

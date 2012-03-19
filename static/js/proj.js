@@ -1,4 +1,6 @@
 $(function() {
+    iminit.map_init();
+    iminit.getMarker(1);
     /*$("#add").click(function () {
     if ($('#add > i').hasClass('icon-ok-sign')) {
         $('#add > i').attr("class", "icon-remove-sign");

@@ -36,6 +36,22 @@ var iminit = {
         map.setCenter(new google.maps.LatLng(55.75, 37.616666699999996));
     },
 
+    getMarker : function (id) {
+        $.getJSON("/ajax/1", function(json) { 
+        if (json.result[0].lat && json.result[0].lng) {
+                        var myLatlng = new google.maps.LatLng(json.result[0].lat,json.result[0].lng);
+                        iminit.placeMarker(myLatlng);
+                        //console.log(myLatlng);
+                        map.setZoom(15);
+                        map.setCenter(myLatlng);
+                        console.log('dasdas');
+
+                    }
+
+        });
+
+    },
+
     getMarkers : function () {
         $.getJSON("/ajax", function(json) { 
             //console.log('ajax',json.result);
@@ -53,7 +69,7 @@ var iminit = {
     },
 
     placeMarker : function (location) {
-        var image = 'static/img/icons/blue/regroup.png';
+        var image = '/static/img/icons/blue/regroup.png';
         //if (iminit.markersArray.length == 0) {
             iminit.marker = new google.maps.Marker({
                 position: location,

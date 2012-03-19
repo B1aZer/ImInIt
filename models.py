@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from database import Base
 from datetime import datetime,timedelta
@@ -14,6 +14,7 @@ class User(Base):
     projects = relationship('Projects')
     comments = relationship('Comments')
     participant = relationship('Participants')
+    #participant = relationship("Participants", uselist=False, backref="users")
     
     def __init__(self, name=None, email=None, password=None, image = None):
         self.name = name
@@ -87,6 +88,18 @@ class Projects(Base):
                     lat=self.lat,
                     lng=self.lng,
                     image=self.image_link)
+    def get_users(self):
+        lst=[]
+        for usr in self.participants:
+            lst.append(usr.user)
+        return lst
+
+"""
+association_table = Table('association', Base.metadata,
+    Column('project_id', Integer, ForeignKey('projects.id')),
+    Column('participant_id', Integer, ForeignKey('participants.id'))
+)
+"""
 
 
 class Comments(Base):
@@ -112,11 +125,21 @@ class Participants(Base):
     project_id = Column(Integer,
                 ForeignKey('projects.id', ondelete='CASCADE'))
     user_id = Column(Integer,
-                ForeignKey('users.id', ondelete='CASCADE'))
+         ForeignKey('users.id', ondelete='CASCADE'))
     user = relationship('User')
+    #child = relationship("Child", uselist=False, backref="parent")
+    #project = relationship('Projects', secondary=association_table)
     project = relationship('Projects')
+    #project = relationship(Projects, secondary=association_table)
+    
+    def __init__ (self, user=None, proj=None):
+        self.user=user
+        self.project=proj
 
+    def __str__(self):
+        return self.user.name
 
+ 
 
 
 class Category(Base):
