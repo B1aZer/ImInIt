@@ -45,7 +45,7 @@ def index():
 
 @app.route('/map')
 def map():
-    return render_template('map.html')
+    return render_template('base.html')
 
 @app.route('/user')
 def user():
@@ -75,7 +75,7 @@ def ajax(*args, **kwargs):
 #!!login requied
 @app.route('/projects/add/<int:proj_id>', methods=['POST','GET'])
 def part_add(proj_id):
-    if request.method == 'GET':
+    if request.method == 'GET' and g.user:
         #app.logger.debug(proj.participants)
         data = request.form.get('data')
         proj = db_session.query(Projects).get(proj_id)
@@ -164,6 +164,7 @@ def add_entry():
                     form.description.data,
                     form.httext.data,
                     g.user,
+                    form.loc.data,
                     form.lat.data,
                     form.lng.data,
                     form.image_link.data)
@@ -202,6 +203,6 @@ def logout():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
 
 

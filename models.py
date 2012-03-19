@@ -48,6 +48,7 @@ class Projects(Base):
     html = Column(String)
     date_created = Column(DateTime, default=datetime.utcnow)
     date_target = Column(DateTime, default=datetime.utcnow)
+    location = Column(String)
     lat = Column(Integer)
     lng = Column(Integer)
     inns_now = Column(Integer, default=0)
@@ -57,11 +58,12 @@ class Projects(Base):
     comments = relationship('Comments')
     participants = relationship('Participants')
 
-    def __init__(self, title=None, desc=None, html=None, user=None, lat=None, lng=None, image=None):
+    def __init__(self, title=None, desc=None, html=None, user=None, loc=None, lat=None, lng=None, image=None):
         self.title = title
         self.description = desc
         self.html=html
         self.user=user
+        self.location=loc
         self.lat=lat
         self.lng=lng
         self.image_link=image

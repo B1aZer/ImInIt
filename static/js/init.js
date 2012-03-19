@@ -24,6 +24,7 @@ var iminit = {
             iminit.deleteOverlays();
             iminit.placeMarker(event.latLng);
             iminit.addCoord(event.latLng);
+            iminit.adressCode();
         });
         if ( $("#lat").val() && $("#lng").val() ) {
             iminit.placeMarker(new google.maps.LatLng($("#lat").val(), $("#lng").val()));
@@ -44,8 +45,6 @@ var iminit = {
                         //console.log(myLatlng);
                         map.setZoom(15);
                         map.setCenter(myLatlng);
-                        console.log('dasdas');
-
                     }
 
         });
@@ -80,6 +79,7 @@ var iminit = {
             google.maps.event.addListener(iminit.marker, "dragend", function() {
                 iminit.geocode = iminit.marker.getPosition();
                 iminit.addCoord(iminit.geocode);
+                iminit.adressCode();
             });
             google.maps.event.addListener(iminit.marker, 'dblclick', function() {
                 map.setZoom(15);
@@ -124,7 +124,7 @@ var iminit = {
 
     adressCode : function() {
 
-        if (iminit.marker) {
+        if (iminit.markersArray.length > 0) {
             geocoder.geocode({'latLng': iminit.marker.getPosition()}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[1]) {

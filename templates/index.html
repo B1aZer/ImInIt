@@ -1,81 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-    
 
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                 <div class="contain">
-                    <div class="wrap">
-                        <div id="mapcanvas">
-                        </div>
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <div class="contain">
+                <div class="wrap">
+                    <div id="mapcanvas">
                     </div>
                 </div>
             </div>
         </div>
-        {% for prj in content %}
-        {% if loop.index%2 > 0 %}<div class="row">{% endif %}
-            <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
-                'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
-                <div class="contain">
-                    <div class="wrap">
-                        <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
+    </div>
+    {% for prj in content %}
+    {% if loop.index%2 > 0 %}<div class="row">{% endif %}
+        <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
+            'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
+            <div class="contain">
+                <div class="wrap">
+                    <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
                         <p>{{ prj.description }}</p>-->
 
-                        <ul class="thumbnails">
-                            <li class="span33">
-                            <div >
-                                {% if  prj.image_link %}
-                                <a href="/projects/{{ prj.id }}"><img src="{{ prj.image_link }}" alt=""></a>
-                                {% else %}
-                                <a href="/projects/{{ prj.id }}"><img src="{{ url_for('static', filename='img/cover.jpg') }}" alt=""></a>
-                                {% endif %}
-                            </div>
-                            </li>
-                            <div class="span33" style="text-align:center;">
-                                <a href="/projects/{{ prj.id }}"><strong>{{ prj.title }}</strong></a>
-                            </div>
-                        </ul>
-                        <p class="well"> {{ prj.description}}</p>
-                        <a class="btn left" href="/projects/{{ prj.id }}">View</a>
-                        <span class="right">
-                            <div class="btn-group">
-                                <a class="btn" href="#"><i class="icon-thumbs-up"></i></a>
-                                <a class="btn" href="#"><i class="icon-thumbs-down"></i></a>
-                            </div>
-                        </span>
+                    <ul class="thumbnails">
+                        <li class="span3 width-fix" >
+                        <div >
+                            {% if  prj.image_link %}
+                            <a href="/projects/{{ prj.id }}" class="thumbnail"><img src="{{ prj.image_link }}" alt=""></a>
+                            {% else %}
+                            <a href="/projects/{{ prj.id }}"><img src="{{ url_for('static', filename='img/cover.jpg') }}" alt=""></a>
+                            {% endif %}
+                        </div>
+                        </li>
+                        <li style="text-align:center">
+                        <a href="/projects/{{ prj.id }}"><strong>{{ prj.title }}</strong></a>
+                        </li>
+                    </ul>
+                    <p class="well"> {{ prj.description}}</p>
+                    <a class="btn left" href="/projects/{{ prj.id }}">View</a>
+                    <span class="right">
+                        <div class="btn-group">
+                            <a class="btn" href="#"><i class="icon-thumbs-up"></i></a>
+                            <a class="btn" href="#"><i class="icon-thumbs-down"></i></a>
+                        </div>
+                    </span>
 
 
-                    </div>
                 </div>
             </div>
-            {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
+        </div>
+        {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
 
-        {% else %}
-        <!--<div class="span3 contain">-->
-        <!--<div class="wrap">-->
-                <h1> Sorry no projects for you today </h1>
-        <!--</div>-->
-        <!--</div>-->
-        {% endfor %}
+    {% else %}
+    <!--<div class="span3 contain">-->
+    <!--<div class="wrap">-->
+    <h1> Sorry no projects for you today </h1>
+    <!--</div>-->
+    <!--</div>-->
+    {% endfor %}
 
-        <ul class="pager right">
-          <li>
-            <a href="?p=0">Previous</a>
-          </li>
-          <li>
-            <a href="?n=14">Next</a>
-          </li>
-        </ul>
-        
-
-    </div> <!-- /container -->
+    <ul class="pager right">
+        <li>
+        <a href="?p=0">Previous</a>
+        </li>
+        <li>
+        <a href="?n=14">Next</a>
+        </li>
+    </ul>
 
 
+</div> <!-- /container -->
 
 
-    {% endblock %}
-    {% block js %}
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-    {% endblock %}
+
+
+{% endblock %}
+{% block js %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
 

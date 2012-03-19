@@ -26,6 +26,7 @@
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
     <div class="row">
+                    <button type="submit" class="btn btn-large">Add Point</button>
         <form id="add-point" method="post" action="/add" class="form-horizontal">
             <div id="tabs" class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
@@ -34,7 +35,6 @@
                     <li><a href="#3" data-toggle="tab"><i class="icon-picture icon-large"></i>Picture</a></li>
                     <li><a href="#4" data-toggle="tab"><i class="icon-facetime-video icon-large"></i>Video</a></li>
                     <li><a href="#5" data-toggle="tab"><i class="icon-map-marker icon-large"></i>Location</a></li>
-                    <button type="submit" class="btn btn-large">Add Point</button>
                     
                 </ul>
                 <div class="tab-content">
@@ -45,7 +45,7 @@
                         {{ render_field(form.date_end,"icon-time") }}
                     </div>
                     <div class="tab-pane fade" id="2">
-                        {{ form.httext(rows='5',cols='80') }}
+                        {{ form.httext(rows='25',cols='80') }}
                     </div>
                     <div class="tab-pane fade" id="3">
                         {{ render_field(form.image_link,"icon-magnet") }}

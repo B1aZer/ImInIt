@@ -49,6 +49,19 @@ body {
     padding-top: 100px;
   }
 }
+.width-fix {
+    width:90%;
+}
+@media (max-width: 768px) {
+.width-fix {
+    width:97%;
+}
+}
+@media (max-width: 480px) {
+.width-fix {
+    width:95%;
+}
+}
 .row {
     margin-bottom: 30px;
 }
