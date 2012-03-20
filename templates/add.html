@@ -26,7 +26,7 @@
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
     <div class="row">
-                    <button type="submit" class="btn btn-large">Add Point</button>
+        <!--<button type="submit" class="btn btn-large">Add Point</button>-->
         <form id="add-point" method="post" action="/add" class="form-horizontal">
             <div id="tabs" class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
@@ -45,6 +45,7 @@
                         {{ render_field(form.date_end,"icon-time") }}
                     </div>
                     <div class="tab-pane fade" id="2">
+                        <label for="httext">About your project</label>
                         {{ form.httext(rows='25',cols='80') }}
                     </div>
                     <div class="tab-pane fade" id="3">

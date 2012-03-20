@@ -1,9 +1,18 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block content %}
 <div class="content">
- {% for error in get_flashed_messages() %}
-    <strong>Error:</strong> {{ error }}
-    {% else %}
-    {% endfor %}
-</div>
+    <div class="popover fade top in" style="top: 119.5px; left: 123.367px; display: block;">
+        <div class="arrow">
+        </div>
+        <div class="popover-inner">
+            <h3 class="popover-title">A Title</h3> 
+            <div class="popover-content"><p>This is text</p> 
+        </div>
+    </div>
+
+
+    </div>
+    </div>
+    
+{% endblock %}
 

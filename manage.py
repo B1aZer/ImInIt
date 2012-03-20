@@ -45,7 +45,7 @@ def index():
 
 @app.route('/map')
 def map():
-    return render_template('base.html')
+    return render_template('map.html')
 
 @app.route('/user')
 def user():

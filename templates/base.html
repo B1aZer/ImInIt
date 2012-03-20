@@ -36,6 +36,7 @@
     <script src="{{ url_for('static', filename='js/init.js') }}"></script>
      <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
+    <script src="{{ url_for('static', filename='js/infobox_packed.js') }}"></script>
     </head>
 
     <body>
@@ -51,59 +52,74 @@
           </a>
           <a class="brand" href="/">Project name</a>
           <div class="nav-collapse">
-            <ul class="nav pull-right">
-             {% if not g.user %}
-             <li><a href="{{ url_for('login') }}">Log In</a></li>
-             <li><a href="/register">Register</a></li>
-             {% else %}
-             <li>
-             <a href="#" class="" rel="popover" id="flasher" 
-                data-content="
-             {% for msg in get_flashed_messages() %}
-             {{ msg }} </br>
-             {% else %}
-             {% endfor %}
-             " data-original-title="A Title"><i class="icon-inbox"></i></a>
-             </li>
-             <li class="dropdown" id="menu1">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    {{ g.user.name }}
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                 <li><a href="{{ url_for('user') }}">Info</a></li>
-                 <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                </ul>
-             </li>
-             
-             {% endif %}
-            </ul>
+              <ul class="nav">
+                  <li><a href="{{ url_for('map') }}">Map</a></li>
+              </ul>
+              <ul class="nav pull-right">
+                  {% if not g.user %}
+                  <li><a href="{{ url_for('login') }}">Log In</a></li>
+                  <li><a href="/register">Register</a></li>
+                  {% else %}
+                  <li>
+                  <a href="#" class="" rel="popover" id="flasher" 
+                      data-content="
+                      {% for msg in get_flashed_messages() %}
+                      {{ msg }} </br>
+                      {% else %}
+                      {% endfor %}
+                      " data-original-title="A Title"><i class="icon-inbox"></i></a>
+                  </li>
+                  <li class="dropdown" id="menu1">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      {{ g.user.name }}
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a href="{{ url_for('user') }}">Info</a></li>
+                      <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                  </ul>
+                  </li>
+
+                  {% endif %}
+              </ul>
           </div><!--/.nav-collapse -->
-        </div>
       </div>
+  </div>
   </div>
   {% endblock %}
   {% block subnav %}
 
   <div class="subnav subnav-fixed" >
-      <div class="container">
-          <ul class="nav nav-pills">
-              <li class="active">
-              <a href="/">Home</a> 
-              </li>
-              <li>
-              <a href="/map">Map</a> 
-              </li>
-              {% if g.user %}
-              <li>
-              <a href="/add">Add</a>
-              </li>
-              {% endif %}
-          </ul>
-      </div>
+  <div class="container">
+      <ul class="nav nav-pills">
+          <li class="active">
+          <a href="/">Home</a> 
+          </li>
+          <li>
+          <a href="/map">Map</a> 
+          </li>
+          {% if g.user %}
+          <li>
+          <a href="/add">Add</a>
+          </li>
+          {% endif %}
+      </ul>
+  </div>
   </div>
 
   {% endblock %}
+
+  <!--
+<ul class="breadcrumb">
+  <li>
+    <a href="#">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="#">Library</a> <span class="divider">/</span>
+  </li>
+  <li class="active">Data</li>
+</ul>
+       -->
   {% block content %}
 
 
@@ -113,50 +129,50 @@
 
 
 
-      <div class="row">
-          <div class="span12">
-              <div class="contain">
-                  <div id="mapcanvas" class="wrap">
-                  </div>
+  <div class="row">
+      <div class="span12">
+          <div class="contain">
+              <div id="mapcanvas" class="wrap">
               </div>
           </div>
       </div>
-      {% for prj in content %}
-      {% if loop.index%2 > 0 %}<div class="row">{% endif %}
-          <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
-              'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
-              <div class="contain">
-                  <div class="wrap">
-                      <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
+  </div>
+  {% for prj in content %}
+  {% if loop.index%2 > 0 %}<div class="row">{% endif %}
+      <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
+          'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
+          <div class="contain">
+              <div class="wrap">
+                  <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
                         <p>{{ prj.description }}</p>-->
 
-                      <ul class="thumbnails">
-                          <li class="span33">
-                          <a href="/projects/1"><img src="http://www.astateoftrance.com/wp-content/themes/asot-v3/img/asot550/placeholder-moscow.jpg" alt=""></a>
+                  <ul class="thumbnails">
+                      <li class="span33">
+                      <a href="/projects/1"><img src="http://www.astateoftrance.com/wp-content/themes/asot-v3/img/asot550/placeholder-moscow.jpg" alt=""></a>
 
-                          </li>
-                      </ul>
-                      <p class="well"> Description </p>
-                      <span class="btn left">View</span>
-                      <span class="right">
-                          <div class="btn-group">
-                              <a class="btn" href="#"><i class="icon-thumbs-up"</i></a>
-                              <a class="btn" href="#"><i class="icon-thumbs-down"</i></a>
-                          </div>
-                      </span>
+                      </li>
+                  </ul>
+                  <p class="well"> Description </p>
+                  <span class="btn left">View</span>
+                  <span class="right">
+                      <div class="btn-group">
+                          <a class="btn" href="#"><i class="icon-thumbs-up"</i></a>
+                          <a class="btn" href="#"><i class="icon-thumbs-down"</i></a>
+                      </div>
+                  </span>
 
 
-                  </div>
               </div>
           </div>
-          {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
+      </div>
+      {% if loop.index%2 == 0 or loop.last %} </div><!--row-->{% endif %}
 
-      {% else %}
-      <!--<div class="span3 contain">-->
-      <!--<div class="wrap">-->
-      <!--</div>-->
-      <!--</div>-->
-      {% endfor %}
+  {% else %}
+  <!--<div class="span3 contain">-->
+  <!--<div class="wrap">-->
+  <!--</div>-->
+  <!--</div>-->
+  {% endfor %}
   </div> <!-- /container -->
 
 

@@ -9,8 +9,10 @@ body {
     height: 250px;
 }
 .contain {
-    background: #EEEEEE;
-    padding: 10px;
+    background: #333333;
+    /*background: #EEEEEE;*/
+    padding: 5px;
+    /*padding: 10px;*/
     -moz-border-radius:4px; 
     -webkit-border-radius: 4px;
     

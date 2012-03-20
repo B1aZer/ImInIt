@@ -1,71 +1,15 @@
 {% extends "base.html" %}
 
-{% block subnav %}
-
-<div class="subnav subnav-fixed" >
-            <ul class="nav nav-pills">
-              <li>
-                <a href="/">Home</a> 
-              </li>
-              <li class="active">
-                <a href="/map">Map</a> 
-              </li>
-              <li>
-                <a href="#">Data</a>
-              </li>
-            </ul>
-    </div>
-
-{% endblock %}
-
 {% block content %}
 
-<div class="container">
-        <div class="row">
-        <div class="span4">
-            <button class="btn add_map" href="#">Load</button>
-            <button class="btn add_form"  href="#">Add</button>
-            <div class="formin">
-                
-    <form id="add-point" action="/ajax" method="POST">
-
-  <input type="hidden"name="action"value="savepoint"id="action">
-
-  <fieldset>
-
-    <legend>Add a Point to the Map</legend>
-
-    <div class="error" style="display:none;"></div>
-
-    <div class="input">
-
-      <label for="name">Location Name</label>
-
-      <input type="text"name="name"id="name"value="">
-
-    </div>
-
-    <div class="input">
-
-      <label for="address">Address</label>
-
-      <input type="text"name="address"id="address"value="">
-
-    </div>
-
-    <button type="submit" class="btn">Add Point</button>
-    <button id="clearbtn" class="btn">Clear Point</button>
-
-      </fieldset>
-
-  </form>
-
-        </div>
-        </div>
-        <div class="span8"  id="mapcanvas"  style="height:360px"></div>
-    </div>
-</div> <!-- /container -->
+            <div id="wrapper" style="height:100%;width:100%;position:fixed;top:77px;">
+                <div id="mapcanvas" style="height:100%;width:100%;position:relative">
+                </div>
+            </div>
 
 
 {% endblock %}
 
+{% block js %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
