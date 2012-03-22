@@ -6,7 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from helpers import jsonify
 from sqlalchemy import desc
 from database import db_session
-from models import User, Projects, Comments, Participants
+from models import User, Projects, Comments, Participants, Category
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
 
 from flask.ext.gravatar import Gravatar
@@ -43,14 +43,6 @@ def index():
     app.logger.debug(g.user)
     return render_template('index.html',content=query)
 
-@app.route('/map')
-def map():
-    return render_template('map.html')
-
-@app.route('/user')
-def user():
-     return render_template('user.html',user=g.user)
-
 @app.route('/ajax/<int:proj_id>', methods=['POST','GET'])
 @app.route('/ajax', methods=['POST','GET'])
 def ajax(*args, **kwargs):
@@ -70,7 +62,80 @@ def ajax(*args, **kwargs):
             query=db_session.query(Projects).get(args[0])
             projs=query.json()
         return jsonify(result = projs)
-    return jsonify(status='success')
+    return jsonify(status='success') 
+
+@app.route('/map')
+def map():
+    return render_template('map.html')
+
+@app.route('/user')
+def user():
+     return render_template('user.html',user=g.user)
+
+@app.route('/cat/<category>')
+def cat():
+    query=db_session.query(Projects).order_by(desc('date_created')).limit(14).offset(0)
+    return render_template('index.html',content=query)
+
+@app.route('/add', methods=['POST','GET'])
+def add_entry():
+    """
+    if not session.get('logged_in'):
+        abort(401)
+    g.db.execute('insert into entries (title, text) values (?, ?)',
+                 [request.form['title'], request.form['text']])
+    g.db.commit()
+    flash('New entry was successfully posted')
+    """
+
+    form = AddProjectForm(request.form)
+    cats = db_session.query(Category).all()
+    if request.method == 'POST' and form.validate():
+        #try:
+            proj = Projects(form.title.data,
+                    form.description.data,
+                    form.httext.data,
+                    g.user,
+                    form.loc.data,
+                    form.lat.data,
+                    form.lng.data,
+                    form.image_link.data)
+            #app.logger.debug(str(proj.__dict__))
+            for cat in form.cat.data.split(','):
+                proj.cat.append(Category(title=cat))
+            db_session.add(proj)
+            db_session.commit()
+            flash('Project added')
+        #except:
+            #app.logger.debug('Cant add project')
+            return redirect('/')
+
+    return render_template('add.html', form=form, cats=cats)
+
+
+
+@app.route('/projects/<int:proj_id>', methods=['POST','GET'])
+def project_index(proj_id):
+    form = CommentForm(request.form)
+    proj = db_session.query(Projects).filter_by(id=proj_id).first()
+    css='icon-ok-sign'
+    if g.user in proj.get_users():
+        css='icon-remove-sign'
+    if request.method == 'POST' and form.validate():
+        comm = Comments(form.comment.data,
+                g.user,
+                proj)
+        db_session.add(comm)
+        db_session.commit()
+        flash('Comment added')
+        return redirect(url_for('project_index',proj_id=proj_id))
+    if proj is None:
+        abort(404)
+    #app.logger.debug(proj.get_users())
+    return render_template('project.html',
+                        query=proj,
+                        form=form,
+                        css=css)
 
 #!!login requied
 @app.route('/projects/add/<int:proj_id>', methods=['POST','GET'])
@@ -108,29 +173,6 @@ def part_add(proj_id):
 
     return redirect('/projects/%s' % proj_id)
 
-@app.route('/projects/<int:proj_id>', methods=['POST','GET'])
-def project_index(proj_id):
-    form = CommentForm(request.form)
-    proj = db_session.query(Projects).filter_by(id=proj_id).first()
-    css='icon-ok-sign'
-    if g.user in proj.get_users():
-        css='icon-remove-sign'
-    if request.method == 'POST' and form.validate():
-        comm = Comments(form.comment.data,
-                g.user,
-                proj)
-        db_session.add(comm)
-        db_session.commit()
-        flash('Comment added')
-        return redirect(url_for('project_index',proj_id=proj_id))
-    if proj is None:
-        abort(404)
-    #app.logger.debug(proj.get_users())
-    return render_template('project.html',
-                        query=proj,
-                        form=form,
-                        css=css)
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
@@ -145,40 +187,6 @@ def register():
         session['auth']=form.username.data
         return redirect('/')
     return render_template('register.html', form=form)
-
-@app.route('/add', methods=['POST','GET'])
-def add_entry():
-    """
-    if not session.get('logged_in'):
-        abort(401)
-    g.db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
-    g.db.commit()
-    flash('New entry was successfully posted')
-    """
-
-    form = AddProjectForm(request.form)
-    if request.method == 'POST' and form.validate():
-        #try:
-            proj = Projects(form.title.data,
-                    form.description.data,
-                    form.httext.data,
-                    g.user,
-                    form.loc.data,
-                    form.lat.data,
-                    form.lng.data,
-                    form.image_link.data)
-            #app.logger.debug(str(proj.__dict__))
-            db_session.add(proj)
-            db_session.commit()
-            flash('Project added')
-        #except:
-            #app.logger.debug('Cant add project')
-            return redirect('/')
-
-    return render_template('add.html', form=form)
-
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

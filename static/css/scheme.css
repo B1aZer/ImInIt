@@ -48,7 +48,8 @@ body {
 /*D5D5D5*/
 @media (min-width: 979px) {
   body {
-    padding-top: 100px;
+    padding-top: 50px;
+    /*padding-top: 100px;*/
   }
 }
 .width-fix {

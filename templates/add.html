@@ -4,30 +4,14 @@
 <link rel="stylesheet" href={{ url_for('static', filename='akzhan/jquery.wysiwyg.css') }} type="text/css" media="screen" charset="utf-8" />
 
 {% endblock %}
-{% block subnav %}
 
-<div class="subnav subnav-fixed" >
-            <ul class="nav nav-pills">
-              <li>
-                <a href="/">Home</a> 
-                </li>
-                <li>
-                <a href="/map">Map</a> 
-              </li>
-              <li class="active">
-                <a href="/add">Add</a>
-              </li>
-            </ul>
-    </div>
-
-{% endblock %}
 
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
     <div class="row">
-        <!--<button type="submit" class="btn btn-large">Add Point</button>-->
         <form id="add-point" method="post" action="/add" class="form-horizontal">
+        <button type="submit" class="btn btn-large">Add Point</button>
             <div id="tabs" class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#1" data-toggle="tab"><i class="icon-edit icon-large"></i>Genral</a></li>
@@ -43,6 +27,9 @@
                         {{ render_field(form.description,"","input-xlarge") }}
                         {{ render_field(form.goal_end,"icon-check") }}
                         {{ render_field(form.date_end,"icon-time") }}
+                        {{ render_field(form.cat,"icon-bookmark") }}
+                        <p> {{ cats }} </p>
+                        <input type="text" data-mode="multiple" data-delimiter="," class="span3" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="{{ cats }}">
                     </div>
                     <div class="tab-pane fade" id="2">
                         <label for="httext">About your project</label>

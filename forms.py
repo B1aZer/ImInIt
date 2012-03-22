@@ -16,6 +16,7 @@ class RegistrationForm(Form):
 class AddProjectForm(Form):
     title = TextField('Title', [validators.Required()])
     description = TextAreaField('Description', [validators.Length(min=15)])
+    cat = TextField('Category')
     loc = TextField('Location')
     date_end=DateField('Ending Date')
     goal_end = TextField('Goal')

@@ -70,7 +70,7 @@ var iminit = {
     },
 
     placeMarker : function (location, id) {
-        if (id == undefined) { id = 0000 }
+        
         var image = '/static/img/icons/blue/regroup.png';
         //if (iminit.markersArray.length == 0) {
             iminit.marker = new google.maps.Marker({
@@ -98,9 +98,11 @@ var iminit = {
                 iminit.addCoord(iminit.geocode);
                 iminit.adressCode();
             });
-            google.maps.event.addListener(iminit.marker, 'click', function() {
-                window.location.href = 'projects/'+id;
-            });
+            if (id != undefined) { 
+                google.maps.event.addListener(iminit.marker, 'click', function() {
+                    window.location.href = 'projects/'+id;
+                });
+            }
             google.maps.event.addListener(iminit.marker, 'mouseover', function() {
                 ib.open(map, iminit.marker); 
                 /*map.panTo(iminit.marker.getPosition()); */

@@ -32,7 +32,15 @@
     {% endblock %}
     <script src="{{ url_for('static', filename='js/jquery-1.7.1.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui-1.8.18.custom.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-button.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-tooltip.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-popover.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-tab.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-transition.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-typeahead.js') }}"></script>
     <script src="{{ url_for('static', filename='js/init.js') }}"></script>
      <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
@@ -76,6 +84,7 @@
                   </a>
                   <ul class="dropdown-menu">
                       <li><a href="{{ url_for('user') }}">Info</a></li>
+                      <li><a href="{{ url_for('add_entry') }}">Add project</a></li>
                       <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                   </ul>
                   </li>
@@ -88,7 +97,7 @@
   </div>
   {% endblock %}
   {% block subnav %}
-
+       <!-- 
   <div class="subnav subnav-fixed" >
   <div class="container">
       <ul class="nav nav-pills">
@@ -105,11 +114,8 @@
           {% endif %}
       </ul>
   </div>
-  </div>
-
-  {% endblock %}
-
-  <!--
+  </div>   --> 
+            <div class="container">    
 <ul class="breadcrumb">
   <li>
     <a href="#">Home</a> <span class="divider">/</span>
@@ -119,12 +125,17 @@
   </li>
   <li class="active">Data</li>
 </ul>
-       -->
+</div>
+      
+  {% endblock %}
+
+  
   {% block content %}
 
 
   <div class="container">
 
+          
 
 
 
@@ -170,8 +181,7 @@
   {% else %}
   <!--<div class="span3 contain">-->
   <!--<div class="wrap">-->
-  <!--</div>-->
-  <!--</div>-->
+ 
   {% endfor %}
   </div> <!-- /container -->
 

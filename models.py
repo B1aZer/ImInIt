@@ -35,14 +35,17 @@ class User(Base):
         if (self.name == name and self.password == passw):
             return self
 
+association_table = Table('association', Base.metadata,
+    Column('project_id', Integer, ForeignKey('projects.id')),
+    Column('category_id', Integer, ForeignKey('category.id'))
+)  
 
 class Projects(Base):
     __tablename__ = 'projects'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    cat_id = Column(Integer, ForeignKey('category.id'))
     user = relationship('User')
-    cat = relationship('Category')
+    cat = relationship('Category', secondary=association_table, backref='projects')
     title = Column(String(50))
     description = Column(String(120))
     html = Column(String)
@@ -61,6 +64,7 @@ class Projects(Base):
     def __init__(self, title=None, desc=None, html=None, user=None, loc=None, lat=None, lng=None, image=None):
         self.title = title
         self.description = desc
+        #self.cat = cat
         self.html=html
         self.user=user
         self.location=loc
@@ -96,12 +100,7 @@ class Projects(Base):
             lst.append(usr.user)
         return lst
 
-"""
-association_table = Table('association', Base.metadata,
-    Column('project_id', Integer, ForeignKey('projects.id')),
-    Column('participant_id', Integer, ForeignKey('participants.id'))
-)
-"""
+
 
 
 class Comments(Base):
@@ -149,6 +148,11 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50), unique=True)
     description = Column(String(120))
-    projects = relationship('Projects')
+    #projects = relationship('Projects')
 
+    def __init__(self, *args, **kwargs):
+        super(Category, self).__init__(*args, **kwargs) 
+
+    def __repr__(self):
+        return "%s" % self.title
 
