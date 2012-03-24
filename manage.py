@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 # all the imports
 #import sqlite3
 #import conf
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from helpers import jsonify
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from database import db_session
 from models import User, Projects, Comments, Participants, Category
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
@@ -39,9 +40,11 @@ def shutdown_session(exception=None):
 @app.route('/')
 def index():
     query=db_session.query(Projects).order_by(desc('date_created')).limit(14).offset(0)
+    cats = db_session.query(Category, func.count(Category.projects)).join(Category.projects).group_by(Category.title) 
+    #cats=db_session.query(Category).all()
     #query=abort(404)
     app.logger.debug(g.user)
-    return render_template('index.html',content=query)
+    return render_template('index.html',content=query, cats = cats)
 
 @app.route('/ajax/<int:proj_id>', methods=['POST','GET'])
 @app.route('/ajax', methods=['POST','GET'])
@@ -90,6 +93,7 @@ def add_entry():
 
     form = AddProjectForm(request.form)
     cats = db_session.query(Category).all()
+    cats = [cat.title for cat in cats]
     if request.method == 'POST' and form.validate():
         #try:
             proj = Projects(form.title.data,
@@ -101,8 +105,16 @@ def add_entry():
                     form.lng.data,
                     form.image_link.data)
             #app.logger.debug(str(proj.__dict__))
+            
             for cat in form.cat.data.split(','):
-                proj.cat.append(Category(title=cat))
+                if cat:
+                    #category = db_session.query(Category).filter_by(title=cat).first()
+                    #if not category:
+                        #category = Category(title=cat)
+                    category = db_session.query(Category).filter_by(title=cat).first() \
+                        or Category(title=cat)
+                    proj.cat.append(category)
+                
             db_session.add(proj)
             db_session.commit()
             flash('Project added')

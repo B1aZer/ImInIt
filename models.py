@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table
-from sqlalchemy.orm import relationship, backref
+# -*- coding: utf-8 -*-
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, select, func
+from sqlalchemy.orm import relationship, backref, column_property
 from database import Base
 from datetime import datetime,timedelta
 
@@ -138,7 +139,7 @@ class Participants(Base):
         self.project=proj
 
     def __str__(self):
-        return self.user.name
+         return self.user.name
 
  
 
@@ -148,11 +149,22 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50), unique=True)
     description = Column(String(120))
+    num_projects = Column(Integer, default = 0)
     #projects = relationship('Projects')
-
+    proj_count = column_property(
+        select([func.count("id")])
+    )
+    
     def __init__(self, *args, **kwargs):
         super(Category, self).__init__(*args, **kwargs) 
 
     def __repr__(self):
         return "%s" % self.title
 
+    def __str__(self):
+        return self.title 
+    
+    def num_proj(self):
+        return self.session.query.projects.count()
+
+                                   
