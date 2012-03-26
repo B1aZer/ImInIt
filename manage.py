@@ -11,6 +11,7 @@ from models import User, Projects, Comments, Participants, Category
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
 
 from flask.ext.gravatar import Gravatar
+from flask.ext.oauth import OAuth
 #from contextlib import closing
 
 
@@ -18,6 +19,7 @@ from flask.ext.gravatar import Gravatar
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object('conf')
+oauth = OAuth()
 
 gravatar = Gravatar(app,
                     size=100,
@@ -26,21 +28,53 @@ gravatar = Gravatar(app,
                     force_default=False,
                     force_lower=False)
 
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key='160705233955349',
+    consumer_secret='4f4fa3aedb2cba7a35267cba7bd3a883',
+    request_token_params={'scope': 'email'}
+)
+
+
 @app.before_request
 def before_request():
     g.user=getattr(g,'user',None)
     if 'auth' in session:
         g.user = db_session.query(User).filter(User.name==session['auth']).first()
-    
+
 
 @app.teardown_request
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.route('/fb')
+def fb_login():
+    return facebook.authorize(callback=url_for('oauth_authorized',
+        next=request.args.get('next') or request.referrer or None))
+
+@app.route('/oauth-authorized')
+@facebook.authorized_handler
+def oauth_authorized(resp):
+    next_url = request.args.get('next') or url_for('index')
+    if resp is None:
+        flash(u'You denied the request to sign in.')
+        return redirect(next_url)
+
+    session['twitter_user'] = resp['screen_name']
+    app.loger.debug(resp['screen_name'])
+    flash('You were signed in as %s' % resp['screen_name'])
+    return redirect(next_url)
+
+
 @app.route('/')
 def index():
     query=db_session.query(Projects).order_by(desc('date_created')).limit(14).offset(0)
-    cats = db_session.query(Category, func.count(Category.projects)).join(Category.projects).group_by(Category.title) 
+    cats = db_session.query(Category, func.count(Category.projects)). \
+            join(Category.projects).group_by(Category.title).  \
+            order_by(desc(func.count(Category.projects)))
     #cats=db_session.query(Category).all()
     #query=abort(404)
     app.logger.debug(g.user)
@@ -65,7 +99,7 @@ def ajax(*args, **kwargs):
             query=db_session.query(Projects).get(args[0])
             projs=query.json()
         return jsonify(result = projs)
-    return jsonify(status='success') 
+    return jsonify(status='success')
 
 @app.route('/map')
 def map():
@@ -76,8 +110,10 @@ def user():
      return render_template('user.html',user=g.user)
 
 @app.route('/cat/<category>')
-def cat():
-    query=db_session.query(Projects).order_by(desc('date_created')).limit(14).offset(0)
+def cat(category):
+    query=db_session.query(Projects). \
+            filter(Projects.cat.any(Category.title == category)). \
+            order_by(desc('date_created')).limit(14).offset(0)
     return render_template('index.html',content=query)
 
 @app.route('/add', methods=['POST','GET'])
@@ -105,7 +141,7 @@ def add_entry():
                     form.lng.data,
                     form.image_link.data)
             #app.logger.debug(str(proj.__dict__))
-            
+
             for cat in form.cat.data.split(','):
                 if cat:
                     #category = db_session.query(Category).filter_by(title=cat).first()
@@ -114,7 +150,7 @@ def add_entry():
                     category = db_session.query(Category).filter_by(title=cat).first() \
                         or Category(title=cat)
                     proj.cat.append(category)
-                
+
             db_session.add(proj)
             db_session.commit()
             flash('Project added')

@@ -9,10 +9,10 @@ body {
     height: 250px;
 }
 .contain {
-    background: #333333;
-    /*background: #EEEEEE;*/
-    padding: 5px;
-    /*padding: 10px;*/
+    /*background: #333333;*/
+    background: #EEEEEE;
+    /*padding: 5px;*/
+    padding: 10px;
     -moz-border-radius:4px; 
     -webkit-border-radius: 4px;
     
@@ -42,6 +42,11 @@ body {
 /* changing thumbnail def size*/
 .span33 {
     width:178px;
+}
+#fb-login {
+    background: url("/static/img/logins/facebook_signin.png") no-repeat scroll left top transparent;
+    width: 150px;
+    height: 25px;
 }
 
 /*E5E5E5*/
