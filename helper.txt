@@ -1,9 +1,0 @@
-session.query(User).all()
-jack = User('Jack','email@dsa.com','pass')
-session.add(jack)
-proj = Projects('title','data',jack,'image')
-session.add(proj)
-session.commit()
-session.query(User).all()
-
-span 3 220px

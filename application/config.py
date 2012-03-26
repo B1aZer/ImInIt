@@ -1,0 +1,9 @@
+# configuration
+DATABASE_URL = 'postgresql://postgres:qwe123asd123@localhost/postgres'
+#SQLALCHEMY_DATABASE_URI= 'sqlite:///sql.db'
+SQLALCHEMY_DATABASE_URI= 'postgresql://postgres:qwe123asd123@localhost/postgres'
+DEBUG = True
+SECRET_KEY = 'development key'
+USERNAME = 'admin'
+PASSWORD = 'admin'
+

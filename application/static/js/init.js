@@ -130,8 +130,8 @@ var iminit = {
                 iminit.markersArray[i].setMap(null);
             }
             iminit.markersArray.length = 0;
-            $("#lat").val('');
-            $("#lng").val('');
+            $("#lat").val('0');
+            $("#lng").val('0');
 
         }
     },

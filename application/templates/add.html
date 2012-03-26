@@ -30,7 +30,7 @@
                         <div class="input-prepend">
                             {{ form.cat.label }}
                             <span class="add-on"><i class=icon-tags></i></span>
-                            <input id=cat name=cat autocomplete="off" type="text" data-mode="multiple" data-delimiter="," class="span3" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="{{ cats|tojson }}">
+                            <input id=cat name=cat autocomplete="off" type="text" data-mode="multiple" data-delimiter="," class="span3" value="{{form.cat.data|default('',true)}}" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="{{ cats|tojson }}">
                             {% if form.cat.errors %}
                                  <div class="alert">
                             {% for error in form.cat.errors %}

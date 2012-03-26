@@ -7,3 +7,4 @@ Flask-WTF==0.5.4
 SQLAlchemy==0.7.5
 WTForms==1.0.1
 oauth2==1.5.211
+psycopg2==2.4.4
