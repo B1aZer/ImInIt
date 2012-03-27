@@ -60,10 +60,12 @@ def shutdown_session(exception=None):
 
 @app.route('/fb')
 def fb_login():
+    app.logger.debug(url_for('oauth_authorized'))
     return facebook.authorize(callback=url_for('oauth_authorized',
-        next=request.args.get('next') or request.referrer or None))
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
 
-@app.route('/oauth-authorized')
+@app.route('/authorized')
 @facebook.authorized_handler
 def oauth_authorized(resp):
     next_url = request.args.get('next') or url_for('index')
