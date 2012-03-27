@@ -68,15 +68,21 @@ def fb_login():
 @app.route('/authorized')
 @facebook.authorized_handler
 def oauth_authorized(resp):
-    next_url = request.args.get('next') or url_for('index')
     if resp is None:
-        flash(u'You denied the request to sign in.')
-        return redirect(next_url)
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    #session['oauth_token'] = (resp['access_token'], '')
+    me = facebook.get('/me')
+    return 'Logged in as id=%s name=%s redirect=%s' % \
+        (me.data['id'], me.data['name'], request.args.get('next'))
 
-    session['twitter_user'] = resp['screen_name']
-    app.loger.debug(resp['screen_name'])
-    flash('You were signed in as %s' % resp['screen_name'])
-    return redirect(next_url)
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('oauth_token')
+
 
 
 @app.route('/')
@@ -88,7 +94,8 @@ def index():
     cats = db.session.query(Category.title, db.func.count(Category.title)) \
             .join(Category.projects) \
             .group_by(Category.title) \
-            .order_by(db.desc(db.func.count(Category.title)))
+            .order_by(db.desc(db.func.count(Category.title))) \
+            .limit(14)
     #cats=db.session.query(Category).all()
     #query=abort(404)
     app.logger.debug(g.user)
@@ -118,6 +125,10 @@ def ajax(*args, **kwargs):
 @app.route('/map')
 def map():
     return render_template('map.html')
+
+@app.route('/tmp')
+def tmp():
+    return render_template('base.html')
 
 @app.route('/user')
 def user():

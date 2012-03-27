@@ -1,5 +1,5 @@
 from wtforms import Form, BooleanField, TextField, IntegerField, PasswordField, HiddenField, DateField, TextAreaField, SubmitField, validators
-from flaskext.wtf import URL,Optional,required,NumberRange
+from flaskext.wtf import URL,Optional,required,NumberRange, Regexp
 from flask import current_app
 
 class RegistrationForm(Form):
@@ -25,8 +25,8 @@ class AddProjectForm(Form):
     video_link = TextField('Video Link', validators=[
                                         URL(),Optional()])
     httext = TextAreaField('html_text')
-    lat= HiddenField(default=0, validators= [NumberRange(min='0', max='100000')])
-    lng= HiddenField(default=0, validators= [NumberRange(min='0', max='100000')])
+    lat= HiddenField(default=0, validators= [Regexp('\d')])
+    lng= HiddenField(default=0, validators= [Regexp('\d')])
     mark_location = BooleanField('Choose location on map')
 
 class LoginForm(Form):

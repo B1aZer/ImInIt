@@ -1,4 +1,25 @@
 {% extends "base.html" %}
+
+
+{% block subnav %}
+{% if cats %}
+<div class="container">    
+    <ul class="breadcrumb">
+        {% for cat in cats %}
+        <li>
+        <a href="/cat/{{ cat[0] }}">{{ cat[0] }}</a> <span class="divider">/</span>
+        </li>
+        <!--<li
+               <a href="#">Library</a> <span class="divider">/</span>
+               </li>
+               <li class="active">Data</li>
+               -->
+        {% else %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}   
+{% endblock  %}
 {% block content %}
 
 
@@ -6,13 +27,13 @@
 
 
     <!--<div class="contain">-->
-        <!--<div class="wrap">  -->
+    <!--<div class="wrap">  -->
 
 
     <div class="row">
         <div class="span12">
             <div class="contain">
-                <div class="wrap">
+                <div class="wrap">  
                     <div id="mapcanvas">
                     </div>
                 </div>
@@ -68,6 +89,19 @@
     <!--</div>-->
     {% endfor %}
 
+
+    <!--</div>-->
+    <!--</div> -->
+
+</div> <!-- /container -->
+
+
+
+
+{% endblock %}
+{% block footer %}
+<footer>
+<div class="container">
     <ul class="pager right">
         <li>
         <a href="?p=0">Previous</a>
@@ -75,15 +109,9 @@
         <li>
         <a href="?n=14">Next</a>
         </li>
-    </ul>
-    <!--</div>-->
-        <!--</div> -->
-
-</div> <!-- /container -->
-
-
-
-
+    </ul>               
+</div>
+</footer> 
 {% endblock %}
 {% block js %}
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>

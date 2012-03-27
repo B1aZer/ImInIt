@@ -115,23 +115,7 @@
       </ul>
   </div>
   </div>   --> 
-       {% if cats %}
-       <div class="container">    
-           <ul class="breadcrumb">
-               {% for cat in cats %}
-               <li>
-               <a href="/cat/{{ cat[0] }}">{{ cat }}</a> <span class="divider">/</span>
-               </li>
-               <!--<li
-               <a href="#">Library</a> <span class="divider">/</span>
-               </li>
-               <li class="active">Data</li>
-               -->
-               {% else %}
-               {% endfor %}
-           </ul>
-       </div>
-       {% endif %}
+      
 
        {% endblock %}
 
@@ -198,8 +182,10 @@
        <!--<div class="footer-inner">
     </div>-->
 
-       <footer>
-       </footer>
+       
+       {% block footer %}
+       {% endblock %}
+       
        <!--</div>-->
 
        <!-- Le javascript
