@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Le styles -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--<link href="/static/less/bootstrap.less" rel="stylesheet/less">-->
+    <link href="/static/css/scheme.css" rel="stylesheet">
+    <link href="/static/css/overcast/jquery-ui-1.8.18.custom.css" rel="stylesheet">
+
+    <!--<script src="/static/js/less-1.2.2.min.js"></script>-->
+
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/images/apple-touch-icon-114x114.png">
+    
+<link rel="stylesheet" href=/static/akzhan/jquery.wysiwyg.css type="text/css" media="screen" charset="utf-8" />
+
+
+    <script src="/static/js/jquery-1.7.1.js"></script>
+    <script src="/static/js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script src="/static/js/bootstrap-alert.js"></script>
+    <script src="/static/js/bootstrap-button.js"></script>
+    <script src="/static/js/bootstrap-dropdown.js"></script>
+    <script src="/static/js/bootstrap-collapse.js"></script>
+    <script src="/static/js/bootstrap-modal.js"></script>
+    <script src="/static/js/bootstrap-tooltip.js"></script>
+    <script src="/static/js/bootstrap-popover.js"></script>
+    <script src="/static/js/bootstrap-tab.js"></script>
+    <script src="/static/js/bootstrap-transition.js"></script>
+    <script src="/static/js/bootstrap-typeahead.js"></script>
+    <script src="/static/js/init.js"></script>
+    <!--<script src="/static/js/less-1.3.0.min.js"></script>-->
+     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
+    <script src="/static/js/infobox_packed.js"></script>
+    </head>
+
+    <body>
+        
+      <!--<div class="wrapper">-->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Project name</a>
+          <div class="nav-collapse">
+              <ul class="nav">
+                  <li><a href="/map">Map</a></li>
+              </ul>
+              <ul class="nav pull-right">
+                  
+                  <li><a href="/login">Log In</a></li>
+                  <li><a href="/register">Register</a></li>
+                  
+              </ul>
+          </div><!--/.nav-collapse -->
+      </div>
+  </div>
+  </div>
+  
+  
+       <!--
+  <div class="subnav subnav-fixed" >
+  <div class="container">
+      <ul class="nav nav-pills">
+          <li class="active">
+          <a href="/">Home</a>
+          </li>
+          <li>
+          <a href="/map">Map</a>
+          </li>
+          
+      </ul>
+  </div>
+  </div>   -->
+
+
+       
+
+
+       
+
+<div class="container">
+    <div class="row">
+        <form id="add-point" method="post" action="/add" class="form-horizontal well">
+            <button type="submit" class="btn btn-large right">Add Point</button>
+            <div id="tabs" class="tabbable tabs-left">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#1" data-toggle="tab"><i class="icon-edit icon-large"></i>Genral</a></li>
+                    <li><a href="#2" data-toggle="tab"><i class="icon-font icon-large"></i>Text</a></li>
+                    <li><a href="#3" data-toggle="tab"><i class="icon-picture icon-large"></i>Picture</a></li>
+                    <li><a href="#4" data-toggle="tab"><i class="icon-facetime-video icon-large"></i>Video</a></li>
+                    <li><a href="#5" data-toggle="tab"><i class="icon-map-marker icon-large"></i>Location</a></li>
+                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="1">
+                        <div class="">
+                            
+                                
+                                    <p> lat </p>
+                                    
+                                    <p> lng </p>
+                                    
+                                    
+                            
+    <div class="input-prepend">
+        <label for="title">Title</label>
+        
+            <span class="add-on"><i class=icon-bookmark></i></span>
+        
+        <input class="" id="title" name="title" type="text" value="one">
+        
+    </div>
+
+                            
+    <div class="input-prepend">
+        <label for="description">Description</label>
+        
+        <textarea class="input-xlarge" id="description" name="description">This is testion for test purposes</textarea>
+        
+    </div>
+
+                            
+    <div class="input-prepend">
+        <label for="goal_end">Goal</label>
+        
+            <span class="add-on"><i class=icon-check></i></span>
+        
+        <input class="" id="goal_end" name="goal_end" type="text" value="">
+        
+    </div>
+
+                            
+    <div class="input-prepend">
+        <label for="date_end">Ending Date</label>
+        
+            <span class="add-on"><i class=icon-time></i></span>
+        
+        <input class="" id="date_end" name="date_end" type="text" value="">
+        
+    </div>
+
+                            <div class="input-prepend">
+                                <label for="cat">Category</label>
+                                <span class="add-on"><i class=icon-tags></i></span>
+                                <input id=cat name=cat autocomplete="off" type="text" data-mode="multiple" data-delimiter="," class="span3" value="" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="[]">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="2">
+                        <label for="httext">About your project</label>
+                        <textarea cols="80" id="httext" name="httext" rows="25">hello
+What is the LowLine?We want to transform an abandoned trolley terminal on the Lower East Side of Manhattan into the world’s first underground park.  It will be a new kind of public space, using solar technology for natural illumination, and cutting edge design to capture and highlight a very special industrial space.
+
+A park… underground?!?Ever wonder why there's so little green space in New York?  There aren’t a lot of empty plots of land just waiting to be turned into new parks. New Yorkers have had to be a little more creative, and must look in unusual places – the High Line, a park built on an old elevated rail trestle, is a great example.
+
+A few years ago, we learned about a massive unused former trolley terminal in our neighborhood, the Lower East Side. We got to thinking: what if we could build a park-- underground-- even if the space lacked natural sunlight?  So we explored using fiber optic cables to transfer sunlight below ground-- to support the growth of plants and trees.  As we shared this idea with others, people got excited.  "An underground High Line for the Lower East Side," they'd say.  "Kind of like... a LowLine."  The nickname stuck.
+
+What is the space like?This "Delancey Underground" space is quite large, by New York standards: 60,000 square feet, or 1.5 acres -- nearly the size of Gramercy Park.  It was built in 1903 as a trolley terminal, for streetcars traveling over the Williamsburg Bridge, and has been out of operation since 1948.  We fell in love with the site because of its architectural details: old cobblestones, crisscrossing rail tracks, vaulted 20-foot ceilings, and strong steel columns.
+
+Here's what's even more exciting: it's in the heart of the Lower East Side.  Our neighborhood is one of the oldest in the U.S., and has been home to generations of immigrants for centuries.  It is a center of diversity, culture, creativity, and innovation.
+
+Let the Sun Shine... UndergroundTo build this park, we're planning to use a cutting-edge version of existing technology-- which we've already built in prototype. The system uses a system of optics to gather sunlight, concentrate it, and reflect it below ground, where it is dispersed by a solar distributor dish embedded in the ceiling.  The light irrigated underground will carry the necessary wavelengths to support photosynthesis-- meaning we can grow plants, trees, and grasses underground. The cables block harmful UV rays that cause sunburn, so you can leave the SPF-45 at home. Sunglasses optional (for cool kids).
+
+What kind of a park is underground?  An awesome one.
+
+We think a year-round public space will be valuable for everyone.  Farmers markets and vendor stands can feature fresh produce and locally made goods, supporting local and sustainable businesses.  Art installations, concerts, and performances can help showcase the incredible creative spirit of the Lower East Side.  Youth programming and educational opportunities can offer rich experiences for kids and parents.  And a safe haven from the hectic feel of Delancey Street will serve as relief in a very car-centric corner of Manhattan.
+
+When it's really cold, or pouring rain, how much fun is it to hang out in Central Park?  The High Line?  Not so much.  The LowLine can be the 21st century answer to traditional parks: instead of building up, let's build down!
+
+What we've done so farWe first presented this idea to our local community board in September, and have been overwhelmed with public interest ever since. We got some great press, from CNN to the New York Times to the Huffington Post.
+
+We’ve spoken with the MTA – the State-r
+
+                     world </textarea>
+                    </div>
+                    <div class="tab-pane fade" id="3">
+                        
+    <div class="input-prepend">
+        <label for="image_link">Image Link</label>
+        
+            <span class="add-on"><i class=icon-magnet></i></span>
+        
+        <input class="" id="image_link" name="image_link" type="text" value="http://s3.amazonaws.com/ksr/projects/76336/photo-full.jpg?1329244834">
+        
+    </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="4">
+                        
+    <div class="input-prepend">
+        <label for="video_link">Video Link</label>
+        
+            <span class="add-on"><i class=icon-magnet></i></span>
+        
+        <input class="" id="video_link" name="video_link" type="text" value="">
+        
+    </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="5">
+                        <div class="input-prepend">
+                            <label for="loc">Location</label>
+                            <span class="add-on"><i class="icon-screenshot"></i></span> <input _class="span2" id="loc" name="loc" type="text" value="">
+                            <span id="findbtn" class="btn">Find Point</span>
+                            <span id="clearbtn" class="btn">Clear Point</span>
+                        </div>
+                        <div id="loc_error">
+                        </div>
+                        <input id="lat" name="lat" type="hidden" value="">
+                        <input id="lng" name="lng" type="hidden" value="">
+                        <!--<p><label class="checkbox inline">
+                            <input id="mark_location" name="mark_location" type="checkbox" value="y"> 
+                            Choose location on map
+                </label></p>-->
+                        <div class="row">
+                            <div class="span8">
+                                <div id="mapcontainer">
+                                    <div class="contain">
+                                        <div id="mapcanvas" class="wrap">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+       <!--<div class="footer-inner">
+    </div>-->
+
+
+       
+       
+
+       <!--</div>-->
+
+       <!-- Le javascript
+    ================================================== -->
+       
+<script src="/static/js/add.js"></script>
+<!--<script type="text/javascript" src=/static/markitup/jquery.markitup.js></script>-->
+<!--<script type="text/javascript" src=/static/markitup/sets/html/set.js></script>-->
+<!--<script type="text/javascript" src=/static/ckeditor/ckeditor.js></script>-->
+<!--<script type="text/javascript" src=/static/ckeditor/adapters/jquery.js></script>-->
+<script type="text/javascript" src=/static/akzhan/jquery.wysiwyg.js></script>
+<script type="text/javascript" src=/static/akzhan/controls/wysiwyg.image.js></script>
+<script type="text/javascript" src=/static/akzhan/controls/wysiwyg.link.js></script>
+<script type="text/javascript" src=/static/akzhan/controls/wysiwyg.table.js></script>
+
+
+       </body>
+       </html>

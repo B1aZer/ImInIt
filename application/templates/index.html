@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    {% for prj in content %}
+    {% for prj in content.items %}
     {% if loop.index%2 > 0 %}<div class="row">{% endif %}
         <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
             'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
@@ -59,14 +59,15 @@
                             {% endif %}
                         </div>
                         </li>
-                        <li style="margin-left:50%">
-                        <a href="/projects/{{ prj.id }}"><strong>{{ prj.title }}</strong></a>
-                        </li>
-                        <li style="margin-left:50%">
-                        {{ prj.cat }}
+                        <li>
+                        <h4><a href="/projects/{{ prj.id }}">{{ prj.title }}</a></h4>
                         </li>
                     </ul>
                     <p class="well"> {{ prj.description}}</p>
+                    {% for cat in  prj.cat %}
+                    <p><h6><i class="icon-tag"></i>{{ cat }}</h6></p>
+                    {% else %}
+                    {% endfor %}
                     <a class="btn left" href="/projects/{{ prj.id }}">View</a>
                     <span class="right">
                         <div class="btn-group">
@@ -84,7 +85,8 @@
     {% else %}
     <!--<div class="span3 contain">-->
     <!--<div class="wrap">-->
-    <h1> Sorry no projects for you today </h1>
+    <h3> Sorry no projects for you today </h3>
+    <p> This is just for testing. Do not worry. </p>
     <!--</div>-->
     <!--</div>-->
     {% endfor %}
@@ -101,16 +103,16 @@
 {% endblock %}
 {% block footer %}
 <footer>
-<div class="container">
-    <ul class="pager right">
-        <li>
-        <a href="?p=0">Previous</a>
-        </li>
-        <li>
-        <a href="?n=14">Next</a>
-        </li>
-    </ul>               
-</div>
+    <div class="container">
+        <ul class="pager right">
+            <li>
+            <a href="?p=1">Previous</a>
+            </li>
+            <li>
+            <a href="?p=2">Next</a>
+            </li>
+        </ul>               
+    </div>
 </footer> 
 {% endblock %}
 {% block js %}

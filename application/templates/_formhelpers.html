@@ -6,13 +6,19 @@
         {% endif %}
         {{ field(class=class)|safe }}
         {% if field.errors %}
-             <div class="alert">
-        {% for error in field.errors %}
-            <a class="close" data-dismiss="alert">×</a>
-            <strong>Warning!</strong> {{ error }}
-        {% endfor %}
-            </div>
+        {{ render_mess(field.errors) }}
         {% endif %}
     </div>
 {% endmacro %}
 
+
+{% macro render_mess(messages) %}
+        {% if messages %}
+        <div class="alert">
+            {% for error in messages %}
+            <a class="close" data-dismiss="alert">×</a>
+            <strong>Warning!</strong> {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %} 
+{% endmacro %}

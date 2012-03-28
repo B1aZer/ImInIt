@@ -87,7 +87,9 @@ def get_facebook_oauth_token():
 
 @app.route('/')
 def index():
+    page = int(request.args.get('p') or 1)
     query=db.session.query(Projects).order_by(db.desc('date_created')).limit(14).offset(0)
+    query=Projects.query.order_by(db.desc('date_created')).paginate(page,14)
     #cats = db.session.query(Category.title, db.func.count(Category.projects)). \
             #join(Category.projects).group_by(Category.title)
             #order_by(db.desc(db.func.count(Category.projects)))
@@ -95,10 +97,10 @@ def index():
             .join(Category.projects) \
             .group_by(Category.title) \
             .order_by(db.desc(db.func.count(Category.title))) \
-            .limit(14)
+            .limit(14).all()
     #cats=db.session.query(Category).all()
     #query=abort(404)
-    app.logger.debug(g.user)
+    #app.logger.debug(cats.__class__)
     return render_template('index.html',content=query, cats = cats)
 
 @app.route('/ajax/<int:proj_id>', methods=['POST','GET'])
@@ -267,6 +269,10 @@ def login():
                     session['auth']=user.get_name()
                     #app.logger.debug(g.user)
                     return redirect(url_for('index'))
+                else:
+                    flash('Creditnails not correct')
+        if not user:
+            flash('Sorry no such user')
     return render_template('login.html', form=form)
 
 @app.route('/logout')

@@ -46,13 +46,6 @@ body {
 .center {
     text-align:center;
 }
-.back {
-    /*background-color: #FAFAFA;                                                                       */
-}
-/* changing thumbnail def size*/
-.span33 {
-    width:178px;
-}
 #fb-login {
     background: url("/static/img/logins/facebook_signin.png") no-repeat scroll left top transparent;
     width: 150px;
@@ -72,10 +65,6 @@ footer {
 }
 .navbar{
     margin-bottom: 0;
-}
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
-    /*background-color: #EEEEEE;                                                                       */
 }
 .popover{
     z-index:2060;

@@ -30,8 +30,10 @@ class AddProjectForm(Form):
     mark_location = BooleanField('Choose location on map')
 
 class LoginForm(Form):
-    username = TextField('Username', [validators.Length(min=4, max=25)])
-    password = PasswordField('Password')
+    username = TextField('Username', [validators.Required(),validators.Length(min=3, max=25)])
+    password = PasswordField('Password', [validators.Required(),
+                                        validators.Length(min=4, max=25,
+                                        message="Password length must be from 4 characters")])
 
 class CommentForm(Form):
 
