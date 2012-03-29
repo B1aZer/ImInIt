@@ -16,9 +16,9 @@
                         {% if query.location %}
                         <script>
 $(function() {   
-iminit.map_init();
-iminit.getMarker({{ query.id }}); 
-});
+        iminit.map_init();
+        iminit.getMarker({{ query.id }}); 
+        });
                         </script>
                         <div class="row">
                             <div class="span10">
@@ -32,28 +32,32 @@ iminit.getMarker({{ query.id }});
                         </div>
                         {% endif %}
                         <!--<div class="row">-->
-                            <!--<div class="span5">-->
-                            <!--<div class="contain">-->
-                            <!--<div class="wrap">-->
-                            <!--<img src="{{ query.image_link }}" alt="">-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="span5">
+                        <!--<div class="span5">-->
+                        <!--<div class="contain">-->
+                        <!--<div class="wrap">-->
+                        <!--<img src="{{ query.image_link }}" alt="">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="span5">
                                 <div class="contain">
                                     <div class="wrap">
                                         <img src="{{ query.image_link }}" alt="">
                                     </div>
                                 </div>
                             </div>-->
-                            <!--</div>-->
+                        <!--</div>-->
+                        {% if query.html %}
                         <div class="contain">
                             <div class="wrap">
                                 <div class="well">
+                                    
                                     {{ query.html|safe }}
+                                    
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="tab-pane" id="2">
                         <div class="contain">
@@ -62,14 +66,14 @@ iminit.getMarker({{ query.id }});
                                     <ul class="unstyled">
                                         {% if query.comments %}
                                         {% for comm in query.comments %}
-                                        <li class="" id="li-comment-{{comm.id}}">
+                                        <li>
                                         <div class="well">
                                             <div class="comment-head">
                                                 <div class="avatar"><img alt="" src="{{ comm.user.email | gravatar }}" class="avatar" height="48" width="48" id=""></div>
-                                                <span class="name"><a href="http://kwerkee.wordpress.com" rel="external nofollow" class="url url">{{ comm.user.name }}</a></span>
-                                                <span class="date">{{ comm.date_created }}</span>
+                                                <span class="name"><a href="">{{ comm.user.name }}</a></span>
+                                                <span class="date">{{ comm.date_created | timesince }}</span>
                                             </div><!-- /.comment-head -->
-                                            <div class="comment-entry" id="comment-2">
+                                            <div class="comment-entry">
                                                 <p>{{ comm.content }}</p>
                                             </div><!-- /comment-entry -->
                                         </div><!-- /.comment-container -->
@@ -86,7 +90,7 @@ iminit.getMarker({{ query.id }});
                                         {% endif %}
                                         {% else %}
                                         <div class="well">
-                                            <h3> No comments yet. </h3>
+                                            <h6> No comments yet. </h6>   
                                         </div>
                                         {% if g.user %}
                                         <li>
@@ -144,22 +148,22 @@ iminit.getMarker({{ query.id }});
             </div>
             <!--<div class="row">                                                                 -->
             <!--<div class="span2">                                                           -->
-                    <!--<div class="well">
+            <!--<div class="well">
                          <h6 style="font-size: 20px;"><div><i class="icon-plus" style="font-size: 26px;"></i></div><h6>
                              </div>-->
-                    <!--<div class="btn-group">                                                   -->
-                    <!--<a class="btn">                                                       -->
-                    <!--<i class="icon-facebook-sign" style="font-size: 34px;"></i>       -->
-                    <!--</a>                                                                  -->
-                    <!--<a class="btn btn-inverse">                                           -->
-                    <!--<i class="icon-twitter-sign" style="font-size: 33px;"></i>        -->
-                    <!--</a>                                                                  -->
-                    <!--<a class="btn">                                                       -->
-                    <!--<i class="icon-twitter-sign" style="font-size: 34px;"></i>        -->
-                    <!--</a>                                                                  -->
-                    <!--</div>                                                                    -->
-                    <!--</div>                                                                        -->
-                    <!--</div>                                                                            -->
+            <!--<div class="btn-group">                                                   -->
+            <!--<a class="btn">                                                       -->
+            <!--<i class="icon-facebook-sign" style="font-size: 34px;"></i>       -->
+            <!--</a>                                                                  -->
+            <!--<a class="btn btn-inverse">                                           -->
+            <!--<i class="icon-twitter-sign" style="font-size: 33px;"></i>        -->
+            <!--</a>                                                                  -->
+            <!--<a class="btn">                                                       -->
+            <!--<i class="icon-twitter-sign" style="font-size: 34px;"></i>        -->
+            <!--</a>                                                                  -->
+            <!--</div>                                                                    -->
+            <!--</div>                                                                        -->
+            <!--</div>                                                                            -->
         </div>
         <!--<div class="well">
             <h6>

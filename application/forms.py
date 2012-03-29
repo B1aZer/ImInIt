@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, TextField, IntegerField, PasswordField, HiddenField, DateField, TextAreaField, SubmitField, validators
+from wtforms import Form, BooleanField, TextField, IntegerField, PasswordField, HiddenField, DateField, TextAreaField, SubmitField, SelectField,  validators
 from flaskext.wtf import URL,Optional,required,NumberRange, Regexp
 from flask import current_app
 
@@ -17,7 +17,8 @@ class RegistrationForm(Form):
 class AddProjectForm(Form):
     title = TextField('Title', [validators.Required()])
     description = TextAreaField('Description', [validators.Length(min=15)])
-    cat = TextField('Category')
+    cat = TextField('Tags')
+    types = SelectField('Type', choices=[('me', 'Meeting'), ('bu', 'Business'), ('pa', 'Party')])
     loc = TextField('Location')
     date_end=DateField('Ending Date')
     goal_end = IntegerField('Goal')

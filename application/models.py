@@ -47,28 +47,31 @@ class Projects(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User')
     cat = db.relationship('Category', secondary=association_table, backref = db.backref('projects'))
+    types=db.Column(db.Text)
     title = db.Column(db.String(50))
     description = db.Column(db.String(120))
     html = db.Column(db.Text)
     date_created = db.Column(db.DateTime,  default=datetime.utcnow)
-    #date_target = db.Column(db.DateTime,  default=datetime.utcnow)
+    date_target = db.Column(db.DateTime,  default=datetime.utcnow)
     location = db.Column(db.String)
     lat = db.Column(db.Float, default=0)
     lng = db.Column(db.Float, default=0)
     inns_now = db.Column(db.Integer, default=0)
-    inns_target = db.Column(db.Integer, default=100, nullable=False)
+    inns_target = db.Column(db.Integer, default=1, nullable=False)
     image_link =  db.Column(db.String(220))
     video_link =  db.Column(db.String(220))
     comments = db.relationship('Comments')
     participants = db.relationship('Participants')
 
-    def __init__(self, title=None, desc=None, html=None, user=None, loc=None, lat=0, lng=0, image=None):
+    def __init__(self, title=None, desc=None, dt=None, ge=None, html=None, user=None, loc=None, types='me', lat=0, lng=0, image=None):
         self.title = title
         self.description = desc
-        #self.cat = cat
+        self.date_target = dt
+        self.inns_target = ge
         self.html=html
         self.user=user
         self.location=loc
+        self.types = types
         self.lat=lat
         self.lng=lng
         self.image_link=image
@@ -92,6 +95,7 @@ class Projects(db.Model):
                     title=self.title,
                     description=self.description,
                     user=self.user.name,
+                    types=self.types,
                     lat=self.lat,
                     lng=self.lng,
                     image=self.image_link)

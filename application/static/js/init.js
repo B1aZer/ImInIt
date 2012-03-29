@@ -5,7 +5,6 @@ var iminit = {
     geocode:null,
     draggable:false,
     marker:null,
-    boxText:document.createElement("div"),
 
     map_init : function () {
         geocoder = new google.maps.Geocoder();
@@ -53,6 +52,22 @@ var iminit = {
     },
 
     getMarkers : function () {
+        /*var infowindow = new google.maps.InfoWindow({*/
+            /*content: "loading..."*/
+        /*});*/
+        boxText = document.createElement("div");
+        var myOptions = {
+                            content: boxText
+                            ,disableAutoPan: true
+                            ,pixelOffset: new google.maps.Size(-148, 0)
+                            ,maxWidth: 0
+                            ,isHidden: false
+                            ,pane: "floatPane"
+                            ,enableEventPropagation: false
+                            ,closeBoxURL:""
+                        };
+
+        var ib = new InfoBox(myOptions);
         $.getJSON("/ajax", function(json) { 
             /*console.log('ajax',json.result);*/
             if (json.result.length>0) { 
@@ -60,42 +75,58 @@ var iminit = {
                     //var location = json.Locations[i]; 
                     //console.log();
                     if (json.result[j].lat && json.result[j].lng) {
+                        if (json.result[j].types) {
+                        var icon = '/static/img/icons/grey/group-2.png'
+                            switch (json.result[j].types) {
+                                case 'me':
+                                    icon = '/static/img/icons/grey/regroup.png' ;
+                                    break;
+                                case 'bu':
+                                    icon = '/static/img/icons/grey/workoffice.png' ;
+                                    break;
+                                case 'pa':
+                                    icon = '/static/img/icons/warn/group-2.png' ;
+                                    break;
+                            }
+                        }
                         var myLatlng = new google.maps.LatLng(json.result[j].lat,json.result[j].lng);
-                        iminit.placeMarker(myLatlng,json.result[j].proj_id);
-                        iminit.boxText.innerHTML = '<div class="content"> <div class="popover fade bottom in" style="display: block;"> <div class="arrow"> </div> <div class="popover-inner"> <h3 class="popover-title">'+json.result[j].title+'</h3> <div class="popover-content"><p>'+json.result[j].description+'</p> </div> </div> </div> </div>'
+                        iminit.placeMarker(myLatlng,json.result[j].proj_id,json.result[j].title,json.result[j].description,icon);
+
+                        google.maps.event.addListener(iminit.marker, 'mouseover', function() {
+                            ib.setContent(this.html)
+                            /*ib.setPosition(this.position)*/
+                            ib.open(map, this); 
+                            /*map.panTo(iminit.marker.getPosition()); */
+
+                        });
+                        google.maps.event.addListener(iminit.marker, 'mouseout', function() {
+                            ib.close(map, this); 
+                            /*map.setCenter(iminit.marker.getPosition());*/
+                        });
                     }
                 } 
             }
         });
     },
 
-    placeMarker : function (location, id) {
-        
-        var image = '/static/img/icons/blue/regroup.png';
+    placeMarker : function (location, id, title, desc, icon) {
+
+        var image = icon || '/static/img/icons/grey/regroup.png';
         //if (iminit.markersArray.length == 0) {
             iminit.marker = new google.maps.Marker({
                 position: location,
                 map: map,
                 draggable: iminit.draggable,
-                icon:image
+                icon:image,
+                id:id,
+                html:'<div class="content"> <div class="popover fade bottom in" style="display: block;"> <div class="arrow"> </div> <div class="popover-inner"> <h3 class="popover-title">'+title+'</h3> <div class="popover-content"><p>'+desc+'</p> </div> </div> </div> </div>'
             })
 
-            var myOptions = {
-                content: iminit.boxText
-                ,disableAutoPan: false
-                ,pixelOffset: new google.maps.Size(-148, 0)
-                ,maxWidth: 0
-                ,isHidden: false
-                ,pane: "floatPane"
-                ,enableEventPropagation: false
-                ,closeBoxURL:""
-            };
 
-            var ib = new InfoBox(myOptions);
 
             google.maps.event.addListener(iminit.marker, "dragend", function() {
-                iminit.geocode = iminit.marker.getPosition();
-                iminit.addCoord(iminit.geocode);
+                iminit.geocode = this.getPosition();
+                iminit.addCoord(this.geocode);
                 iminit.adressCode();
             });
             if (id != undefined) { 
@@ -103,17 +134,10 @@ var iminit = {
                     window.location.href = 'projects/'+id;
                 });
             }
-            google.maps.event.addListener(iminit.marker, 'mouseover', function() {
-                ib.open(map, iminit.marker); 
-                /*map.panTo(iminit.marker.getPosition()); */
-            });
-            google.maps.event.addListener(iminit.marker, 'mouseout', function() {
-                ib.close(map, iminit.marker); 
-                /*map.setCenter(iminit.marker.getPosition());*/
-            });
+
             google.maps.event.addListener(iminit.marker, 'dblclick', function() {
                 map.setZoom(15);
-                map.setCenter(iminit.marker.getPosition());
+                map.setCenter(this.getPosition());
             });
             iminit.markersArray.push(iminit.marker);
 

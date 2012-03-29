@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import application
 import unittest
+import random
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -62,8 +63,26 @@ We’ve spoken with the MTA – the State-r
             image_link='http://s3.amazonaws.com/ksr/projects/76336/photo-full.jpg?1329244834',
             goal_end='10',
             date_end='2012-3-31',
-            lat=0,
-            lng=0
+            lat=55.74 + random.uniform(-0.1,0.1),
+            lng=37.62 + random.uniform(-0.4,0.4),
+            loc="location",
+            cat='cat1',
+            types='me'
+        ), follow_redirects=True)
+
+    def adding1(self, title, description):
+        return self.app.post('/add', data=dict(
+            title=title,
+            description=description,
+            httext = "",
+            image_link='http://upload.wikimedia.org/wikipedia/ru/thumb/5/58/The_virgin_suicides_OST.jpg/220px-The_virgin_suicides_OST.jpg',
+            goal_end='2',
+            date_end='2012-3-30',
+            lat=55.74 + random.uniform(-0.1,0.1),
+            lng=37.62 + random.uniform(-0.4,0.4),
+            loc="location2",
+            cat='cat2, cat4',
+            types='pa'
         ), follow_redirects=True)
 
     def logout(self):
@@ -77,8 +96,10 @@ We’ve spoken with the MTA – the State-r
         assert 'Thanks for registering' in rv.data
         rv = self.login('jonny', 'qwe123')
         assert 'You were logged in' in rv.data
-        for i in xrange(40):
+        for i in xrange(20):
             self.adding('one %s' %i,'This is testion for test purposes')
+        for i in xrange(20):
+            self.adding1('two %s' %i,'This is testion for test purposes')
         rv = self.app.get('/')
         assert 'This is testion for test purposes' in rv.data
         #rv = self.logout()

@@ -9,9 +9,11 @@ from helpers import jsonify
 from models import User, Projects, Comments, Participants, Category
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
 from functools import wraps
+import helpers
 
 from flask.ext.gravatar import Gravatar
 from flask.ext.oauth import OAuth
+from flaskext.babel import Babel
 from extensions import db
 
 
@@ -20,6 +22,7 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 oauth = OAuth()
+babel = Babel(app)
 
 db.init_app(app)
 
@@ -29,7 +32,7 @@ gravatar = Gravatar(app,
                     default='retro',
                     force_default=False,
                     force_lower=False)
-               
+
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
@@ -39,6 +42,14 @@ facebook = oauth.remote_app('facebook',
     consumer_secret='4f4fa3aedb2cba7a35267cba7bd3a883',
     request_token_params={'scope': 'email'}
 )
+
+@app.template_filter()
+def timesince(value):
+    return helpers.timesince(value)
+
+@app.template_filter()
+def timebefore(value):
+    return helpers.timebefore(value)
 
 def create_db():
     with app.test_request_context():
@@ -106,10 +117,15 @@ def index():
             .group_by(Category.title) \
             .order_by(db.desc(db.func.count(Category.title))) \
             .limit(14).all()
-    #cats=db.session.query(Category).all()
-    #query=abort(404)
-    #app.logger.debug(cats.__class__)
     return render_template('index.html',content=query, cats = cats)
+
+@app.route('/cat/<category>')
+def cat(category):
+    page = int(request.args.get('p') or 1)
+    query=Projects.query. \
+            filter(Projects.cat.any(Category.title == category)). \
+            order_by(db.desc('date_created')).paginate(page,14)
+    return render_template('index.html',content=query)
 
 @app.route('/ajax/<int:proj_id>', methods=['POST','GET'])
 @app.route('/ajax', methods=['POST','GET'])
@@ -144,12 +160,7 @@ def tmp():
 def user():
      return render_template('user.html',user=g.user)
 
-@app.route('/cat/<category>')
-def cat(category):
-    query=db.session.query(Projects). \
-            filter(Projects.cat.any(Category.title == category)). \
-            order_by(db.desc('date_created')).limit(14).offset(0)
-    return render_template('index.html',content=query)
+
 
 @app.route('/add', methods=['POST','GET'])
 @login_required
@@ -162,9 +173,12 @@ def add_entry():
         #try:
             proj = Projects(form.title.data,
                     form.description.data,
+                    form.date_end.data,
+                    form.goal_end.data,
                     form.httext.data,
                     g.user,
                     form.loc.data,
+                    form.types.data,
                     form.lat.data,
                     form.lng.data,
                     form.image_link.data)

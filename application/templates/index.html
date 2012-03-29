@@ -48,7 +48,13 @@
                 <div class="wrap">
                     <!--<a href="/projects/{{ prj.id }}"><h3>{{prj.title}}</h3></a>
                         <p>{{ prj.description }}</p>-->
-
+                    <p>
+                    <span> 
+                        <span class="badge  ">{{ prj.inns_now }}</span>
+                        <span class="badge badge-warning">{{ prj.inns_target }}</span>
+                    </span>
+                    <span class="label  right">{{ prj.date_target | timebefore }}</span>
+                    </p>
                     <ul class="thumbnails">
                         <li class="span3 width-fix" >
                         <div >
@@ -60,19 +66,35 @@
                         </div>
                         </li>
                     </ul>
-                        <h4 class="text-fix"><a href="/projects/{{ prj.id }}">{{ prj.title }}</a></h4>
+                    <h3 class="text-fix">{{ prj.title }}</h3>
+
                     <p class="well"> {{ prj.description}}</p>
-                    {% for cat in  prj.cat %}
-                    <p><h6><i class="icon-tag"></i>{{ cat }}</h6></p>
-                    {% else %}
-                    {% endfor %}
-                    <a class="btn left" href="/projects/{{ prj.id }}">View</a>
-                    <span class="right">
-                        <div class="btn-group">
-                            <a class="btn" id="rockon" href="#"><i class="icon-thumbs-up"></i></a>
-                            <a class="btn" href="#"><i class="icon-thumbs-down"></i></a>
-                        </div>
-                    </span>
+                    {% if  prj.location %}
+                    <h6><i class="icon-map-marker"></i> {{ prj.location }} </h6>
+                    {% endif %}
+                    <div class="progress progress-striped progress-warning active">
+                        <div class="bar" style="width: {{ prj.inns_now / prj.inns_target * 100 }}%;"></div>
+                    </div>
+                    {% if prj.cat %}
+                    <div class="btn-group left">
+                        {% for cat in prj.cat %}
+                        <a class="btn">{{ cat }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %} 
+                    <p>
+
+
+
+                    </p>
+
+                    <!--<a class="btn left" href="/projects/{{ prj.id }}">View</a>-->
+                    <!--<span class="right">-->
+                    <!--<div class="btn-group">-->
+                    <!--<a class="btn" id="rockon" href="#"><i class="icon-thumbs-up"></i></a>-->
+                    <!--<a class="btn" href="#"><i class="icon-thumbs-down"></i></a>-->
+                    <!--</div>-->
+                    <!--</span>-->
 
 
                 </div>
@@ -101,16 +123,22 @@
 {% endblock %}
 {% block footer %}
 <footer>
+    {% if content.pages > 1 %}
     <div class="container">
         <ul class="pager right">
+            {% if content.has_prev %}
             <li>
-            <a href="?p=1">Previous</a>
+            <a href="?p={{ content.page -1 }}">Previous</a>
             </li>
+            {% endif %}
+            {% if content.has_next %}
             <li>
-            <a href="?p=2">Next</a>
+            <a href="?p={{ content.page +1 }}">Next</a>
             </li>
+            {% endif %}
         </ul>               
     </div>
+    {% endif %}
 </footer> 
 {% endblock %}
 {% block js %}
