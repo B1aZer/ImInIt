@@ -47,7 +47,6 @@
      <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
     <script src="{{ url_for('static', filename='js/infobox_packed.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </head>
 
     <body>
@@ -65,11 +64,17 @@
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li><a href="{{ url_for('map') }}">Map</a></li>
-                        <li><p>text</p></li>
+                        {% if get_flashed_messages() %}
+                        {% for message in get_flashed_messages() %}
+                        <li class="divider-vertical"></li>
+                        <li><p id="status">{{ message }}</p></li>
+                        <li class="divider-vertical"></li>
+                        {% endfor %}
+                        {% endif %}
                     </ul>
                     <ul class="nav pull-right">
                         {% if not g.user %}
-                        <li> <a class="btn-slide" href="#">History</a></li>
+                        <li><a href="/login">Register</a></li>
                         <li class="dropdown" id="login-menu">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#login-menu">
                             Login
@@ -79,10 +84,10 @@
                             <li class=span4>
                             <p></p>
                             <form action="{{ url_for('login') }}" method=post class="span4">
-                                <label for="username">Username</label>
-                                <input type="text" value="" name="username" id="username" class="">
-                                <label for="password">Password</label>
-                                <input type="password" value="" name="password" id="password" class="">
+                                <label for="user">Username</label>
+                                <input type="text" value="" name="user" id="user" class="">
+                                <label for="passw">Password</label>
+                                <input type="password" value="" name="passw" id="passw" class="">
                                 <p> <button class="btn" type="submit">Login</button></p>
                                 <script>
 $('.dropdown-menu').find('form').click(function (e) {
@@ -94,7 +99,6 @@ $('.dropdown-menu').find('form').click(function (e) {
                         </ul>
                         </li>
                         <!--<li><a href="{{ url_for('login') }}">Log In</a></li>-->
-                        <li><a href="/register">Register</a></li>
                         {% else %}
                         <!--<li>-->
                         <!--<a href="#" class="" rel="popover" id="flasher"-->

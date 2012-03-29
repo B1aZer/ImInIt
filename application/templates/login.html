@@ -2,15 +2,20 @@
 {% block content %}
 {% from "_formhelpers.html" import render_field,render_mess %}
 <div class="container">
-    <form action="{{ url_for('login') }}" method=post class="span4">
-        {{ render_field(form.username) }}
-        {{ render_field(form.password) }}
-        {% if get_flashed_messages() %}
-        {{ render_mess(get_flashed_messages()) }}
-        {% endif %}
+    <form action="{{ url_for('login') }}" method=post class="well span4">
+        {{ render_field(log_form.user) }}
+        {{ render_field(log_form.passw) }}
         <p> <button class="btn" type="submit">Login</button></p>
 
     </form>
+    <form method="post" action="{{ url_for('register') }}" class="well span4">
+        {{ render_field(reg_form.username) }}
+        {{ render_field(reg_form.email) }}
+        {{ render_field(reg_form.password) }}
+        {{ render_field(reg_form.confirm) }}
+        {{ render_field(reg_form.image) }}
+        <p><input type=submit class="btn" value=Register>
+    </form> 
 
 </div>
 {% endblock %}

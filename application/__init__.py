@@ -8,6 +8,7 @@ from helpers import jsonify
 #from sqlalchemy import db.desc, func
 from models import User, Projects, Comments, Participants, Category
 from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
+from functools import wraps
 
 from flask.ext.gravatar import Gravatar
 from flask.ext.oauth import OAuth
@@ -28,7 +29,7 @@ gravatar = Gravatar(app,
                     default='retro',
                     force_default=False,
                     force_lower=False)
-
+               
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
@@ -52,7 +53,6 @@ def before_request():
     g.user=getattr(g,'user',None)
     if 'auth' in session:
         g.user = db.session.query(User).filter(User.name==session['auth']).first()
-
 
 @app.teardown_request
 def shutdown_session(exception=None):
@@ -83,12 +83,20 @@ def oauth_authorized(resp):
 def get_facebook_oauth_token():
     return session.get('oauth_token')
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 
 @app.route('/')
 def index():
     page = int(request.args.get('p') or 1)
-    query=db.session.query(Projects).order_by(db.desc('date_created')).limit(14).offset(0)
+    #query=db.session.query(Projects).order_by(db.desc('date_created')).limit(14).offset(0)
     query=Projects.query.order_by(db.desc('date_created')).paginate(page,14)
     #cats = db.session.query(Category.title, db.func.count(Category.projects)). \
             #join(Category.projects).group_by(Category.title)
@@ -144,6 +152,7 @@ def cat(category):
     return render_template('index.html',content=query)
 
 @app.route('/add', methods=['POST','GET'])
+@login_required
 def add_entry():
 
     form = AddProjectForm(request.form)
@@ -210,7 +219,6 @@ def project_index(proj_id):
 def part_add(proj_id):
     if request.method == 'GET' and g.user:
         #app.logger.debug(proj.participants)
-        data = request.form.get('data')
         proj = db.session.query(Projects).get(proj_id)
         if g.user not in proj.get_users():
             proj.inns_now +=1
@@ -243,37 +251,39 @@ def part_add(proj_id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
+    reg_form = RegistrationForm(request.form)
+    log_form = LoginForm(request.form)
+    if request.method == 'POST' and reg_form.validate():
         #check email,login
-        user = User(form.username.data, form.email.data,
-                    form.password.data, form.image.data)
+        user = User(reg_form.username.data, reg_form.email.data,
+                    reg_form.password.data, reg_form.image.data)
         db.session.add(user)
         db.session.commit()
 
         flash('Thanks for registering')
-        session['auth']=form.username.data
+        session['auth']=reg_form.username.data
         return redirect('/')
-    return render_template('register.html', form=form)
+    return render_template('login.html',log_form=log_form, reg_form=reg_form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    #Mak e seperate gef - log the user in for register cookie
-    form = LoginForm(request.form)
+    if request.args.get('next'):
+        session['next']=request.args.get('next')
+    log_form = LoginForm(request.form)
+    reg_form = RegistrationForm(request.form)
     if request.method == 'POST':
-        user = db.session.query(User).filter(User.name == form.username.data).first()
-        if form.validate() and user:
+        user = db.session.query(User).filter(User.name == log_form.user.data).first()
+        if log_form.validate() and user:
             #app.logger.debug(user.get_name())
-                if user.authentificate(form.username.data,form.password.data):
+                if user.authentificate(log_form.user.data,log_form.passw.data):
                     flash('You were logged in')
                     session['auth']=user.get_name()
-                    #app.logger.debug(g.user)
-                    return redirect(url_for('index'))
+                    return redirect(session.pop('next',None) or url_for('index'))
                 else:
                     flash('Creditnails not correct')
         if not user:
-            flash('Sorry no such user')
-    return render_template('login.html', form=form)
+            flash('Sorry! No such user')
+    return render_template('login.html', log_form=log_form, reg_form=reg_form )
 
 @app.route('/logout')
 def logout():

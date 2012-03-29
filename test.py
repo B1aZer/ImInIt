@@ -11,14 +11,15 @@ class FlaskrTestCase(unittest.TestCase):
         application.drop_db()
         application.create_db()
 
-    def test_empty_db(self):
-        rv = self.app.get('/')
-        assert 'Sorry no projects for you today' in rv.data
+    def tearDown(self):
+        pass
+
+
 
     def login(self, username, password):
         return self.app.post('/login', data=dict(
-            username=username,
-            password=password
+            user =username,
+            passw=password
         ), follow_redirects=True)
 
     def register(self, username, password):
@@ -27,7 +28,7 @@ class FlaskrTestCase(unittest.TestCase):
             password=password,
             confirm=password,
             email='weaea@dsa.com',
-            image='john hawk'
+            image='https://secure.gravatar.com/avatar/b888d0bbe52d3a08505e62a60ff5cfc8?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png'
         ), follow_redirects=True)
 
     def adding(self, title, description):
@@ -58,33 +59,36 @@ What we've done so farWe first presented this idea to our local community board 
 We’ve spoken with the MTA – the State-r
 
                      world """,
-            image_link='http://s3.amazonaws.com/ksr/projects/76336/photo-full.jpg?1329244834'
+            image_link='http://s3.amazonaws.com/ksr/projects/76336/photo-full.jpg?1329244834',
+            goal_end='10',
+            date_end='2012-3-31',
+            lat=0,
+            lng=0
         ), follow_redirects=True)
 
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
 
-    def test_login_logout(self):
+
+    def test_2(self):
         rv = self.login('jonny', 'qwe123')
-        assert 'Sorry no such user' in rv.data
+        assert 'Sorry! No such user' in rv.data
+        rv = self.register('jonny','qwe123')
+        assert 'Thanks for registering' in rv.data
+        rv = self.login('jonny', 'qwe123')
+        assert 'You were logged in' in rv.data
+        for i in xrange(40):
+            self.adding('one %s' %i,'This is testion for test purposes')
+        rv = self.app.get('/')
+        assert 'This is testion for test purposes' in rv.data
         #rv = self.logout()
         #assert 'You were logged out' in rv.data
 
-    def test_reg(self):
-        rv = self.register('jonny','qwe123')
-        assert 'Thanks for registering' in rv.data
-
-    def test_login_again(self):
+    def test_1(self):
         rv = self.login('jonny', 'qwe123')
-        assert 'jonny' in rv.data
+        assert 'Sorry! No such user' in rv.data
+        pass
 
-    def test_adding_thanks(self):
-        rv = self.adding('one','This is testion for test purposes')
-        print str(rv)
-        f = open('test.html' , 'w')
-        f.write(str(rv.data))
-        f.close
-        assert 'Previous' in rv.data
 
 
 if __name__ == '__main__':

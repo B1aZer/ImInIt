@@ -4,14 +4,15 @@ from flask import current_app
 
 class RegistrationForm(Form):
     username = TextField('Username', [validators.Length(min=4, max=25)])
-    email = TextField('Email Address', [validators.Length(min=6, max=35)])
+    email = TextField('Email Address', [validators.Email()])
     password = PasswordField('New Password', [
         validators.Required(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
     #accept_tos = BooleanField('I accept the TOS', [validators.Required()])
-    image = TextField('Image URL')
+    image = TextField('Image URL', validators=[
+                                        URL(), Optional()])
 
 class AddProjectForm(Form):
     title = TextField('Title', [validators.Required()])
@@ -30,8 +31,8 @@ class AddProjectForm(Form):
     mark_location = BooleanField('Choose location on map')
 
 class LoginForm(Form):
-    username = TextField('Username', [validators.Required(),validators.Length(min=3, max=25)])
-    password = PasswordField('Password', [validators.Required(),
+    user = TextField('Username', [validators.Required(),validators.Length(min=3, max=25)])
+    passw = PasswordField('Password', [validators.Required(),
                                         validators.Length(min=4, max=25,
                                         message="Password length must be from 4 characters")])
 
