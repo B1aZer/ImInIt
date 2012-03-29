@@ -10,75 +10,85 @@
 {% from "_formhelpers.html" import render_field %}
 <div class="container">
     <div class="row">
-        <form id="add-point" method="post" action="/add" class="form-horizontal well">
-            <button type="submit" class="btn btn-large btn-primary right">Add Me</button>
-            <div id="tabs" class="tabbable tabs-left">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#1" data-toggle="tab"><i class="icon-edit icon-large"></i>Genral</a></li>
-                    <li><a href="#2" data-toggle="tab"><i class="icon-font icon-large"></i>Text</a></li>
-                    <li><a href="#3" data-toggle="tab"><i class="icon-picture icon-large"></i>Picture</a></li>
-                    <!--<li><a href="#4" data-toggle="tab"><i class="icon-facetime-video icon-large"></i>Video</a></li>-->
-                    <li><a href="#5" data-toggle="tab"><i class="icon-map-marker icon-large"></i>Location</a></li>
-                    
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="1">
-                        <div class="span4">
-                            
-                            {{ render_field(form.title,"icon-bookmark") }}
-                            {{ render_field(form.description,"","input-xlarge") }}
-                            {{ render_field(form.goal_end,"icon-check") }}
-                            {{ render_field(form.date_end,"icon-time") }}
-                            <div class="input-prepend">
-                                {{ form.cat.label }}
-                                <span class="add-on"><i class=icon-tags></i></span>
-                                <input id=cat name=cat autocomplete="off" type="text" data-mode="multiple" data-delimiter="," class="span3" value="{{form.cat.data|default('',true)}}" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="{{ cats|tojson }}">
-                                {% if form.cat.errors %}
-                                <div class="alert">
-                                    {% for error in form.cat.errors %}
-                                    <a class="close" data-dismiss="alert">×</a>
-                                    <strong>Warning!</strong> {{ error }}
-                                    {% endfor %}
+        <div class="span12">
+            <form id="add-point" method="post" action="/add" class="well">
+                <button type="submit" class="btn btn-large btn-primary right">Add Me</button>
+                <div id="tabs" class="tabbable tabs-left">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#1" data-toggle="tab"><i class="icon-edit icon-large"></i>Genral</a></li>
+                        <li><a href="#2" data-toggle="tab"><i class="icon-font icon-large"></i>Text</a></li>
+                        <li><a href="#3" data-toggle="tab"><i class="icon-picture icon-large"></i>Picture</a></li>
+                        <!--<li><a href="#4" data-toggle="tab"><i class="icon-facetime-video icon-large"></i>Video</a></li>-->
+                        <li><a href="#5" data-toggle="tab"><i class="icon-map-marker icon-large"></i>Location</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="1">
+                            <div class="span8">
+                                <div class="row">
+
+                                    {{ render_field(form.title,"icon-bookmark","input-medium") }}
+                                    {{ render_field(form.description,"") }}
+                                    {{ render_field(form.goal_end,"icon-check","input-medium") }}
+                                    {{ render_field(form.date_end,"icon-time","input-medium") }}
+                                    <div class="input-prepend">
+                                        {{ form.cat.label }}
+                                        <span class="add-on"><i class=icon-tags></i></span><input id=cat name=cat autocomplete="off" type="text" data-mode="multiple" data-delimiter="," class="input-medium" value="{{form.cat.data|default('',true)}}" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source="{{ cats|tojson }}">
+                                        {% if form.cat.errors %}
+                                        <div class="alert">
+                                            {% for error in form.cat.errors %}
+                                            <a class="close" data-dismiss="alert">×</a>
+                                            <strong>Warning!</strong> {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="2">
-                        <div class="span4">
-                            <label for="httext">About your project</label>
-                            {{ form.httext(rows='25',cols='80') }}
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="3">
-                        <div class="span4">
-                            {{ render_field(form.image_link,"icon-magnet") }}
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="4">
-                        <div class="span4">
-                            {{ render_field(form.video_link,"icon-magnet") }}
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="5">
-                        <div class="span8">
-                            <div class="input-prepend">
-                                {{ form.loc.label }}
-                                <span class="add-on"><i class="icon-screenshot"></i></span> {{ form.loc(_class="span2") }}
-                                <span id="findbtn" class="btn">Find Point</span>
-                                <span id="clearbtn" class="btn">Clear Point</span>
+                        <div class="tab-pane fade" id="2">
+                            <div class="span4">
+                                <div class="row">
+                                    <label for="httext">About your project</label>
+                                    {{ form.httext(rows='5',cols='25') }}
+                                </div>
                             </div>
-                            <div id="loc_error">
+                        </div>
+                        <div class="tab-pane fade" id="3">
+                            <div class="span4">
+                                <div class="row">
+                                    {{ render_field(form.image_link,"icon-magnet","input-medium") }}
+                                </div>
                             </div>
-                            {{ form.lat }}
-                            {{ form.lng }}
-                            <!--<p><label class="checkbox inline">
+                        </div>
+                        <div class="tab-pane fade" id="4">
+                            <div class="span4">
+                                <div class="row">
+                                    {{ render_field(form.video_link,"icon-magnet","input-medium") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="5">
+                            <!--<div class="span3">-->
+                            <div class="span8">
+                                <div class="row">
+                                    <div class="input-prepend">
+                                        {{ form.loc.label }}
+                                        <span class="add-on"><i class="icon-screenshot"></i></span> 
+                                        {{ form.loc(class="input-small") }}
+
+                                    </div>
+                                    <span id="findbtn" class="btn">Find Point</span>
+                                    <!--<span id="clearbtn" class="btn">Clear Point</span>-->
+                                    <div id="loc_error">
+                                    </div>
+                                    {{ form.lat }}
+                                    {{ form.lng }}
+                                    <!--<p><label class="checkbox inline">
                             {{ form.mark_location }} 
                             {{ form.mark_location.label.text }}
                 </label></p>-->
-                            <div class="row"></div>
-                            <div class="row">
-                                <div class="span8">
+                                    <div class="row"></div>
                                     <div id="mapcontainer">
                                         <div class="contain">
                                             <div id="mapcanvas" class="wrap">
@@ -87,11 +97,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -59,10 +59,8 @@
                             {% endif %}
                         </div>
                         </li>
-                        <li>
-                        <h4><a href="/projects/{{ prj.id }}">{{ prj.title }}</a></h4>
-                        </li>
                     </ul>
+                        <h4 class="text-fix"><a href="/projects/{{ prj.id }}">{{ prj.title }}</a></h4>
                     <p class="well"> {{ prj.description}}</p>
                     {% for cat in  prj.cat %}
                     <p><h6><i class="icon-tag"></i>{{ cat }}</h6></p>

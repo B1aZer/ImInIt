@@ -65,6 +65,15 @@ footer {
 .popover{
     z-index:2060;
 }
+.width-fix {
+    width:90%;
+    margin: 0 0 0 21px;
+} 
+.text-fix {
+    position:relative;
+    top:-15px;
+    text-align:center;
+}
 #status {
     display: block;
     color: #FFAE5A;
@@ -84,9 +93,6 @@ footer {
     padding-top: 50px;
     /*padding-top: 100px;*/
   }
-}
-.width-fix {
-    width:90%;
 }
 @media (max-width: 768px) {
 .width-fix {
