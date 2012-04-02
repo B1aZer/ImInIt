@@ -83,18 +83,26 @@
                         <ul class="dropdown-menu">
                             <li class=span4>
                             <p></p>
-                            <form action="{{ url_for('login') }}" method=post class="span4">
-                                <label for="user">Username</label>
-                                <input type="text" value="" name="user" id="user" class="">
-                                <label for="passw">Password</label>
-                                <input type="password" value="" name="passw" id="passw" class="">
-                                <p> <button class="btn" type="submit">Login</button></p>
-                                <script>
+                            <div class="span3">
+                                <form action="{{ url_for('login') }}" method=post>
+                                    <label for="user">Username</label>
+                                    <input type="text" value="" name="user" id="user" class="">
+                                    <label for="passw">Password</label>
+                                    <input type="password" value="" name="passw" id="passw" class="">
+                                    <button class="btn" type="submit">Login</button>
+
+                                    <div class="btn-group right">
+                                        <button class="btn" onClick="location.href='{{ url_for('fb_login') }}';return false;"><i class="icon-facebook-sign"></i></button> 
+                                        <button class="btn" onClick="location.href='{{ url_for('tw_login') }}';return false;"><i class="icon-twitter-sign"></i></button> 
+                                    </div>
+
+                                    <script>
 $('.dropdown-menu').find('form').click(function (e) {
         e.stopPropagation();
         });
-                                </script>
-                            </form>
+                                    </script>
+                                </form>
+                            </div>
                             </li>
                         </ul>
                         </li>
