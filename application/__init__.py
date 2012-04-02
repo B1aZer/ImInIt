@@ -99,7 +99,7 @@ def fb_authorized(resp):
             request.args['error_description']
         ))
         return redirect(next_url)
-    g.user.facebook_token=resp['access_token']
+    session['facebook_token']=resp['access_token']
     me = facebook.get('/me')
     user = User.query.filter_by(name=me.data['name']).first()
     if not user:
@@ -144,8 +144,8 @@ def tw_authorized(resp):
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
-    #return session.get('facebook_token')
-    return getattr(g.user,'facebook_token',None)
+    resp = session.get('facebook_token') or getattr(g.user,'facebook_token',None)
+    return resp
 
 @twitter.tokengetter
 def get_twitter_token():
