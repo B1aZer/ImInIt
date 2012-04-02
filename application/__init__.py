@@ -40,7 +40,6 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key='160705233955349',
     consumer_secret='4f4fa3aedb2cba7a35267cba7bd3a883',
-    request_token_params={'scope': 'email'}
 )
 
 @app.template_filter()
@@ -71,7 +70,6 @@ def shutdown_session(exception=None):
 
 @app.route('/fb')
 def fb_login():
-    app.logger.debug(url_for('oauth_authorized'))
     return facebook.authorize(callback=url_for('oauth_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
@@ -88,7 +86,7 @@ def oauth_authorized(resp):
     me = facebook.get('/me')
     flash('Logged in as id=%s name=%s redirect=%s' % \
         (me.data['id'], me.data['name'], request.args.get('next')))
-    return redirect('/')
+    return str(me.data)
 
 
 
