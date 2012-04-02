@@ -80,14 +80,14 @@ def fb_login():
 @facebook.authorized_handler
 def oauth_authorized(resp):
     if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
+        flash('Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
-        )
+        ))
     #session['oauth_token'] = (resp['access_token'], '')
     me = facebook.get('/me')
-    return 'Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'))
+    flash('Logged in as id=%s name=%s redirect=%s' % \
+        (me.data['id'], me.data['name'], request.args.get('next')))
 
 
 @facebook.tokengetter

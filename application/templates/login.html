@@ -3,24 +3,37 @@
 {% from "_formhelpers.html" import render_field,render_mess %}
 <div class="container">
     <div class="row">
-    <div class="span4 well">
-        <form action="{{ url_for('login') }}" method=post>
-            {{ render_field(log_form.user) }}
-            {{ render_field(log_form.passw) }}
-            <p> <button class="btn" type="submit">Login</button></p>
+        <div class="span5">
+            <div class="span4 well">
+                <form action="{{ url_for('login') }}" method=post>
+                    {{ render_field(log_form.user) }}
+                    {{ render_field(log_form.passw) }}
+                    <p> <button class="btn" type="submit">Login</button> </p>
+                </form>
 
-        </form>
-    </div>
-    <div class="span4 well">
-        <form method="post" action="{{ url_for('register') }}">
-            {{ render_field(reg_form.username) }}
-            {{ render_field(reg_form.email) }}
-            {{ render_field(reg_form.password) }}
-            {{ render_field(reg_form.confirm) }}
-            {{ render_field(reg_form.image) }}
-            <p><input type=submit class="btn" value=Register>
-        </form> 
-    </div>
+
+
+
+            </div>
+            <div class="span4 well">
+                <a class="btn" ><i class="icon-facebook-sign"></i> Sign in with Facebook</a>
+                </div>
+            <div class="span4 well">
+                <a class="btn" ><i class="icon-twitter-sign"></i> Sign in with Twitter</a>
+                </div>
+        </div>
+        <div class="span5">
+            <div class="span4 well">
+                <form method="post" action="{{ url_for('register') }}">
+                    {{ render_field(reg_form.username) }}
+                    {{ render_field(reg_form.email) }}
+                    {{ render_field(reg_form.password) }}
+                    {{ render_field(reg_form.confirm) }}
+                    {{ render_field(reg_form.image) }}
+                    <p><input type=submit class="btn" value=Register>
+                </form> 
+            </div>  
+        </div>  
     </div>
 </div>
 {% endblock %}
