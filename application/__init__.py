@@ -88,6 +88,8 @@ def oauth_authorized(resp):
     me = facebook.get('/me')
     flash('Logged in as id=%s name=%s redirect=%s' % \
         (me.data['id'], me.data['name'], request.args.get('next')))
+    return redirect('/')
+
 
 
 @facebook.tokengetter
