@@ -12,16 +12,24 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True)
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
     password = db.Column(db.String(80))
+    twit_id =  db.Column(db.String)
+    twit_token =  db.Column(db.String)
+    fb_id =  db.Column(db.String)
+    fb_token =  db.Column(db.String)
     projects = db.relationship('Projects')
     comments = db.relationship('Comments')
     participant = db.relationship('Participants')
     #participant = db.relationship("Participants", uselist=False, db.backref="users")
 
-    def __init__(self, name=None, email=None, password=None, image = None):
+    def __init__(self, name=None, email=None, password=None, image = None, twit_id = None, twit_token = None, fb_id = None, fb_token = None):
         self.name = name
         self.email = email
         self.password = password
         self.image = image
+        self.twit_id = twit_id
+        self.twit_token = twit_token
+        self.fb_id = fb_id
+        self.fb_token = fb_token
 
     def __repr__(self):
         return "%s" % self.name

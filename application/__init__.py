@@ -47,8 +47,7 @@ twitter = oauth.remote_app('twitter',
     access_token_url='http://api.twitter.com/oauth/access_token',
     authorize_url='http://api.twitter.com/oauth/authenticate',
     consumer_key='h2H3rxB5DogKqj9XpJ7Q',
-    consumer_secret='FjBx1RI0HsRTev3m8FKPigcejMszFlSoEWGmVz75U',
-    request_token_params={'scope': 'email'}
+    consumer_secret='FjBx1RI0HsRTev3m8FKPigcejMszFlSoEWGmVz75U'
 )
 
 
@@ -93,16 +92,28 @@ def tw_login():
 @app.route('/fb_authorized')
 @facebook.authorized_handler
 def fb_authorized(resp):
+    next_url = request.args.get('next') or url_for('index')
     if resp is None:
         flash('Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
         ))
-    session['facebook_token'] = (resp['access_token'], '')
+        return redirect(next_url)
     me = facebook.get('/me')
-    flash('Logged in as id=%s name=%s redirect=%s' % \
+    user = User.query.filter_by(name=me.data['name']).first()
+    if not user:
+        user = User(me.data['name'],fb_id=me.data['id'],fb_token=(
+        resp['access_token'],
+        ''
+        ))
+        db.session.add(user)
+        db.session.commit()
+        session['auth'] = me.data['name']
+        flash('Logged in as id=%s name=%s redirect=%s' % \
         (me.data['id'], me.data['name'], request.args.get('next')))
-    return redirect('/')
+        return redirect(next_url)
+    session['auth'] = me.data['name']
+    return redirect(next_url)
 
 @app.route('/tw_authorized')
 @twitter.authorized_handler
@@ -111,24 +122,34 @@ def tw_authorized(resp):
     if resp is None:
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
-
-    session['twitter_token'] = (
+    #user = User.query.filter_by(twitter_id=resp['user_id'].first())
+    user = User.query.filter_by(name=resp['screen_name']).first()
+    if not user:
+        user = User(resp['screen_name'],twit_id=resp['user_id'],twit_token=(
         resp['oauth_token'],
         resp['oauth_token_secret']
-    )
-
-    flash('You were signed in as %s' % resp['screen_name'])
-    return str(resp)
+        ))
+        db.session.add(user)
+        db.session.commit()
+        session['auth']=resp['screen_name']
+        flash('Signed in as %s' % resp['screen_name'])
+        return redirect(next_url)
+    #td I can login as twitter name!!
+    session['auth']=resp['screen_name']
+    flash('User exist: %s' % resp['screen_name'])
+    return redirect(next_url)
 
 
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
-    return session.get('facebook_token')
+    #return session.get('facebook_token')
+    return getattr(g.user,'facebook_token',None)
 
 @twitter.tokengetter
 def get_twitter_token():
-    return session.get('twitter_token')
+    #return session.get('twitter_token')
+    return getattr(g.user,'twit_token',None)
 
 def login_required(f):
     @wraps(f)
