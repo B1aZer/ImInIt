@@ -84,7 +84,7 @@ def oauth_authorized(resp):
             request.args['error_reason'],
             request.args['error_description']
         ))
-    #session['oauth_token'] = (resp['access_token'], '')
+    session['oauth_token'] = (resp['access_token'], '')
     me = facebook.get('/me')
     flash('Logged in as id=%s name=%s redirect=%s' % \
         (me.data['id'], me.data['name'], request.args.get('next')))
