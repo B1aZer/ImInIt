@@ -67,16 +67,19 @@ $(function() {
                                         {% if query.comments %}
                                         {% for comm in query.comments %}
                                         <li>
-                                        <div class="well">
-                                            <div class="comment-head">
-                                                <div class="avatar"><img alt="" src="{{ comm.user.email | gravatar }}" class="avatar" height="48" width="48" id=""></div>
+                                        <div class="row">
+                                            <div class="span2">
+                                                <div class="avatar">
+                                                    <img alt="" src="{{ comm.user.email | gravatar }}" class="avatar" height="48" width="48" id="">
+                                                </div>
                                                 <span class="name"><a href="">{{ comm.user.name }}</a></span>
                                                 <span class="date">{{ comm.date_created | timesince }}</span>
-                                            </div><!-- /.comment-head -->
-                                            <div class="comment-entry">
-                                                <p>{{ comm.content }}</p>
-                                            </div><!-- /comment-entry -->
+                                            </div>
+                                        <div class="well span6">
+
+                                            <p>{{ comm.content }}</p>
                                         </div><!-- /.comment-container -->
+                                        </div>
                                         </li>
                                         {% endfor %}
                                         {% if g.user %}
@@ -112,18 +115,27 @@ $(function() {
                             <div class="wrap">
                                 <div id="participants">
                                     {% if query.participants %}
-                                    <ul class="unstyled">
+                                    <ul class="thumbnails">
                                         {% for part in query.participants %}
-                                        <li class="" id="li-part-{{ part.id }}">
-                                        <div class="well">
-                                            <div class="avatar">
-                                                <img alt="" src="{{ part.user.email | gravatar }}" class="avatar" height="48" width="48" id="">
-                                            </div>
-                                            {{ part.user }}
-                                        </div>
+                                        <li class="span2">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="50">
+                                        </a>
                                         </li>
                                         {% endfor %}
                                     </ul>
+                                    <!--<ul class="unstyled">-->
+                                    <!--{% for part in query.participants %}-->
+                                    <!--<li class="" id="li-part-{{ part.id }}">-->
+                                    <!--<div class="well">-->
+                                    <!--<div class="avatar">-->
+                                    <!--<img alt="" src="{{ part.user.email | gravatar }}" class="avatar" height="48" width="48" id="">-->
+                                    <!--</div>-->
+                                    <!--{{ part.user }}-->
+                                    <!--</div>-->
+                                    <!--</li>-->
+                                    <!--{% endfor %}-->
+                                    <!--</ul>-->
                                     {% endif %}
                                 </div>
                             </div>
@@ -143,7 +155,9 @@ $(function() {
                         <h6 style="font-size: 20px;"><div>going {{ query.inns_now }}</div></h6>
                     </div>
                     <!--<button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>-->
-                    <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>
+                    <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   
+                    {% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>
+                    {% endif %} 
                 </div>
             </div>
             <!--<div class="row">                                                                 -->

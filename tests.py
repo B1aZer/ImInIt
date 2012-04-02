@@ -28,7 +28,7 @@ class FlaskrTestCase(unittest.TestCase):
             username=username,
             password=password,
             confirm=password,
-            email='weaea@dsa.com',
+            email='weaea%s@dsa.com' % random.random(),
             image='https://secure.gravatar.com/avatar/b888d0bbe52d3a08505e62a60ff5cfc8?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png'
         ), follow_redirects=True)
 
@@ -70,6 +70,14 @@ We’ve spoken with the MTA – the State-r
             types='me'
         ), follow_redirects=True)
 
+    def comment(self, proj, comm):
+        return self.app.post('/projects/%s' %proj, data=dict(
+            comment=comm
+            ), follow_redirects=True)
+
+    def parts(self, proj):
+        return  self.app.get('/projects/add/%s' %proj)
+
     def adding1(self, title, description):
         return self.app.post('/add', data=dict(
             title=title,
@@ -89,6 +97,8 @@ We’ve spoken with the MTA – the State-r
         return self.app.get('/logout', follow_redirects=True)
 
 
+        self.register('nonny','qwe123')
+
     def test_2(self):
         rv = self.login('jonny', 'qwe123')
         assert 'Sorry! No such user' in rv.data
@@ -102,6 +112,19 @@ We’ve spoken with the MTA – the State-r
             self.adding1('two %s' %i,'This is testion for test purposes')
         rv = self.app.get('/')
         assert 'This is testion for test purposes' in rv.data
+        for i in xrange(5):
+            self.comment(40,'hello')
+        self.app.get('/projects/add/40')
+        self.register('bonny','qwe123')
+        self.app.get('/projects/add/40')
+        self.register('monny','qwe123')
+        self.app.get('/projects/add/40')
+        self.register('konny','qwe123')
+        self.app.get('/projects/add/40')
+        self.register('nonny','qwe123')
+        self.app.get('/projects/add/40')
+        self.register('lonny','qwe123')
+        self.app.get('/projects/add/40')
         #rv = self.logout()
         #assert 'You were logged out' in rv.data
 
