@@ -99,6 +99,7 @@ def fb_authorized(resp):
             request.args['error_description']
         ))
         return redirect(next_url)
+    return str(resp)
     me = facebook.get('/me')
     user = User.query.filter_by(name=me.data['name']).first()
     if not user:
