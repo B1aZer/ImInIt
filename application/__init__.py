@@ -59,6 +59,16 @@ def timesince(value):
 def timebefore(value):
     return helpers.timebefore(value)
 
+@app.template_filter()
+def split(value, sep=' '):
+    return value.split(sep)
+
+@app.template_filter()
+def positive(value):
+    if value < 0:
+        return 0
+    return value
+
 def create_db():
     with app.test_request_context():
         db.create_all()
@@ -200,8 +210,8 @@ def ajax(*args, **kwargs):
         for qq in query.all():
             #for q in qq:
             projs.append(qq.json())
-        if args:
-            query=db.session.query(Projects).get(args[0])
+        if kwargs:
+            query=Projects.query.get(kwargs['proj_id'])
             projs=query.json()
         return jsonify(result = projs)
     return jsonify(status='success')
@@ -267,9 +277,11 @@ def add_entry():
 def project_index(proj_id):
     form = CommentForm(request.form)
     proj = db.session.query(Projects).filter_by(id=proj_id).first()
-    css='icon-ok-sign'
+    if proj is None:
+        abort(404)
+    css=True
     if g.user in proj.get_users():
-        css='icon-remove-sign'
+        css=False
     if request.method == 'POST' and form.validate():
         comm = Comments(form.comment.data,
                 g.user,
@@ -277,9 +289,8 @@ def project_index(proj_id):
         db.session.add(comm)
         db.session.commit()
         flash('Comment added')
-        return redirect(url_for('project_index',proj_id=proj_id,_anchor=2))
-    if proj is None:
-        abort(404)
+        #td change anchor in v0.9
+        return redirect('projects/%s#2' % proj_id)
     #app.logger.debug(proj.get_users())
     return render_template('project.html',
                         query=proj,

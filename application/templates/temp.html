@@ -1,18 +1,52 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="content">
-    <div class="popover fade top in" style="top: 119.5px; left: 123.367px; display: block;">
-        <div class="arrow">
-        </div>
-        <div class="popover-inner">
-            <h3 class="popover-title">A Title</h3> 
-            <div class="popover-content"><p>This is text</p> 
-        </div>
-    </div>
-
-
-    </div>
-    </div>
-    
-{% endblock %}
-
+<div class="span2"> 
+            <div class="row1 ">
+            </div>
+            <div class="row">
+                <div class="span2">
+                    <div class="well">
+                        <h6 style="font-size: 20px;">going {{ query.inns_now }}/12</h6>
+                        <h6>Time left {{ query.inns_now }}/12</h6>
+                        
+                    </div>
+                    <!--<button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>-->
+                    <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   
+                    <!--{% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>-->
+                    <!--{% endif %} -->
+                </div>
+            </div>
+            <!--<div class="row">                                                                 -->
+            <!--<div class="span2">                                                           -->
+            <!--<div class="well">
+                         <h6 style="font-size: 20px;"><div><i class="icon-plus" style="font-size: 26px;"></i></div><h6>
+                             </div>-->
+            <!--<div class="btn-group">                                                   -->
+            <!--<a class="btn">                                                       -->
+            <!--<i class="icon-facebook-sign" style="font-size: 34px;"></i>       -->
+            <!--</a>                                                                  -->
+            <!--<a class="btn btn-inverse">                                           -->
+            <!--<i class="icon-twitter-sign" style="font-size: 33px;"></i>        -->
+            <!--</a>                                                                  -->
+            <!--<a class="btn">                                                       -->
+            <!--<i class="icon-twitter-sign" style="font-size: 34px;"></i>        -->
+            <!--</a>                                                                  -->
+            <!--</div>                                                                    -->
+            <!--</div>                                                                        -->
+            <!--</div>                                                                            -->
+        </div>            
+        
+        {% if query.location %}
+                    <script>
+$(function() {
+        iminit.map_init();
+        iminit.getMarker({{ query.id }});
+        });
+                    </script>
+                        <div class="span4">
+                            <div class="contain">
+                                <div class="wrap">
+                                    <div id="mapcanvas" style="height:150px">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}     

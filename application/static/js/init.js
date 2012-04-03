@@ -38,9 +38,9 @@ var iminit = {
     },
 
     getMarker : function (id) {
-        $.getJSON("/ajax/1", function(json) { 
-            if (json.result[0].lat && json.result[0].lng) {
-                var myLatlng = new google.maps.LatLng(json.result[0].lat,json.result[0].lng);
+        $.getJSON("/ajax/"+id, function(json) { 
+            if (json.result.lat && json.result.lng) {
+                var myLatlng = new google.maps.LatLng(json.result.lat,json.result.lng);
                 iminit.placeMarker(myLatlng);
                 //console.log(myLatlng);
                 map.setZoom(15);

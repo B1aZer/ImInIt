@@ -12,9 +12,21 @@ body {
 /*BBBBBB*/
 /*DDDDDD*/
 
+.page-header #mapcanvas {
+    height: 150px;
+}            
+.page-header .wrap {
+    padding: 0;
+}
+
+.page-header .row {
+    margin-bottom: 0;
+}
+
 #mapcanvas {
     height: 250px;
 }
+
 .contain {
     /*background: #808080;*/
     /*background: #AAAAAA;*/
@@ -50,22 +62,8 @@ body {
     width: 150px;
     height: 25px;
 }
-footer {
-    padding-top: 20px;
-    /*background-color: #AAAAAA;*/
-}
-
 .row {
     margin-bottom: 30px;
-}
-.row1 {
-    margin-bottom: 54px;
-}
-.right-pane {
-    border-left: 1px solid #D5D5D5;
-}
-.header {
-    height:300px
 }
 .popover{
     z-index:2060;

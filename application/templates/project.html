@@ -1,215 +1,227 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=160705233955349";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 <div class="container">
     <div class="row">
-        <div class="span10">
+        <div class="span12">
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#1" data-toggle="tab">Info</a></li>
+                    <li class="active"><a href="#1" data-toggle="tab">About</a></li>
                     <li><a href="#2" data-toggle="tab">Comments</a></li>
                     {% if query.participants %}
                     <li><a href="#3" data-toggle="tab">Participants</a></li>
                     {% endif %}
                 </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="1">
-                        {% if query.location %}
-                        <script>
-$(function() {   
-        iminit.map_init();
-        iminit.getMarker({{ query.id }}); 
-        });
-                        </script>
+                <div class="page-header">
+                    <h1>{{ query.title }}</h1>
+                    <p>{{ query.description }}</p>
+
+                    <div class="hero-unit">
                         <div class="row">
-                            <div class="span10">
+                            <div class="span3">
+                                {% if query.location %}
+                                <script>
+$(function() {
+        iminit.map_init();
+        iminit.getMarker({{ query.id }});
+        });
+                                </script>
                                 <div class="contain">
                                     <div class="wrap">
                                         <div id="mapcanvas">
                                         </div>
                                     </div>
                                 </div>
+                                {% else %}
+                                <div class="contain">
+                                    <div class="wrap">
+                                        {% if  query.image_link %}
+                                        <img src="{{ query.image_link }}" class="thumbnail" alt="" width=96% height=100%>
+                                        {% else %}
+                                        <img src="{{ url_for('static', filename='img/cover.jpg') }}" class="thumbnail" alt="" width=96% height=100%>
+                                        {% endif %}
+                                    </div>
+                                </div>  
+                                {% endif %}
+                            </div>
+                            <div class="span6 offset1">
+                                <div class="row">
+                                    <div class="span2">
+                                        <h1>{{ query.inns_now }}</h1>
+                                        <p>People now</p>
+                                        <p>
+                                        {% if g.user and css %} <a href="{{url_for('part_add',proj_id=query.id)}}" class="btn btn-large btn-primary">Im in</a>
+                                        {% endif %} 
+                                        </p> 
+                                    </div>
+                                    <div class="span2">
+                                        <h1>{{ (query.inns_target - query.inns_now) | positive}}</h1>
+                                        <p>People left</p> 
+                                        {% if g.user and not css %} <a href="{{url_for('part_add',proj_id=query.id)}}" class="btn btn-large btn-primary">Im Out</a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="span2">
+                                        {% if query.date_target | timebefore != 'passed' %}
+                                        <h1>{{ query.date_target | timebefore | split | first }}</h1>
+                                        <p>{{ query.date_target | timebefore | split | last }} left</p>
+                                        {% else %}
+                                        <h1>{{ query.date_target | timebefore | split | first }}</h1>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        {% endif %}
-                        <!--<div class="row">-->
-                        <!--<div class="span5">-->
-                        <!--<div class="contain">-->
-                        <!--<div class="wrap">-->
-                        <!--<img src="{{ query.image_link }}" alt="">-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="span5">
+                    </div>
+                    <div class="row">
+                        <div class="span2">
+                            <a class="btn btn-mini" data-toggle="modal" href="#myModal" >Send message</a>
+                            <div class="modal fade" id="myModal" style="display:none">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">×</a>
+                                    <h3>Modal header</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <p>One fine body…</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="#" class="btn">Close</a>
+                                    <a href="#" class="btn btn-primary">Save changes</a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="span2">
+                            <div class="fb-like" data-send="false" data-layout="button_count" data-width="140" data-show-faces="false"></div>
+                        </div>
+                        <div class="span2">
+                            <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                    <!--<div class="row">-->
+                    <!--<div class="span5">-->
+                    <!--<div class="contain">-->
+                    <!--<div class="wrap">-->
+                    <!--<img src="{{ query.image_link }}" alt="">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="span5">
                                 <div class="contain">
                                     <div class="wrap">
                                         <img src="{{ query.image_link }}" alt="">
                                     </div>
                                 </div>
                             </div>-->
-                        <!--</div>-->
-                        {% if query.html %}
-                        <div class="contain">
-                            <div class="wrap">
-                                <div class="well">
-
-                                    {{ query.html|safe }}
-
+                    <!--</div>-->
+                    {% if query.html %}
+                    <!--<div class="contain">-->
+                    <!--<div class="wrap">-->
+                    <!--<div class="well">-->
+                    {{ query.html|safe }}
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    {% endif %}
+                </div>
+                <div class="tab-pane" id="2">
+                    <div id="comments">
+                        <ul class="unstyled">
+                            {% if query.comments %}
+                            {% if g.user %}
+                            <li>
+                            <div class="row">
+                                <div class="span1">
+                                    <ul class="thumbnails">
+                                        <li class="span1">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{{ g.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                        </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="span11">
+                                    <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                        {{form.comment(class="span5",rows=5)}}
+                                        <p></p>
+                                        <button type="submit" class="btn">Send</button>
+                                    </form>
                                 </div>
                             </div>
-                        </div>
+                            </li>
+                            {% endif %}
+                            {% for comm in query.comments %}
+                            <li>
+                            <div class="row">
+                                <div class="span1">
+                                    <ul class="thumbnails">
+                                        <li class="span1">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{{ comm.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                        </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="span11">
+                                    <div class="well">
+                                        <h6><a href="">{{ comm.user.name }}</a>
+                                            {{ comm.date_created | timesince }} </h6>
+                                    </div>
+                                    <p>{{ comm.content }}</p>
+                                </div><!-- /.comment-container -->
+                            </div>
+                            </li>
+                            {% endfor %}
+                            {% else %}
+                            {% if g.user %}
+                            <li>
+                            <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                {{form.comment(class="span5",rows=5)}}
+                                <p></p>
+                                <button type="submit" class="btn">Send</button>
+                            </form>
+                            </li>
+                            {% endif %}
+                            <div class="well">
+                                <h6> No comments here yet. </h6>
+                            </div>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane" id="3">
+                    <div id="participants">
+                        {% if query.participants %}
+                        <ul class="thumbnails">
+                            {% for part in query.participants %}
+                            <li class="span1">
+                            <a href="#" class="thumbnail">
+                                <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="70">
+                            </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
-                    <div class="tab-pane" id="2">
-                        <div id="comments">
-                            <ul class="unstyled">
-                                {% if query.comments %}
-                                {% if g.user %}
-                                <li>
-                                <div class="row">
-                                            <div class="span1">
-                                                <ul class="thumbnails">
-                                                    <li class="span1">
-                                                    <a href="#" class="thumbnail">
-                                                        <img src="{{ g.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
-                                                    </a>
-                                                    </li>
-                                                </ul> 
-
-                                            </div>
-                                            <div class="span9">
-                                <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
-                                    {{form.comment(class="span5",rows=5)}}
-                                    <p></p>
-                                    <button type="submit" class="btn">Send</button>
-                                </form>
-                                            </div>
-                                            </div>
-                                </li>
-                                {% endif %}
-                                {% for comm in query.comments %}
-                                <li>
-                                        <div class="row">
-                                            <div class="span1">
-                                                <ul class="thumbnails">
-                                                    <li class="span1">
-                                                    <a href="#" class="thumbnail">
-                                                        <img src="{{ comm.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
-                                                    </a>
-                                                    </li>
-                                                </ul> 
-
-                                            </div>
-                                            <div class="span9">
-                                                <div class="well">
-                                                    <h6><a href="">{{ comm.user.name }}</a>
-                                                        {{ comm.date_created | timesince }} </h6>
-                                                </div>
-                                                <p>{{ comm.content }}</p>
-                                            </div><!-- /.comment-container -->
-                                        </div>
-                                </li>
-                                {% endfor %}
-
-                                {% else %}
-                                {% if g.user %}
-                                <li>
-                                <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
-                                    {{form.comment(class="span5",rows=5)}}
-                                    <p></p>
-                                    <button type="submit" class="btn">Send</button>
-                                </form>
-                                </li>
-                                {% endif %}
-                                <div class="well">
-                                    <h6> No comments here yet. </h6>   
-                                </div>
-
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="3">
-                        <div id="participants">
-                            {% if query.participants %}
-                            <ul class="thumbnails">
-                                {% for part in query.participants %}
-                                <li class="span1">
-                                <a href="#" class="thumbnail">
-                                    <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="70">
-                                </a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            <!--<ul class="unstyled">-->
-                            <!--{% for part in query.participants %}-->
-                            <!--<li class="" id="li-part-{{ part.id }}">-->
-                            <!--<div class="well">-->
-                            <!--<div class="avatar">-->
-                            <!--<img alt="" src="{{ part.user.email | gravatar }}" class="avatar" height="48" width="48" id="">-->
-                            <!--</div>-->
-                            <!--{{ part.user }}-->
-                            <!--</div>-->
-                            <!--</li>-->
-                            <!--{% endfor %}-->
-                            <!--</ul>-->
-                            {% endif %}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="span2"> 
-            <div class="row1 ">
-            </div>
-            <div class="row">
-                <div class="span2">
-                    <div class="well">
-                        <h6 style="font-size: 20px;">going {{ query.inns_now }}/12</h6>
-                        <h6>Time left {{ query.inns_now }}/12</h6>
-                        <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>
-                    </div>
-                    <!--<button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>-->
-                    <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   
-                    <!--{% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>-->
-                    <!--{% endif %} -->
-                </div>
-            </div>
-            <!--<div class="row">                                                                 -->
-            <!--<div class="span2">                                                           -->
-            <!--<div class="well">
-                         <h6 style="font-size: 20px;"><div><i class="icon-plus" style="font-size: 26px;"></i></div><h6>
-                             </div>-->
-            <!--<div class="btn-group">                                                   -->
-            <!--<a class="btn">                                                       -->
-            <!--<i class="icon-facebook-sign" style="font-size: 34px;"></i>       -->
-            <!--</a>                                                                  -->
-            <!--<a class="btn btn-inverse">                                           -->
-            <!--<i class="icon-twitter-sign" style="font-size: 33px;"></i>        -->
-            <!--</a>                                                                  -->
-            <!--<a class="btn">                                                       -->
-            <!--<i class="icon-twitter-sign" style="font-size: 34px;"></i>        -->
-            <!--</a>                                                                  -->
-            <!--</div>                                                                    -->
-            <!--</div>                                                                        -->
-            <!--</div>                                                                            -->
-        </div>
-        <!--<div class="well">
-            <h6>
-                <i class="icon-screenshot"></i> target: 100
-            </h6>
-        </div>
-        <div class="row">
-            <div class="span2">
-                 <a class="btn btn-large btn-success">
-                     <h3>Contribute</h3>
-                 </a>
-             </div>
-         </div>
-         <h5><a class="btn btn-small"><i class="icon-facebook-sign"></i> share on fb.com</a></h5>
-         <h5><a class="btn btn-small"><i class="icon-facebook-sign"></i> share on vk.com</a></h5>
-         <h5><a class="btn btn-small"><i class="icon-twitter-sign"></i> share on twitter</a></h5>
-                 </div>-->
-    </div><!--row-->
+    </div>
+</div><!--row-->
 </div> <!-- /container -->
 {% endblock %}
 {% block js %}

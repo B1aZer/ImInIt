@@ -96,7 +96,7 @@ def timebefore(dt, default=None):
 
     for period, trans in periods:
         if period and diff.days >= 0:
-            return gettext("%(period)s left", period=trans)
+            return gettext("%(period)s", period=trans)
 
     return default
 
