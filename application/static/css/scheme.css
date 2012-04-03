@@ -58,7 +58,12 @@ footer {
 .row {
     margin-bottom: 30px;
 }
-
+.row1 {
+    margin-bottom: 54px;
+}
+.right-pane {
+    border-left: 1px solid #D5D5D5;
+}
 .header {
     height:300px
 }

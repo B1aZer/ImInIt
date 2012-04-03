@@ -277,7 +277,7 @@ def project_index(proj_id):
         db.session.add(comm)
         db.session.commit()
         flash('Comment added')
-        return redirect(url_for('project_index',proj_id=proj_id))
+        return redirect(url_for('project_index',proj_id=proj_id,_anchor=2))
     if proj is None:
         abort(404)
     #app.logger.debug(proj.get_users())

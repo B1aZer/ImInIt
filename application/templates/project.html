@@ -51,113 +51,127 @@ $(function() {
                         <div class="contain">
                             <div class="wrap">
                                 <div class="well">
-                                    
+
                                     {{ query.html|safe }}
-                                    
+
                                 </div>
                             </div>
                         </div>
                         {% endif %}
                     </div>
                     <div class="tab-pane" id="2">
-                        <div class="contain">
-                            <div class="wrap">
-                                <div id="comments">
-                                    <ul class="unstyled">
-                                        {% if query.comments %}
-                                        {% for comm in query.comments %}
-                                        <li>
-                                        <div class="row">
-                                            <div class="span2">
-                                                <div class="avatar">
-                                                    <img alt="" src="{{ comm.user.email | gravatar }}" class="avatar" height="48" width="48" id="">
-                                                </div>
-                                                <span class="name"><a href="">{{ comm.user.name }}</a></span>
-                                                <span class="date">{{ comm.date_created | timesince }}</span>
-                                            </div>
-                                        <div class="well span6">
+                        <div id="comments">
+                            <ul class="unstyled">
+                                {% if query.comments %}
+                                {% if g.user %}
+                                <li>
+                                <div class="row">
+                                            <div class="span1">
+                                                <ul class="thumbnails">
+                                                    <li class="span1">
+                                                    <a href="#" class="thumbnail">
+                                                        <img src="{{ g.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                                    </a>
+                                                    </li>
+                                                </ul> 
 
-                                            <p>{{ comm.content }}</p>
-                                        </div><!-- /.comment-container -->
+                                            </div>
+                                            <div class="span9">
+                                <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                    {{form.comment(class="span5",rows=5)}}
+                                    <p></p>
+                                    <button type="submit" class="btn">Send</button>
+                                </form>
+                                            </div>
+                                            </div>
+                                </li>
+                                {% endif %}
+                                {% for comm in query.comments %}
+                                <li>
+                                        <div class="row">
+                                            <div class="span1">
+                                                <ul class="thumbnails">
+                                                    <li class="span1">
+                                                    <a href="#" class="thumbnail">
+                                                        <img src="{{ comm.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                                    </a>
+                                                    </li>
+                                                </ul> 
+
+                                            </div>
+                                            <div class="span9">
+                                                <div class="well">
+                                                    <h6><a href="">{{ comm.user.name }}</a>
+                                                        {{ comm.date_created | timesince }} </h6>
+                                                </div>
+                                                <p>{{ comm.content }}</p>
+                                            </div><!-- /.comment-container -->
                                         </div>
-                                        </li>
-                                        {% endfor %}
-                                        {% if g.user %}
-                                        <li>
-                                        <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
-                                            {{form.comment(class="span5",rows=5)}}
-                                            <p></p>
-                                            <button type="submit" class="btn">Send</button>
-                                        </form>
-                                        </li>
-                                        {% endif %}
-                                        {% else %}
-                                        <div class="well">
-                                            <h6> No comments yet. </h6>   
-                                        </div>
-                                        {% if g.user %}
-                                        <li>
-                                        <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
-                                            {{form.comment(class="span5",rows=5)}}
-                                            <p></p>
-                                            <button type="submit" class="btn">Send</button>
-                                        </form>
-                                        </li>
-                                        {% endif %}
-                                        {% endif %}
-                                    </ul>
+                                </li>
+                                {% endfor %}
+
+                                {% else %}
+                                {% if g.user %}
+                                <li>
+                                <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
+                                    {{form.comment(class="span5",rows=5)}}
+                                    <p></p>
+                                    <button type="submit" class="btn">Send</button>
+                                </form>
+                                </li>
+                                {% endif %}
+                                <div class="well">
+                                    <h6> No comments here yet. </h6>   
                                 </div>
-                            </div>
+
+                                {% endif %}
+                            </ul>
                         </div>
                     </div>
                     <div class="tab-pane" id="3">
-                        <div class="contain">
-                            <div class="wrap">
-                                <div id="participants">
-                                    {% if query.participants %}
-                                    <ul class="thumbnails">
-                                        {% for part in query.participants %}
-                                        <li class="span2">
-                                        <a href="#" class="thumbnail">
-                                            <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="50">
-                                        </a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                    <!--<ul class="unstyled">-->
-                                    <!--{% for part in query.participants %}-->
-                                    <!--<li class="" id="li-part-{{ part.id }}">-->
-                                    <!--<div class="well">-->
-                                    <!--<div class="avatar">-->
-                                    <!--<img alt="" src="{{ part.user.email | gravatar }}" class="avatar" height="48" width="48" id="">-->
-                                    <!--</div>-->
-                                    <!--{{ part.user }}-->
-                                    <!--</div>-->
-                                    <!--</li>-->
-                                    <!--{% endfor %}-->
-                                    <!--</ul>-->
-                                    {% endif %}
-                                </div>
-                            </div>
+                        <div id="participants">
+                            {% if query.participants %}
+                            <ul class="thumbnails">
+                                {% for part in query.participants %}
+                                <li class="span1">
+                                <a href="#" class="thumbnail">
+                                    <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="70">
+                                </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <!--<ul class="unstyled">-->
+                            <!--{% for part in query.participants %}-->
+                            <!--<li class="" id="li-part-{{ part.id }}">-->
+                            <!--<div class="well">-->
+                            <!--<div class="avatar">-->
+                            <!--<img alt="" src="{{ part.user.email | gravatar }}" class="avatar" height="48" width="48" id="">-->
+                            <!--</div>-->
+                            <!--{{ part.user }}-->
+                            <!--</div>-->
+                            <!--</li>-->
+                            <!--{% endfor %}-->
+                            <!--</ul>-->
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="span2">
-            <div class="row">
-            </div>
-            <div class="row">
+        <div class="span2"> 
+            <div class="row1 ">
             </div>
             <div class="row">
                 <div class="span2">
                     <div class="well">
-                        <h6 style="font-size: 20px;"><div>going {{ query.inns_now }}</div></h6>
+                        <h6 style="font-size: 20px;">going {{ query.inns_now }}/12</h6>
+                        <h6>Time left {{ query.inns_now }}/12</h6>
+                        <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>
                     </div>
                     <!--<button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>-->
                     <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   
-                    {% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>
-                    {% endif %} 
+                    <!--{% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>-->
+                    <!--{% endif %} -->
                 </div>
             </div>
             <!--<div class="row">                                                                 -->
