@@ -14,80 +14,86 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="1">
-                        <strong>{{user.name}}</strong>
+                        <p> <strong>{{user.name}}</strong> joined {{user.date_joined | timesince}}</p>
                     </div>
                     {% if g.user == user %}
-                    <div class="tab-pane" id="2">
+                    <div class="tab-pane messages" id="2">
                         {% if mess %}
-                        {% for mess in mess %}
-                        <div class="modal fade" id="myModal{{loop.index}}" style="display:none">
-                            <div class="modal-header">
-                                <a class="close" data-dismiss="modal">×</a>
-                                <h3>Send message to {{mess.author.name}}</h3>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="{{url_for('mess_send',author=mess.author.name)}}">
-                                    <p>
-                                    {{form.message(class="span7",rows=12)}}
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button href="#" class="btn btn-primary">Send</button>
-                                </form>
-                            </div>
-                        </div>  
+                        {% for mess in mess %} 
                         <div class="row">
-                            <div class="span1">
-                                {% if mess.author == g.user %}
-                                <ul class="thumbnails">
-                                    <li class="span1">
-                                    <a href="#" rel="tooltip" title="{{ mess.author.name }}" class="thumbnail">
-                                        <img src="{{ mess.author.email | gravatar }}" alt="" class="avatar" height="50" width="100">
-                                    </a>
-                                    </li>
-                                </ul>
-                                {% else %}
-                                <a class="btn btn-danger" data-toggle="modal" href="#myModal{{loop.index}}" >reply</a>
-                                {% endif %}
-                            </div>  
-                            <div class="span6">
-                                <div class="accordion" id="accordion{{loop.index+1}}">
-                                        <b class="arrow-right right"> </b>
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{loop.index+1}}" href="#collapse{{loop.index}}">
-                                                Message from <strong>{{mess.author.name}}</strong> {{mess.date_created |timesince }} about <strong>{{mess.project.title}}</strong>
-                                            </a>
-                                        </div>
-                                        <div id="collapse{{loop.index}}" class="accordion-body collapse" style="height: 0px; ">
-                                            <div class="accordion-inner">
-                                                {{ mess.content }}
-                                            </div>
-                                        </div>
+                            <div class="span8">
+                                <div class="row">
+                                    <div class="span1">
+                                        <p>
+                                        <img src="{{ mess.author.email | gravatar }}" alt="{{ mess.author.name }}" class="thumbnail" height=50% >
+                                        </p>
                                     </div>
+                                    <div class="span6">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ mess.author.name }} </th>
+                                                    <th> {{mess.date_created |timesince }}</th>
+                                                    {% if mess.kind == 'project' %}
+                                                    <th>{{ mess.project.title }}</th>
+                                                    {% else %}
+                                                    <th>{{ mess.kind }}</th>
+                                                    {% endif %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                {% if  ( mess.content |length ) > 72 %}
+                                                
+                                                <td colspan="3" data-toggle="collapse" data-target="#demo{{loop.index}}">
+                                                    {{ mess.content[0:72] }}
+                                                    <div id="demo{{loop.index}}" class="collapse"> {{mess.content[72:] }}</div> 
+                                                    <div class="positarrow"><b class="arrow-right right"></b></div>
+                                                </td>
+                                                {% else %}
+                                                <td colspan="3">{{ mess.content }}</td>
+                                                {% endif %}
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="span1">
+                                        <p>
+                                        <a class="btn btn-info" data-toggle="modal" href="#myModal{{loop.index}}">reply</a>
+                                        </p>
+                                        <p>
+                                        <a class="btn btn-danger" href="/user/del/{{mess.id}}" >delete</a>
+                                        </p> 
+                                        <div class="modal fade" id="myModal{{loop.index}}" style="display:none">
+                                            <div class="modal-header">
+                                                <a class="close" data-dismiss="modal">×</a>
+                                                <h3>Send message to {{mess.author.name}}</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="post" action="{{url_for('mess_send',author=mess.author.name)}}">
+                                                    <div class="well">
+                                                    {{mess.content}}
+                                                    </div>
+                                                    <div class="well">
+                                                    {{form.message(class="span6",rows=5)}}
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button href="#" class="btn btn-primary">Send</button>
+                                                </form>
+                                            </div>
+                                        </div>  
+                                    </div> 
                                 </div>
-                                <!--<hr>-->
-                            </div>
-                            <div class="span1">
-                                {% if mess.author == g.user %}
-                                {% if mess.reciever == g.user %}
-                                <a class="btn btn-danger" href="#" >reply</a>
-                                {% endif %}
-                                {% else %} 
-                                <ul class="thumbnails">
-                                    <li class="span1">
-                                    <a href="#" rel="tooltip" title="{{ mess.author.name }}" class="thumbnail">
-                                        <img src="{{ mess.author.email | gravatar }}" alt="" class="avatar" height="50" width="100">
-                                    </a>
-                                    </li>
-                                </ul>  
+                                {% if not loop.last  %}
+                                <hr>
                                 {% endif %}
                             </div>
                         </div>
                         {% endfor %}
-                        {% endif %}
+                        {% endif %}  
                     </div>
-                    {% endif %}
+                    {% endif %}                       
                     <div class="tab-pane" id="3">
                         {% if user.projects %}
                         <ul class="thumbnails">
@@ -106,7 +112,7 @@
                         <ul class="thumbnails">
                             {% for prj in user.participant %}
                             <li class="span1">
-                            <a href="projects/{{prj.project.id}}" class="thumbnail" rel="tooltip" title="{{ prj.project.title }}">
+                            <a href="/projects/{{prj.project.id}}" class="thumbnail" rel="tooltip" title="{{ prj.project.title }}">
                                 <img src="{{ prj.project.image_link }}" alt="{{ prj.project.title }}" >
                             </a>
                             </li>

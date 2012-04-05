@@ -57,7 +57,7 @@ class Projects(db.Model):
     cat = db.relationship('Category', secondary=association_table, backref = db.backref('projects'))
     types=db.Column(db.Text)
     title = db.Column(db.String(50))
-    description = db.Column(db.String(120))
+    description = db.Column(db.String(350))
     html = db.Column(db.Text)
     date_created = db.Column(db.DateTime,  default=datetime.utcnow)
     date_target = db.Column(db.DateTime,  default=datetime.utcnow)
@@ -145,10 +145,12 @@ class Messages(db.Model):
     project = db.relationship('Projects')
     author = db.relationship("User",
                     primaryjoin="User.id==Messages.author_id",
-                    backref="sent_messages")
+                    backref="sent_messages"
+                    )
     reciever = db.relationship("User",
                     primaryjoin="User.id==Messages.reciver_id",
-                    backref="my_messages")
+                    backref=db.backref("my_messages",order_by=db.desc("Messages.date_created"))
+                    )
 
 class Participants(db.Model):
     __tablename__ = 'participants'

@@ -126,13 +126,11 @@ $(function() {
                             <li>
                             <div class="row">
                                 <div class="span1">
-                                    <ul class="thumbnails">
-                                        <li class="span1">
-                                        <a href="#" class="thumbnail">
-                                            <img src="{{ g.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                    <p>
+                                        <a href="/user/{{ g.user.name }}" >
+                                            <img src="{{ g.user.email | gravatar }}" alt="" class="thumbnail" height="50%">
                                         </a>
-                                        </li>
-                                    </ul>
+                                        </p>
                                 </div>
                                 <div class="span11">
                                     <form class="well" method="post" action="{{url_for('project_index',proj_id=query.id)}}">
@@ -148,17 +146,15 @@ $(function() {
                             <li>
                             <div class="row">
                                 <div class="span1">
-                                    <ul class="thumbnails">
-                                        <li class="span1">
-                                        <a href="#" class="thumbnail">
-                                            <img src="{{ comm.user.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+                                        <p>
+                                        <a href="/user/{{ comm.user.name }}" >
+                                            <img src="{{ comm.user.email | gravatar }}" class="thumbnail" alt="" height=50%>
                                         </a>
-                                        </li>
-                                    </ul>
+                                        </p>
                                 </div>
                                 <div class="span11">
                                     <div class="well">
-                                        <h6><a href="">{{ comm.user.name }}</a>
+                                        <h6><a href="/user/{{ comm.user.name }}">{{ comm.user.name }}</a>
                                             {{ comm.date_created | timesince }} </h6>
                                     </div>
                                     <p>{{ comm.content }}</p>
@@ -189,7 +185,7 @@ $(function() {
                         <ul class="thumbnails">
                             {% for part in query.participants %}
                             <li class="span1">
-                            <a href="user/{{part.user.name}}" class="thumbnail" rel="tooltip" title="{{ part.user.name }}">
+                            <a href="/user/{{part.user.name}}" class="thumbnail" rel="tooltip" title="{{ part.user.name }}">
                                 <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="70">
                             </a>
                             </li>

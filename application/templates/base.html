@@ -92,8 +92,8 @@
                                     <button class="btn" type="submit">Login</button>
 
                                     <div class="btn-group right">
-                                        <button class="btn" onClick="location.href='{{ url_for('fb_login') }}';return false;"><i class="icon-facebook-sign"></i></button> 
-                                        <button class="btn" onClick="location.href='{{ url_for('tw_login') }}';return false;"><i class="icon-twitter-sign"></i></button> 
+                                        <button class="btn" onClick="location.href='{{ url_for('fb_login') }}';return false;"><i class="icon-facebook-sign icon-large"></i></button> 
+                                        <button class="btn" onClick="location.href='{{ url_for('tw_login') }}';return false;"><i class="icon-twitter-sign icon-large"></i></button> 
                                     </div>
 
                                     <script>
@@ -233,10 +233,9 @@ $('.dropdown-menu').find('form').click(function (e) {
 
     {% endblock %}
 
-    <!--</div>-->
-
-    <!-- Le javascript
-    ================================================== -->
+    <!-- Le javascript-->
+<script src="{{ url_for('static', filename='js/jquery.ba-hashchange.min.js') }}"></script>
+<!--================================================== -->
     {% block js %}
     {% endblock %}
 

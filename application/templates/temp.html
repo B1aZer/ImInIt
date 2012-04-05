@@ -1,52 +1,68 @@
-<div class="span2"> 
-            <div class="row1 ">
-            </div>
-            <div class="row">
-                <div class="span2">
-                    <div class="well">
-                        <h6 style="font-size: 20px;">going {{ query.inns_now }}/12</h6>
-                        <h6>Time left {{ query.inns_now }}/12</h6>
-                        
+{% if mess %}
+{% for mess in mess %}
+<div class="modal fade" id="myModal{{loop.index}}" style="display:none">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Send message to {{mess.author.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <form method="post" action="{{url_for('mess_send',author=mess.author.name)}}">
+            <p>
+            {{form.message(class="span7",rows=12)}}
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button href="#" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>  
+<div class="row">
+    <div class="span1">
+        {% if mess.author == g.user %}
+        <ul class="thumbnails">
+            <li class="span1">
+            <a href="#" rel="tooltip" title="{{ mess.author.name }}" class="thumbnail">
+                <img src="{{ mess.author.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+            </a>
+            </li>
+        </ul>
+        {% else %}
+        <!--<a class="btn btn-danger" data-toggle="modal" href="#myModal{{loop.index}}" >reply</a>-->
+        {% endif %}
+    </div>  
+    <div class="span6">
+        <div class="accordion" id="accordion{{loop.index+1}}">
+            <b class="arrow-right right"> </b>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{loop.index+1}}" href="#collapse{{loop.index}}">
+                        Message from <strong>{{mess.author.name}}</strong> {{mess.date_created |timesince }} about <strong>{{mess.project.title}}</strong>
+                    </a>
+                </div>
+                <div id="collapse{{loop.index}}" class="accordion-body collapse" style="height: 0px; ">
+                    <div class="accordion-inner">
+                        {{ mess.content }}
                     </div>
-                    <!--<button onclick="$.post('/ajax/in', { data: {{ query.id }} }); return false;" id="add" class="btn btn-inverse" href="#" style="width:100%"><i class="icon-ok-sign" style="font-size: 50px;"></i></button>-->
-                    <!--<button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn btn-inverse" style="width:100%"><i class="{{css}}" style="font-size: 50px;"></i></button>-->                   
-                    <!--{% if g.user %} <button onclick="location.href='{{url_for('part_add',proj_id=query.id)}}'" class="btn"><i class="{{css}}" style="font-size: 50px;"></i></button>-->
-                    <!--{% endif %} -->
                 </div>
             </div>
-            <!--<div class="row">                                                                 -->
-            <!--<div class="span2">                                                           -->
-            <!--<div class="well">
-                         <h6 style="font-size: 20px;"><div><i class="icon-plus" style="font-size: 26px;"></i></div><h6>
-                             </div>-->
-            <!--<div class="btn-group">                                                   -->
-            <!--<a class="btn">                                                       -->
-            <!--<i class="icon-facebook-sign" style="font-size: 34px;"></i>       -->
-            <!--</a>                                                                  -->
-            <!--<a class="btn btn-inverse">                                           -->
-            <!--<i class="icon-twitter-sign" style="font-size: 33px;"></i>        -->
-            <!--</a>                                                                  -->
-            <!--<a class="btn">                                                       -->
-            <!--<i class="icon-twitter-sign" style="font-size: 34px;"></i>        -->
-            <!--</a>                                                                  -->
-            <!--</div>                                                                    -->
-            <!--</div>                                                                        -->
-            <!--</div>                                                                            -->
-        </div>            
-        
-        {% if query.location %}
-                    <script>
-$(function() {
-        iminit.map_init();
-        iminit.getMarker({{ query.id }});
-        });
-                    </script>
-                        <div class="span4">
-                            <div class="contain">
-                                <div class="wrap">
-                                    <div id="mapcanvas" style="height:150px">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}     
+        </div>
+        <!--<hr>-->
+    </div>
+    <div class="span1">
+        {% if mess.author == g.user %}
+        {% if mess.reciever == g.user %}
+        <!--<a class="btn btn-danger" href="#" >reply</a>-->
+        {% endif %}
+        {% else %} 
+        <ul class="thumbnails">
+            <li class="span1">
+            <a href="#" rel="tooltip" title="{{ mess.author.name }}" class="thumbnail">
+                <img src="{{ mess.author.email | gravatar }}" alt="" class="avatar" height="50" width="100">
+            </a>
+            </li>
+        </ul>  
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endif %}

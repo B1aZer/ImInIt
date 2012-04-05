@@ -53,7 +53,9 @@
                         <span class="badge  ">{{ prj.inns_now }}</span>
                         <span class="badge badge-warning">{{ prj.inns_target }}</span>
                     </span>
-                    <span class="label  right">{{ prj.date_target | timebefore }} left</span>
+                    <span class="label  right">
+                        {{ prj.date_target | timebefore }} {% if ( prj.date_target| timebefore ) != 'passed' %} left {% endif %}
+                    </span>
                     </p>
                     <ul class="thumbnails">
                         <li class="span3 width-fix" >
@@ -68,7 +70,7 @@
                     </ul>
                     <h3 class="text-fix">{{ prj.title }}</h3>
 
-                    <p class="well"> {{ prj.description}}</p>
+                    <p class="well"> {{ prj.description }}</p>
                     {% if  prj.location %}
                     <h6><i class="icon-map-marker"></i> {{ prj.location }} </h6>
                     {% endif %}

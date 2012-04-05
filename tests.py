@@ -35,7 +35,7 @@ class FlaskrTestCase(unittest.TestCase):
     def adding(self, title, description):
         return self.app.post('/add', data=dict(
             title=title,
-            description=description,
+            description="""What is the LowLine?We want to transform an abandoned trolley terminal on the Lower East Side of Manhattan into the world’s first underground park.  It will be a new kind of public space, using solar technology for natural illumination, and cutting edge design to capture and highlight a very special industrial space.""",
             httext = """hello
 What is the LowLine?We want to transform an abandoned trolley terminal on the Lower East Side of Manhattan into the world’s first underground park.  It will be a new kind of public space, using solar technology for natural illumination, and cutting edge design to capture and highlight a very special industrial space.
 
@@ -66,7 +66,7 @@ We’ve spoken with the MTA – the State-r
             lat=55.74 + random.uniform(-0.1,0.1),
             lng=37.62 + random.uniform(-0.4,0.4),
             loc="location",
-            cat='cat1',
+            cat='cat111, cat11211, ca321t111, ca31t111, cat312111, ca31t111, c31at111,    ',
             types='me'
         ), follow_redirects=True)
 
@@ -93,8 +93,7 @@ We’ve spoken with the MTA – the State-r
             date_end='2012-3-30',
             lat=55.74 + random.uniform(-0.1,0.1),
             lng=37.62 + random.uniform(-0.4,0.4),
-            loc="location2",
-            cat='cat2, cat4',
+            cat='cat2, cat4, cat14, cat124, cat314, cat414, c5at4, cat434, cat5224, ca5252t4, c5252at4, ca35t4, cat5324, cat4, cat4, cat4',
             types='pa'
         ), follow_redirects=True)
 
@@ -131,7 +130,7 @@ We’ve spoken with the MTA – the State-r
         self.register('lonny','qwe123')
         self.app.get('/projects/add/40')
         for i in xrange(5):
-            self.message(40,'hello')
+            self.message(40,'hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello')
         #rv = self.logout()
         #assert 'You were logged out' in rv.data
 

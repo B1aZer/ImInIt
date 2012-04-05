@@ -231,9 +231,18 @@ def user(*args,**kwargs):
     form = MessageForm(request.form)
     if kwargs:
         user = User.query.filter_by(name=kwargs["name"]).first()
-    mess = Messages.query.filter(db.or_(Messages.author == user,Messages.reciever == user)).order_by(db.desc('date_created')).all()
+    #mess = Messages.query.filter(db.or_(Messages.author == user,Messages.reciever == user)).order_by(db.desc('date_created')).all()
+    mess = user.my_messages
     return render_template('user.html',user=user,mess=mess,form=form)
 
+@login_required
+@app.route('/user/del/<int:mess_id>', methods=['GET'])
+def mess_del(mess_id):
+    mess = Messages.query.get(mess_id)
+    if mess:
+        db.session.delete(mess)
+        db.session.commit()
+    return redirect('/user/%s#/2' % g.user.name)
 
 
 @login_required
@@ -256,17 +265,19 @@ def add_entry():
                     form.lat.data,
                     form.lng.data,
                     form.image_link.data or url_for('static', filename='img/cover.jpg'))
-            #app.logger.debug(str(proj.__dict__))
 
+            dupl = set()
             for cat in form.cat.data.split(','):
+                cat = cat.strip()
                 if cat:
-                    cat = cat.strip()
                     #category = db.session.query(Category).filter_by(title=cat).first()
                     #if not category:
                         #category = Category(title=cat)
                     category = db.session.query(Category).filter_by(title=cat).first() \
                         or Category(title=cat)
-                    proj.cat.append(category)
+                    if cat not in dupl:
+                        proj.cat.append(category)
+                        dupl.add(cat)
 
             db.session.add(proj)
             db.session.commit()
@@ -355,7 +366,7 @@ def mess_send(*args,**kwargs):
         db.session.add(mess)
         db.session.commit()
         flash('Message send')
-        return redirect('/projects/%s' % kwargs['proj_id'])
+        return redirect('/projects/%s#/2' % kwargs['proj_id'])
     if request.method == 'POST' and 'author' in kwargs and form.validate():
         mess = Messages(content = form.message.data,
                 kind = 'private',
@@ -365,8 +376,9 @@ def mess_send(*args,**kwargs):
         db.session.add(mess)
         db.session.commit()
         flash('Message send')
-        return redirect('/user/%s' % g.user.name)
+        return redirect('/user/%s#/2' % g.user.name)
     return redirect('.')
+
 
 @app.route('/register', methods=['GET','POST'])
 def register():
