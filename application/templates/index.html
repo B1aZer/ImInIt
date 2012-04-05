@@ -30,7 +30,7 @@
     <!--<div class="wrap">  -->
 
 
-    <div class="row">
+    <div class="row big">
         <div class="span12">
             <div class="contain">
                 <div class="wrap">  
@@ -41,7 +41,7 @@
         </div>
     </div>
     {% for prj in content.items %}
-    {% if loop.index%2 > 0 %}<div class="row">{% endif %}
+    {% if loop.index%2 > 0 %}<div class="row big">{% endif %}
         <div class="span3 {{ loop.cycle('offset3','offset3','offset2', 'offset3', 'offset1', 'offset3', 'offset0', 'offset3',
             'offset1','offset3','offset2', 'offset3', 'offset3', 'offset3') }}">
             <div class="contain">

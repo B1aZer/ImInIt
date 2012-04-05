@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
+<script>
+//facebook
+(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=160705233955349";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
+}(document, 'script', 'facebook-jssdk'));
+</script>
 <div class="container">
     <div class="row">
         <div class="span12">
@@ -24,7 +25,6 @@
                 <div class="page-header">
                     <h1>{{ query.title }}</h1>
                     <p>{{ query.description }}</p>
-
                     <div class="hero-unit">
                         <div class="row">
                             <div class="span3">
@@ -50,7 +50,7 @@ $(function() {
                                         <img src="{{ url_for('static', filename='img/cover.jpg') }}" class="thumbnail" alt="" width=96% height=100%>
                                         {% endif %}
                                     </div>
-                                </div>  
+                                </div>
                                 {% endif %}
                             </div>
                             <div class="span6 offset1">
@@ -60,12 +60,12 @@ $(function() {
                                         <p>People now</p>
                                         <p>
                                         {% if g.user and css %} <a href="{{url_for('part_add',proj_id=query.id)}}" class="btn btn-large btn-primary">Im in</a>
-                                        {% endif %} 
-                                        </p> 
+                                        {% endif %}
+                                        </p>
                                     </div>
                                     <div class="span2">
                                         <h1>{{ (query.inns_target - query.inns_now) | positive}}</h1>
-                                        <p>People left</p> 
+                                        <p>People left</p>
                                         {% if g.user and not css %} <a href="{{url_for('part_add',proj_id=query.id)}}" class="btn btn-large btn-primary">Im Out</a>
                                         {% endif %}
                                     </div>
@@ -78,7 +78,6 @@ $(function() {
                                         {% endif %}
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -88,17 +87,20 @@ $(function() {
                             <div class="modal fade" id="myModal" style="display:none">
                                 <div class="modal-header">
                                     <a class="close" data-dismiss="modal">×</a>
-                                    <h3>Modal header</h3>
+                                    <h3>Send message to author</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <p>One fine body…</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="#" class="btn">Close</a>
-                                    <a href="#" class="btn btn-primary">Save changes</a>
+                                    <form method="post" action="{{url_for('mess_send',proj_id=query.id)}}">
+                                        <p>
+                                        {{mess.message(class="span6",rows=5)}}
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#" class="btn" data-dismiss="modal">Close</a>
+                                        <button href="#" class="btn btn-primary">Send</button>
+                                    </form>
                                 </div>
                             </div>
-
                         </div>
                         <div class="span2">
                             <div class="fb-like" data-send="false" data-layout="button_count" data-width="140" data-show-faces="false"></div>
@@ -112,30 +114,8 @@ $(function() {
             </div>
             <div class="tab-content">
                 <div class="tab-pane active" id="1">
-                    <!--<div class="row">-->
-                    <!--<div class="span5">-->
-                    <!--<div class="contain">-->
-                    <!--<div class="wrap">-->
-                    <!--<img src="{{ query.image_link }}" alt="">-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="span5">
-                                <div class="contain">
-                                    <div class="wrap">
-                                        <img src="{{ query.image_link }}" alt="">
-                                    </div>
-                                </div>
-                            </div>-->
-                    <!--</div>-->
                     {% if query.html %}
-                    <!--<div class="contain">-->
-                    <!--<div class="wrap">-->
-                    <!--<div class="well">-->
                     {{ query.html|safe }}
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
                     {% endif %}
                 </div>
                 <div class="tab-pane" id="2">
@@ -209,7 +189,7 @@ $(function() {
                         <ul class="thumbnails">
                             {% for part in query.participants %}
                             <li class="span1">
-                            <a href="#" class="thumbnail">
+                            <a href="user/{{part.user.name}}" class="thumbnail" rel="tooltip" title="{{ part.user.name }}">
                                 <img src="{{ part.user.email | gravatar }}" alt="" class="avatar" height="50" width="70">
                             </a>
                             </li>
@@ -225,6 +205,6 @@ $(function() {
 </div> <!-- /container -->
 {% endblock %}
 {% block js %}
-<!--<script src="{{ url_for('static', filename='js/proj.js') }}"></script>-->
+<script src="{{ url_for('static', filename='js/proj.js') }}"></script>
 <!--<script src="{{ url_for('static', filename='js/jquery.cycle.all.js') }}"></script>-->
 {% endblock %}

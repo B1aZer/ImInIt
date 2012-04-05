@@ -38,6 +38,9 @@ class LoginForm(Form):
                                         message="Password length must be from 4 characters")])
 
 class CommentForm(Form):
-
     comment = TextAreaField(validators=[
                             required("Comment is required")])
+
+class MessageForm(Form):
+    message = TextAreaField(validators=[
+                            required("Please input message text")])

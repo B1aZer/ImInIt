@@ -75,6 +75,11 @@ We’ve spoken with the MTA – the State-r
             comment=comm
             ), follow_redirects=True)
 
+    def message(self, proj, mess):
+        return self.app.post('/projects/send/%s' %proj, data=dict(
+            message=mess
+            ), follow_redirects=True)
+
     def parts(self, proj):
         return  self.app.get('/projects/add/%s' %proj)
 
@@ -125,6 +130,8 @@ We’ve spoken with the MTA – the State-r
         self.app.get('/projects/add/40')
         self.register('lonny','qwe123')
         self.app.get('/projects/add/40')
+        for i in xrange(5):
+            self.message(40,'hello')
         #rv = self.logout()
         #assert 'You were logged out' in rv.data
 

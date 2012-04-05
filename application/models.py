@@ -113,9 +113,6 @@ class Projects(db.Model):
             lst.append(usr.user)
         return lst
 
-
-
-
 class Comments(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer,primary_key = True)
@@ -132,6 +129,26 @@ class Comments(db.Model):
         self.content = content
         self.user = user
         self.project=project
+
+class Messages(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer,primary_key = True)
+    content = db.Column (db.String)
+    kind = db.Column (db.String)
+    date_created =  db.Column(db.DateTime, default=datetime.utcnow)
+    author_id = db.Column(db.Integer,
+                db.ForeignKey('users.id', ondelete='CASCADE'))
+    reciver_id = db.Column(db.Integer,
+                db.ForeignKey('users.id', ondelete='CASCADE'))
+    project_id = db.Column(db.Integer,
+                db.ForeignKey('projects.id', ondelete='CASCADE'))
+    project = db.relationship('Projects')
+    author = db.relationship("User",
+                    primaryjoin="User.id==Messages.author_id",
+                    backref="sent_messages")
+    reciever = db.relationship("User",
+                    primaryjoin="User.id==Messages.reciver_id",
+                    backref="my_messages")
 
 class Participants(db.Model):
     __tablename__ = 'participants'
@@ -152,8 +169,6 @@ class Participants(db.Model):
 
     def __str__(self):
          return self.user.name
-
-
 
 
 class Category(db.Model):

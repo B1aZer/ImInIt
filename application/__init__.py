@@ -6,8 +6,8 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from helpers import jsonify
 #from sqlalchemy import db.desc, func
-from models import User, Projects, Comments, Participants, Category
-from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm
+from models import *
+from forms import RegistrationForm,AddProjectForm,LoginForm,CommentForm,MessageForm
 from functools import wraps
 import helpers
 
@@ -225,13 +225,19 @@ def tmp():
     return render_template('base.html')
 
 @app.route('/user')
-def user():
-     return render_template('user.html',user=g.user)
+@app.route('/user/<name>')
+def user(*args,**kwargs):
+    user = g.user
+    form = MessageForm(request.form)
+    if kwargs:
+        user = User.query.filter_by(name=kwargs["name"]).first()
+    mess = Messages.query.filter(db.or_(Messages.author == user,Messages.reciever == user)).order_by(db.desc('date_created')).all()
+    return render_template('user.html',user=user,mess=mess,form=form)
 
 
 
-@app.route('/add', methods=['POST','GET'])
 @login_required
+@app.route('/add', methods=['POST','GET'])
 def add_entry():
 
     form = AddProjectForm(request.form)
@@ -249,7 +255,7 @@ def add_entry():
                     form.types.data,
                     form.lat.data,
                     form.lng.data,
-                    form.image_link.data)
+                    form.image_link.data or url_for('static', filename='img/cover.jpg'))
             #app.logger.debug(str(proj.__dict__))
 
             for cat in form.cat.data.split(','):
@@ -276,6 +282,7 @@ def add_entry():
 @app.route('/projects/<int:proj_id>', methods=['POST','GET'])
 def project_index(proj_id):
     form = CommentForm(request.form)
+    mess = MessageForm(request.form)
     proj = db.session.query(Projects).filter_by(id=proj_id).first()
     if proj is None:
         abort(404)
@@ -295,10 +302,11 @@ def project_index(proj_id):
     return render_template('project.html',
                         query=proj,
                         form=form,
+                        mess=mess,
                         css=css)
 
-#!!login requied
-@app.route('/projects/add/<int:proj_id>', methods=['POST','GET'])
+@login_required
+@app.route('/projects/add/<int:proj_id>')
 def part_add(proj_id):
     if request.method == 'GET' and g.user:
         #app.logger.debug(proj.participants)
@@ -332,7 +340,35 @@ def part_add(proj_id):
 
     return redirect('/projects/%s' % proj_id)
 
-@app.route('/register', methods=['GET', 'POST'])
+@login_required
+@app.route('/projects/send/<int:proj_id>', methods=['POST'])
+@app.route('/users/send/<author>', methods=['POST'])
+def mess_send(*args,**kwargs):
+    form = MessageForm(request.form)
+    if request.method == 'POST' and 'proj_id' in kwargs and form.validate():
+        mess = Messages(content = form.message.data,
+                kind = 'project',
+                author = g.user,
+                project = Projects.query.get(kwargs['proj_id']),
+                reciever = Projects.query.get(kwargs['proj_id']).user
+                )
+        db.session.add(mess)
+        db.session.commit()
+        flash('Message send')
+        return redirect('/projects/%s' % kwargs['proj_id'])
+    if request.method == 'POST' and 'author' in kwargs and form.validate():
+        mess = Messages(content = form.message.data,
+                kind = 'private',
+                author = g.user,
+                reciever = User.query.filter_by(name = kwargs['author']).first()
+                )
+        db.session.add(mess)
+        db.session.commit()
+        flash('Message send')
+        return redirect('/user/%s' % g.user.name)
+    return redirect('.')
+
+@app.route('/register', methods=['GET','POST'])
 def register():
     reg_form = RegistrationForm(request.form)
     log_form = LoginForm(request.form)
@@ -368,6 +404,7 @@ def login():
             flash('Sorry! No such user')
     return render_template('login.html', log_form=log_form, reg_form=reg_form )
 
+@login_required
 @app.route('/logout')
 def logout():
     session.pop('auth', None)
