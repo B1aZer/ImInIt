@@ -1,0 +1,67 @@
+<?php get_header(); ?>
+<?php if (have_posts()) : ?>
+<div id="box">
+<div id="leftcontent">
+<?php while (have_posts()) : the_post(); ?>
+<div class="postcontainer">
+  <div class="entry" id="post-<?php the_ID(); ?>">
+    <div class="entrycomments">      <?php comments_popup_link('comments &#187;', '1 comment &#187;', '% comments &#187;'); ?>
+</div><h1><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
+      <?php the_title(); ?>
+      </a></h1>
+    <?php the_content('Read the rest of this entry &raquo;'); ?>
+  </div>
+
+<div class="entryinfo">
+  <div class="brownbox">
+    <h1>
+      <?php the_category(', ') ?>
+    </h1>
+    <h2>Опубликовано <br /><span style="color:#FF007E"><?php the_time('F jS, Y') ?><br/>в <?php the_time('G:i'); ?></span></h2>
+    <div style="float:right;margin:3px 0px 0px 3px;"><a href="/author/<?php the_author_login(); ?>" title="<?php echo $curauth->display_name; ?>"> <?php echo get_avatar(get_the_author_email(), '50'); ?> </a></div>
+    <h2>Автор<br />
+      <?php the_author_posts_link(); ?>
+    </h2>
+      <h2><?php the_tags('Тэги <br />', ', ', '<br />'); ?></h2><h2><?php if(function_exists('akst_share_link')) { akst_share_link(); } ?>
+      <?php edit_post_link('<br />Править', '', ' '); ?></h2>
+    </div>
+    <div class="ratebox">Оценка  <?php
+if(function_exists('the_ratings')) {
+the_ratings();
+}
+?></div>
+    <div class="relatedposts">Похожие темы<?php if(function_exists('wp23_related_posts')) { wp23_related_posts('', ''); } ?>
+</div>
+</div>
+</div>
+<?php endwhile; ?>
+<br style="clear:both;" />
+<div class="navigation">
+  <?php if(function_exists('wp_pagenavi')) { wp_pagenavi(); } ?>
+</div>
+<?php else : ?>
+<div id="pagebox">
+<div id="leftcontent">
+<div class="archivebox">
+<h1 style="text-align:center;">Не нашел</h1>
+<p style="text-align:center;">Очень извиняюсь, но здесь ничего нет.</p>
+<br /><br />
+    <h3>Архивы по месяцам</h3>
+    <ul>
+      <?php wp_get_archives('type=monthly'); ?>
+
+
+    </ul>
+    <br />
+    <h3>Архивы по рубрикам:</h3>
+    <ul>
+      <?php wp_list_cats(); ?>
+    </ul>
+</div>
+<?php endif; ?>
+<br style="clear:both;" />
+</div>
+<?php get_sidebar(); ?>
+<br style="clear:both;" />
+<?php get_footer(); ?>
+

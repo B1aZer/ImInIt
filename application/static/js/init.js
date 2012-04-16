@@ -58,7 +58,6 @@ var iminit = {
         boxText = document.createElement("div");
         var myOptions = {
                             content: boxText
-                            ,disableAutoPan: true
                             ,pixelOffset: new google.maps.Size(-148, 0)
                             ,maxWidth: 0
                             ,isHidden: false
@@ -97,6 +96,7 @@ var iminit = {
                             /*ib.setPosition(this.position)*/
                             ib.open(map, this); 
                             /*map.panTo(iminit.marker.getPosition()); */
+                            /*map.panTo(this.position);*/
 
                         });
                         google.maps.event.addListener(iminit.marker, 'mouseout', function() {
@@ -119,7 +119,7 @@ var iminit = {
                 draggable: iminit.draggable,
                 icon:image,
                 id:id,
-                html:'<div class="content"> <div class="popover fade bottom in" style="display: block;"> <div class="arrow"> </div> <div class="popover-inner"> <h3 class="popover-title">'+title+'</h3> <div class="popover-content"><p>'+desc+'</p> </div> </div> </div> </div>'
+                html:'<div class="content"> <div class="popover fade bottom in" style="display: block;">  <div class="popover-inner"> <h3 class="popover-title">'+title+'</h3> <div class="popover-content"><p>'+desc+'</p> </div> </div> </div> </div>'
             })
 
 

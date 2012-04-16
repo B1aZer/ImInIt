@@ -77,8 +77,26 @@ right: 16px;
 .login .well {
     margin-bottom:16px;
 }
+.infoBox .popover {
+    position: relative;
+}
+.main {
+    min-height:100%;
+    height:100%;
+    width:100%;
+    position:fixed;
+}
+
+.wrapper {
+     position:relative;
+     height:100%;
+}
 #mapcanvas {
     height: 250px;
+    /*top:40px;*/
+    /*bottom:0;*/
+
+    /*position:absolute;*/
 }
 .contain {
     /*background: #808080;*/

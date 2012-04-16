@@ -220,6 +220,10 @@ def ajax(*args, **kwargs):
 def map():
     return render_template('map.html')
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
 @app.route('/tmp')
 def tmp():
     return render_template('base.html')

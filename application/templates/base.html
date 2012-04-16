@@ -46,10 +46,13 @@
     <!--<script src="{{ url_for('static', filename='js/less-1.3.0.min.js') }}"></script>-->
      <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDw3MasK3D5dyC5BH7WVcRikm79niyrk3Q&sensor=true"></script>
-    <script src="{{ url_for('static', filename='js/infobox_packed.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/infobox.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/smartinfowindow.js') }}"></script>
     </head>
 
     <body>
+    {% block map_header %}
+    {% endblock %}
     {% block navbar %}
     <!--<div class="wrapper">-->
     <div class="navbar navbar-fixed-top">
@@ -233,12 +236,15 @@ $('.dropdown-menu').find('form').click(function (e) {
 
     {% endblock %}
 
+
     <!-- Le javascript-->
 <script src="{{ url_for('static', filename='js/jquery.ba-hashchange.min.js') }}"></script>
 <!--================================================== -->
     {% block js %}
     {% endblock %}
 
+    {% block map_footer %}
+    {% endblock %}
     </body>
     </html>
 
