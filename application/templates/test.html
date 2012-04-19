@@ -1,72 +1,56 @@
-<div class="post_table">
-    <div class="post_image">
-      <a class="post_image" href="/id771193"><img src="http://cs9964.userapi.com/u771193/e_63eaa407.jpg" width="50" height="50"></a>
-      <span class="online">Online</span>
-    </div>
-    <div class="post_info">
-      <div class="fl_r delete_post_wrap">
-  <div class="delete_post">
-    <div id="delete_post771193_675" onclick="wall.markAsSpam('771193_675', 'e908fc7d9ba79ab69b');" onmouseover="wall.activeDeletePost('771193_675', 'Отметить как спам')" onmouseout="wall.deactiveDeletePost('771193_675')" style="opacity: 0; "></div>
-  </div>
+    <link href="{{ url_for('static', filename='css/overcast/jquery-ui-1.8.18.custom.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/jquery-1.7.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui-1.8.18.custom.min.js') }}"></script>
+<style>
+	#draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+	.droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+	</style>
+	<script>
+	$(function() {
+		$( "#draggable" ).draggable();
+		$( ".droppable" ).droppable({
+                drop: function( event, ui ) {
+				$( this )
+					.addClass( "ui-state-highlight" )
+					.find( "p" )
+						.html( "Dropped!" );
+                $.post('ajax/test',
+                    { 
+                        'post' : $( this ).find("label").html()
+                    },
+                    function(data) {
+                        console.log(data);
+                })
+                <!--//.success(function(data) { alert(data); });-->
+                
+			}
+		});
+	});
+	</script>
+
+
+
+<div class="demo">
+	
+<div id="draggable" class="ui-widget-content">
+	<p>Drag me to my target</p>
 </div>
-      <div class="wall_text"><a class="author" href="/id771193">Лана Стесина</a> <div id="wpt771193_675"></div><table cellpadding="0" cellspacing="0" class="published_by_wrap">
-  <tbody><tr>
-    <td>
-      <a class="published_by_photo" href="/arrivo" onclick="return nav.go(this, event)"><img src="http://cs5371.userapi.com/g32810353/e_5ef0d3e4.jpg" width="30" height="30"></a>
-    </td>
-    <td>
-      <a class="published_by" href="/arrivo" onclick="return nav.go(this, event)">АРРИВО - путешествия, отдых, туризм - ARRIVO</a>
-      
-      <div class="published_by_date"><a class="published_by_date" href="/wall-32810353_653" onclick="return nav.go(this, event);">сегодня в 15:06</a></div>
-    </td>
-  </tr>
-</tbody></table><div class="wall_post_text">Бамбуковая роща у города Камакура в Японии</div>
-  <table cellspacing="0" cellpadding="0" width="100%">
-    <tbody><tr>
-      <td>
-        <a onclick="playAudioNew('61541039_148784611_771193_675')"><div class="play_new" id="play61541039_148784611_771193_675"></div></a>
-        <input type="hidden" id="audio_info61541039_148784611_771193_675" value="http://cs1067.userapi.com/u2538966/audio/d79f9d862f9a.mp3,257">
-        
-      </td>
-      <td class="info">
-        <div class="duration fl_r" onmousedown="if (window.audioPlayer) audioPlayer.switchTimeFormat('61541039_148784611_771193_675', event);">4:17</div>
-        <div class="audio_title_wrap"><b><a href="/search?c[section]=audio&amp;c[q]=Shakuhachi+%28the+Japanese+Flute%29-">Shakuhachi (the Japanese Flute)-</a></b> – <span id="title61541039_148784611_771193_675">Meditation Music</span></div>
-      </td>
-      
-    </tr>
-  </tbody></table>
-  <div class="player_wrap">
-    <div id="line61541039_148784611_771193_675" class="playline"><div></div></div>
-    <div id="player61541039_148784611_771193_675" class="player" ondragstart="return false;" onselectstart="return false;">
-      <table width="100%" border="0" cellpadding="0" cellspacing="0">
-        <tbody><tr valign="top" id="audio_tr61541039_148784611_771193_675">
-          <td style="width:100%;padding:0px;position:relative;">
-            <div id="audio_white_line61541039_148784611_771193_675" class="audio_white_line" onmousedown="audioPlayer.prClick(event);"></div>
-            <div id="audio_load_line61541039_148784611_771193_675" class="audio_load_line" onmousedown="audioPlayer.prClick(event);"><!-- --></div>
-            <div id="audio_progress_line61541039_148784611_771193_675" class="audio_progress_line" onmousedown="audioPlayer.prClick(event);">
-              <div id="audio_pr_slider61541039_148784611_771193_675" class="audio_pr_slider"><!-- --></div>
-            </div>
-          </td>
-          <td id="audio_vol61541039_148784611_771193_675" style="position: relative;"></td>
-        </tr>
-      </tbody></table>
-    </div>
-  </div>
-</div></div></div>
-      <div class="post_like_wrap fl_r" onmouseover="wall.postLikeOver('771193_675')" onmouseout="wall.postLikeOut('771193_675')" onclick="wall.like('771193_675', 'd1317bdfd48204d533'); event.cancelBubble = true;">
-  <div class="post_like">
-    <span class="post_like_link fl_l" id="like_link771193_675">Мне нравится</span>
-    <i class="post_like_icon  fl_l" id="like_icon771193_675"></i>
-    <span class="post_like_count fl_l" id="like_count771193_675">1</span>
-  </div>
+
+<div class="droppable ui-widget-header">
+    <label> label1</label>
+	<p>Drop here</p>
 </div>
-      <div class="replies"><div class="reply_link_wrap" id="wpe_bottom771193_675">
-  <small><a href="/wall771193_675"><span class="rel_date rel_date_needs_update" abs_time="сегодня в 17:19" time="1334323144">три часа назад</span></a></small><span id="reply_link771193_675" class="reply_link"><span class="divide">|</span><a class="reply_link" onclick="wall.showEditReply('771193_675')">Комментировать</a></span>
-</div>
-<div class="replies_wrap clear" id="replies_wrap771193_675" style="display: none">
-  <div id="replies771193_675"><input type="hidden" id="start_reply771193_675" value=""></div>
-  <div class="reply_fakebox_wrap" id="reply_fakebox771193_675" onclick="wall.showEditReply('771193_675')"><div class="reply_fakebox">Комментировать..</div></div>
-</div></div>
-    </div>
-  </div>
+
+<div class=" droppable ui-widget-header">
+    <label> label2</label>
+	<p>Drop here</p>
+</div>  
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description" style="display: none; ">
+<p>Enable any DOM element to be droppable, a target for draggable elements.</p>
+</div><!-- End demo-description -->
 

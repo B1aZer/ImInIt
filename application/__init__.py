@@ -3,7 +3,7 @@
 #import sqlite3
 #import conf
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+        abort, render_template, flash
 from helpers import jsonify
 #from sqlalchemy import db.desc, func
 from models import *
@@ -27,29 +27,30 @@ babel = Babel(app)
 db.init_app(app)
 
 gravatar = Gravatar(app,
-                    size=100,
-                    rating='g',
-                    default='retro',
-                    force_default=False,
-                    force_lower=False)
+        size=100,
+        rating='g',
+        default='retro',
+        force_default=False,
+        force_lower=False)
 
 facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key='160705233955349',
-    consumer_secret='4f4fa3aedb2cba7a35267cba7bd3a883',
-)
+        base_url='https://graph.facebook.com/',
+        request_token_url=None,
+        access_token_url='/oauth/access_token',
+        authorize_url='https://www.facebook.com/dialog/oauth',
+        consumer_key='160705233955349',
+        consumer_secret='4f4fa3aedb2cba7a35267cba7bd3a883',
+        )
 twitter = oauth.remote_app('twitter',
-    base_url='http://api.twitter.com/1/',
-    request_token_url='http://api.twitter.com/oauth/request_token',
-    access_token_url='http://api.twitter.com/oauth/access_token',
-    authorize_url='http://api.twitter.com/oauth/authenticate',
-    consumer_key='h2H3rxB5DogKqj9XpJ7Q',
-    consumer_secret='FjBx1RI0HsRTev3m8FKPigcejMszFlSoEWGmVz75U'
-)
+        base_url='http://api.twitter.com/1/',
+        request_token_url='http://api.twitter.com/oauth/request_token',
+        access_token_url='http://api.twitter.com/oauth/access_token',
+        authorize_url='http://api.twitter.com/oauth/authenticate',
+        consumer_key='h2H3rxB5DogKqj9XpJ7Q',
+        consumer_secret='FjBx1RI0HsRTev3m8FKPigcejMszFlSoEWGmVz75U'
+        )
 
+#########################################Templates######################################################
 
 @app.template_filter()
 def timesince(value):
@@ -69,6 +70,8 @@ def positive(value):
         return 0
     return value
 
+#########################################DataBase######################################################
+
 def create_db():
     with app.test_request_context():
         db.create_all()
@@ -86,6 +89,8 @@ def before_request():
 @app.teardown_request
 def shutdown_session(exception=None):
     db.session.remove()
+
+#########################################Social######################################################
 
 @app.route('/fb')
 def fb_login():
@@ -107,21 +112,21 @@ def fb_authorized(resp):
         flash('Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
-        ))
+            ))
         return redirect(next_url)
     session['facebook_token']=(resp['access_token'],'')
     me = facebook.get('/me')
     user = User.query.filter_by(name=me.data['name']).first()
     if not user:
         user = User(me.data['name'],fb_id=me.data['id'],fb_token=(
-        resp['access_token'],
-        ''
-        ))
+            resp['access_token'],
+            ''
+            ))
         db.session.add(user)
         db.session.commit()
         session['auth'] = me.data['name']
         flash('Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next')))
+                (me.data['id'], me.data['name'], request.args.get('next')))
         return redirect(next_url)
     session['auth'] = me.data['name']
     return redirect(next_url)
@@ -137,9 +142,9 @@ def tw_authorized(resp):
     user = User.query.filter_by(name=resp['screen_name']).first()
     if not user:
         user = User(resp['screen_name'],twit_id=resp['user_id'],twit_token=(
-        resp['oauth_token'],
-        resp['oauth_token_secret']
-        ))
+            resp['oauth_token'],
+            resp['oauth_token_secret']
+            ))
         db.session.add(user)
         db.session.commit()
         session['auth']=resp['screen_name']
@@ -149,8 +154,6 @@ def tw_authorized(resp):
     session['auth']=resp['screen_name']
     flash('User exist: %s' % resp['screen_name'])
     return redirect(next_url)
-
-
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
@@ -170,7 +173,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
+#########################################Routes######################################################
 
 @app.route('/')
 def index():
@@ -224,6 +227,12 @@ def map():
 def test():
     return render_template('test.html')
 
+@app.route('/ajax/test', methods=['POST','GET'])
+def ajax_test():
+    if request.method == 'POST':
+        app.logger.debug(str((request.form.values())))
+        return request.form['post']
+
 @app.route('/tmp')
 def tmp():
     return render_template('base.html')
@@ -247,7 +256,6 @@ def mess_del(mess_id):
         db.session.delete(mess)
         db.session.commit()
     return redirect('/user/%s#/2' % g.user.name)
-
 
 @login_required
 @app.route('/add', methods=['POST','GET'])
@@ -278,7 +286,7 @@ def add_entry():
                     #if not category:
                         #category = Category(title=cat)
                     category = db.session.query(Category).filter_by(title=cat).first() \
-                        or Category(title=cat)
+                            or Category(title=cat)
                     if cat not in dupl:
                         proj.cat.append(category)
                         dupl.add(cat)
@@ -291,8 +299,6 @@ def add_entry():
             return redirect('/')
 
     return render_template('add.html', form=form, cats=cats)
-
-
 
 @app.route('/projects/<int:proj_id>', methods=['POST','GET'])
 def project_index(proj_id):
@@ -350,8 +356,8 @@ def part_add(proj_id):
     signals.comment_deleted.send(comment.post)
 
     return jsonify(success=True,
-                   comment_id=comment_id)
-                   """
+            comment_id=comment_id)
+    """
 
     return redirect('/projects/%s' % proj_id)
 
@@ -382,7 +388,6 @@ def mess_send(*args,**kwargs):
         flash('Message send')
         return redirect('/user/%s#/2' % g.user.name)
     return redirect('.')
-
 
 @app.route('/register', methods=['GET','POST'])
 def register():
